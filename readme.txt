@@ -1,41 +1,38 @@
-Thanks for downloading this theme!
+=== Corporate Bizplan ===
 
-This theme is meant to work hand in hand with the CPO Companion plugin.
-The plugin is very light, and you will need to install it in order to
-manage the main slider, homepage features, as well as the portfolio:
-https://wordpress.org/plugins/cpo-companion/
+Contributors: keonthemes
+Tags: blog, education, portfolio, grid-Layout, one-column, right-sidebar, custom-background, custom-colors, custom-logo, custom-menu, featured-images, footer-widgets, full-width-template, post-formats, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready
 
-If you have any questions regarding its usage, you can read the
-quickstart guide at the following URL:
-https://docs.machothemes.com/
+Requires at least: 4.7
+Tested up to: 4.9.8
+Stable tag: 1.0.0
+License: GPLv3 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Antreas WordPress Theme, Copyright (C) 2018, Macho Themes
-Antreas is distributed under the terms of the GNU GPL
+== Description ==
 
-BUNDLED RESOURCES
-All resources bundled with this theme are licensed or compatible
-with the GPLv2. Following is a list of all of them:
+Corporate Bizplan is a beautiful and elegant Red color schemed child theme of Bizplan. Theme Demo: https://keonthemes.com/theme-demo/?id=MjEyN3xjb3Jwb3JhdGUtYml6cGxhbnxDb3Jwb3JhdGUgQml6cGxhbg=
 
-Font Awesome - https://fontawesome.com/v4.7.0/
-License: https://fontawesome.com/v4.7.0/license/
-Copyright: Dave Gandy
+== License ==
 
-Jquery Cycle2 - http://jquery.malsup.com/cycle2/
-License: Dual licensed under the MIT and GPL licenses.
-Copyright: M. Alsup
+Corporate Bizplan WordPress Theme, Copyright (C) 2018, Keon Themes
+Corporate Bizplan is distributed under the terms of the GNU GPL
 
-HTML5 Shiv - https://github.com/aFarkas/html5shiv
-License: Dual licensed under the MIT and GPL licenses.
-Copyright: @afarkas @jdalton @jon_neal @rem
+== Installation ==
 
-Magnific Popup - http://dimsemenov.com/plugins/magnific-popup/
-License: MIT License
-Copyright: Stephane Caron
+1. In your admin panel, go to Appearance > Themes and click the Add New button.
+2. Click Upload and Choose File, then select the theme's .zip file. Click Install Now.
+3. Click Activate to use your new theme right away.
 
-Selectize - https://github.com/selectize/selectize.js
-License: http://www.apache.org/licenses/LICENSE-2.0
-Copyright: Brian Reavis & Contributors
+== Credits ==
 
-Theme Screenshot Image
-Photo by Joel Filipe
-https://stocksnap.io/photo/YEWW2351JM
+== Images ==
+ 
+* Screenshot Image:
+License: CC0 1.0 Universal (CC0 1.0)
+Source: https://pixabay.com/en/beard-brainstorming-business-2286440/
+
+== Changelog ==
+
+= 1.0.0 =
+* Initial release.

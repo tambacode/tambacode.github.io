@@ -1,12 +1,68 @@
 /*
-Theme Name: Antreas
-Theme URI: https://www.demos.machothemes.com/antreas
-Description: A multipurpose WordPress theme perfect for agencies and online businesses.
-Author: Macho Themes
-Author URI: http://machothemes.com
+Theme Name: Corporate Bizplan
+Theme URI: https://keonthemes.com/downloads/corporate-bizplan/
+Author: Keon Themes
+Author URI: https://keonthemes.com/
+Description: Corporate Bizplan is a beautiful and elegant Red color schemed child theme of Bizplan. Theme Demo: https://keonthemes.com/theme-demo/?id=MjEyN3xjb3Jwb3JhdGUtYml6cGxhbnxDb3Jwb3JhdGUgQml6cGxhbg=
 Version: 1.0.0
-License: GNU General Public License 2.0
-License URI: license.txt
-Text Domain: antreas
-Domain Path: /languages
+License: GNU General Public License v3 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
+Template: bizplan
+Text Domain: corporate-bizplan
+Tags: blog, education, portfolio, grid-Layout, one-column, right-sidebar, custom-background, custom-colors, custom-logo, custom-menu, featured-images, footer-widgets, full-width-template, post-formats, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
 */
+
+/*======================================*/
+/* Primary color */
+/*======================================*/
+
+body .block-grid .post-content .post-thumb-outer .post-detail a.date {
+	background-color: rgba(239, 75, 80, 0.8);
+}
+
+body .site-header .header-bottom-right .cart-icon a .count,
+body #go-top span,
+body .icon-block-outer .list-inner .icon-area .icon-outer:hover,
+body .icon-block-outer .list-inner .icon-area .icon-outer:focus,
+body .icon-block-outer .list-inner .icon-area .icon-outer:active,
+body article.hentry.sticky .post-format-outer > span a {
+	background-color: #EF4B50;
+}
+
+body .icon-block-outer .list-inner .icon-area .icon-outer:hover,
+body .icon-block-outer .list-inner .icon-area .icon-outer:focus,
+body .icon-block-outer .list-inner .icon-area .icon-outer:active {
+	-webkit-box-shadow: 0 0 0 10px #EF4B50;
+       -moz-box-shadow: 0 0 0 10px #EF4B50;
+        -ms-box-shadow: 0 0 0 10px #EF4B50;
+         -o-box-shadow: 0 0 0 10px #EF4B50;
+            box-shadow: 0 0 0 10px #EF4B50;
+}
+
+/*======================================*/
+/* Primary hover color */
+/*======================================*/
+
+body .block-grid .post-content .post-thumb-outer .post-detail a.date:hover,
+body .block-grid .post-content .post-thumb-outer .post-detail a.date:focus,
+body .block-grid .post-content .post-thumb-outer .post-detail a.date:active {
+	background-color: rgba(206, 45, 50, 0.8);
+}
+
+body .site-header .header-bottom-right .cart-icon a:hover span.count,
+body .site-header .header-bottom-right .cart-icon a:focus span.count,
+body .site-header .header-bottom-right .cart-icon a:active span.count,
+body #go-top span:hover,
+body #go-top span:focus,
+body #go-top span:active,
+body article.hentry.sticky .post-format-outer > span a:hover,
+body article.hentry.sticky .post-format-outer > span a:focus,
+body article.hentry.sticky .post-format-outer > span a:active,
+body .top-header .top-header-right .socialgroup a:hover,
+body .top-header .top-header-right .socialgroup a:focus,
+body .top-header .top-header-right .socialgroup a:active {
+	background-color: #ce2d32;
+}
