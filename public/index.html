@@ -1,65 +1,65 @@
-<!DOCTYPE html>
+
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
-
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/6.2.3/firebase-app.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/6.2.3/firebase-auth.js"></script>
-    <script defer src="/__/firebase/6.2.3/firebase-database.js"></script>
-    <script defer src="/__/firebase/6.2.3/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/6.2.3/firebase-storage.js"></script>
-    <!-- initialize the SDK after all desired features are loaded -->
-    <script defer src="/__/firebase/init.js"></script>
-
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
+    <title>Shared.Farm</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <link rel="manifest" href="manifest.json"/>
+    <!-- Please don't use this type of comment >> // << because it is compiled in the HTML-->
+    <link rel="stylesheet" type="text/css" href="semanticUI/semantic.css"/>
+    <link rel="stylesheet" type="text/css" href="semanticUI/components/Semantic-UI-Alert.css"/>
+    <link rel="stylesheet" type="text/css" href="css/webapp.css"/>
+    <link rel="stylesheet" type="text/css" href="css/sharedfarm.css"/>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
+    <script src="semanticUI/semantic.min.js"></script>
+    <script type="text/javascript" src="semanticUI/components/Semantic-UI-Alert.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
   </head>
   <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+    <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home</a><a href="#" class="item">Mensagens</a></div>
+    <div class="pusher">
+      <div id="menu" class="ui sf_header">
+        <div class="ui padded grid">
+          <div class="blue row">
+            <div class="three wide column">
+              <button onclick="ui_openSidebar();" class="ui icon button blue"><i class="icon list large"></i></button>
+            </div>
+            <div class="ten wide column">
+              <div class="ui search">
+                <div class="ui icon input big fluid">
+                  <input type="text" placeholder="Pesquisar..." class="prompt"/><i class="search icon"></i>
+                </div>
+                <div class="results"></div>
+              </div>
+            </div>
+            <div class="right aligned three wide column">
+              <!--button.ui.icon.button.blue(onclick="auth_facebookLogin()")-->
+              <button class="ui icon button blue"><i class="icon user circle large"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="all">
+        <div class="bottomFloating">
+          <button onclick="testMethod();" class="ui primary button"><i class="icon plus"></i>Anunciar Agora</button>
+        </div><br/><br/>
+      </div>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
-
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-
-        try {
-          let app = firebase.app();
-          let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
-          document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
+      var testVar = 'var';
+      var testMethod = function() {
+          console.log("Button Clicked");
+          console.log("Please don't add code here");
+          console.log("Add it in a JS file already created or create a new one");
+      }
     </script>
   </body>
 </html>

@@ -1,0 +1,38 @@
+html
+    head
+        title Shared.Farm
+        
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        meta(http-equiv="X-UA-Compatible" content="ie=edge")
+        link( rel="manifest" href="manifest.json")
+        
+        // Please don't use this type of comment >> // << because it is compiled in the HTML
+        //- Use this one instead >> //- << because it does not compile in the HTML
+
+        //- CSS
+        include templates/styles
+        
+        //- Script
+        include templates/scripts
+    body
+        include templates/sideBar
+        .pusher
+            include templates/header
+            #all
+                .bottomFloating
+                    button.ui.primary.button(onclick="testMethod();")
+                        i.icon.plus
+                        | Anunciar Agora
+                include templates/home
+                br
+                br
+            include templates/footer
+
+        script.
+            var testVar = 'var';
+            var testMethod = function() {
+                console.log("Button Clicked");
+                console.log("Please don't add code here");
+                console.log("Add it in a JS file already created or create a new one");
+            }
