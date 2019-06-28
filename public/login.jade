@@ -1,0 +1,48 @@
+html
+    head
+        title Shared.Farm - Login
+        
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        meta(http-equiv="X-UA-Compatible" content="ie=edge")
+        link( rel="manifest" href="manifest.json")
+        
+        //- CSS
+        include templates/styles
+        
+        //- Script
+        include templates/scripts
+    body
+        include templates/sideBar
+        .pusher
+            include templates/header
+            #all
+                .vertical-center
+                    .ui.padded.sixteen.column.centered.grid
+                        .wide.column.row
+                            .ui.blue.card.login
+                                .content
+                                    .ui.grid
+                                        .blue.column.row
+                                            .column
+                                            .left.aligned.ten.wide.column
+                                                .ui.white.header Login                                            
+                                            //.right.aligned.four.wide.column
+                                                .ui.icon
+                                                    i.icon.user.circle.large
+                                        .ui.padded.column.row.grid
+                                            .sixteen.wide.column.centered
+                                                button.large.ui.facebook.button
+                                                    i.facebook.icon
+                                                    | Entrar com o Facebook
+                                            .sixteen.wide.column
+                                                button.large.ui.twitter.button
+                                                    i.twitter.icon
+                                                    | Entrar com o Twitter&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                            .sixteen.wide.column
+                                                a(href="#")
+                                                    | Ainda não possui uma conta? Cadastre-se agora!
+
+                br
+                br
+            include templates/footer
