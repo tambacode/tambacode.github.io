@@ -1,10 +1,20 @@
 var auth_UserOnline = false;
 
+var auth_Init = function() {
+    firebase.auth().onAuthStateChanged(firebaseUser => {
+        if (firebaseUser) {
+            auth_LogOnUser();
+        } else {
+            auth_LogoffUser();
+        }
+    });
+}
+
 var auth_RequireLoggingToAccess = function(url) {
     if (auth_UserOnline) {
-        window.location.href = url;
+        misc_GoToPage(url);
     } else {
-        window.location.href = 'login.html?redirectUrl=' + url;
+        misc_GoToPage('login.html?redirectUrl=' + url);
     }
 };
 
@@ -20,8 +30,9 @@ var auth_RequestLogin = function(provider, providerName) {
 };
 
 var auth_LoginSuccessful = function(result, providerName) {
-    // result.credential.accessToken;
-    //auth_successfulLogin(result.user.uid, result.user.displayName)
+    // Some params from facebook
+    //result.user.uid | result.user.displayName | result.credential.accessToken
+
     var providerToken = null;
     var uid = null
 
@@ -33,13 +44,13 @@ var auth_LoginSuccessful = function(result, providerName) {
     var path = '/users/' + uid;
 
     var onSucess = function(snapshot) {
-        auth_LogUser();
+        auth_LogOnUser();
     };
 
     var onNullValue = function(snapshot) {
         db_InsertUserOnLogin(path, result.user.displayName, providerName, providerToken);
 
-        auth_LogUser();
+        auth_LogOnUser();
     };
 
     db_get(path, onSucess, onNullValue, auth_LoginFailed);
@@ -56,14 +67,24 @@ var auth_LoginFailed = function(error, providerName) {
     });
 };
 
-var auth_LogUser = function() {
+var auth_LogOnUser = function() {
     auth_UserOnline = true;
 
     redirectUrl = misc_GetUrlParam('redirectUrl');
-    if (redirectUrl != '') {
+    if (redirectUrl) {
         auth_RequireLoggingToAccess(redirectUrl);
     }
 }
+
+var auth_LogoffUser = function() {
+    if (auth_UserOnline)
+    {
+        firebase.auth().signOut();
+        auth_UserOnline = false;
+
+        misc_GoToPage('index.html');
+    }
+};
 
 ///////////////////////////////// PROVIDER DEPENDENT /////////////////////////////////
 ////// STEPS TO CONFIGURE FACEBOOK LOGIN //////
@@ -88,3 +109,5 @@ var auth_LoginFacebook = function() {
     auth_RequestLogin(provider, 'facebook');
 };
 //////////////////////////////////////////////////////////////////////////////////////
+
+auth_Init();

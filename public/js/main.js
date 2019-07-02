@@ -22,3 +22,7 @@ misc_GetUrlParam = function(param) {
 	var url = new URL(window.location.href);
 	return url.searchParams.get(param);
 };
+
+misc_GoToPage = function(url) {
+	window.location.href = url;	
+}
