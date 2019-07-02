@@ -1,0 +1,23 @@
+///////////////////////////////// DB STRUCTURE /////////////////////////////////
+// Use this file to define the database structure
+{
+	"db": {
+		"users": {
+			"uid": {
+				"name": "Test name",
+				"address": "Lorem ipsum dolor sit amet.",
+				"profile_picture_link": "url link containing the source image to the profile image",
+				"phone_number": "(99) 99999-9999",
+				"push_notification_key" : "notification_key",
+				"ads_id": {
+					"uuid_1": "uuid",
+					"uuid_2": "uuid"
+				},
+				"tokens": {
+					"facebook": "facebook_token",
+					"twitter": "facebook_token"
+				}
+			}
+		}
+	}
+}

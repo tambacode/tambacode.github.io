@@ -5,7 +5,7 @@ var db = firebase.database();
 var db_GetNewPushKey = function(path) {
     var key = db.ref().child(path).push().key;
     return key;
-}
+};
 
 /*
     Method used to insert a new value in some path
@@ -36,6 +36,33 @@ var db_update = function(path, postData) {
     db.ref().update(updates)
 };
 
+var db_get = function(path, onSucess, onNullValue, onError) {
+    db.ref(path).once('value')
+        .then(function(snapshot) {
+            if (snapshot.val() == null)
+            {
+                onNullValue(snapshot);
+            } else {
+                onSucess(snapshot);
+            }
+        }).catch(function(error) {
+            onError(error);
+        });
+};
+
+///////////////////////////////// USERS /////////////////////////////////
+var db_InsertUserOnLogin = function(path, name, providerName, providerToken) {
+    var dataToInsert = {
+        name: name,
+        tokens : {
+            providerName: providerToken
+        }
+    };
+
+    db_set(path, dataToInsert);
+};
+///////////////////////////////// USERS /////////////////////////////////
+
 ///////////////////////////////// EXAMPLES /////////////////////////////////
 //  Below there are three (3) methods to examplify how to use the methods above
 var insertData = function(userId, name, notificationKey) {
@@ -59,7 +86,7 @@ var insertRandomMessage = function(userId) {
     };
 
     insertMessage(postData);
-}
+};
 
 var insertMessage = function(postData) {
     var path = 'message/' + postData.id;

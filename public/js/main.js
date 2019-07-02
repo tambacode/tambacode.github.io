@@ -1,4 +1,5 @@
 window.fb = {};
+
 fb.firebaseConfig = {
     apiKey: "AIzaSyD1aOg-QStOG5VB-imai9JF68h9Qq2q8So",
     authDomain: "shared-farm-dev.firebaseapp.com",
@@ -12,13 +13,12 @@ fb.firebaseConfig = {
 firebase.initializeApp(fb.firebaseConfig);
 
 ////////////////// USER //////////////////
-user_Online = false;
-
 user_OpenProfile = function() {
-	if (user_Online) {
-		console.log('ONLINE');
-	} else {
-		window.location.href = "login.html";
-	}
-}
+	auth_RequireLoggingToAccess('profile.html');
+};
 ////////////////// USER //////////////////
+
+misc_GetUrlParam = function(param) {
+	var url = new URL(window.location.href);
+	return url.searchParams.get(param);
+};

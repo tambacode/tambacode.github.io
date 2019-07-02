@@ -26,22 +26,21 @@ html
                                         .blue.column.row
                                             .column
                                             .left.aligned.ten.wide.column
-                                                .ui.white.header Login                                            
+                                                .ui.white.header Entrar usando
                                             //.right.aligned.four.wide.column
                                                 .ui.icon
                                                     i.icon.user.circle.large
                                         .ui.padded.column.row.grid
                                             .sixteen.wide.column.centered
-                                                button.large.ui.facebook.button
+                                                button.large.ui.facebook.button(onClick="auth_LoginFacebook();")
                                                     i.facebook.icon
                                                     | Entrar com o Facebook
                                             .sixteen.wide.column
-                                                button.large.ui.twitter.button
+                                                button.large.ui.twitter.button(onClick="auth_LoginTwitter();")
                                                     i.twitter.icon
                                                     | Entrar com o Twitter&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                             .sixteen.wide.column
-                                                a(href="#")
-                                                    | Ainda não possui uma conta? Cadastre-se agora!
+                                                | Ao prosseguir você concorda com as Políticas de Privacidade e Termos de Responsabilidade da Shared.Farm
 
                 br
                 br
