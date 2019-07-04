@@ -1,0 +1,73 @@
+
+<html>
+  <head>
+    <title>Shared.Farm</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <link rel="manifest" crossorigin="use-credentials" href="%PUBLIC_URL%/manifest.json"/>
+    <link rel="stylesheet" type="text/css" href="semanticUI/semantic.css"/>
+    <link rel="stylesheet" type="text/css" href="semanticUI/components/Semantic-UI-Alert.css"/>
+    <link rel="stylesheet" type="text/css" href="css/webapp.css"/>
+    <link rel="stylesheet" type="text/css" href="css/sharedfarm.css"/>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
+    <script src="semanticUI/semantic.min.js"></script>
+    <script type="text/javascript" src="semanticUI/components/Semantic-UI-Alert.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+  </head>
+  <body>
+    <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home</a><a href="#" class="item">Mensagens</a><a onClick="auth_LogoffUser();" class="item">Sair</a></div>
+    <div class="pusher">
+      <div id="menu" class="ui sf_header">
+        <div class="ui padded grid">
+          <div class="blue row">
+            <div class="three wide column">
+              <button onclick="ui_openSidebar();" class="ui icon button blue"><i class="icon list large"></i></button>
+            </div>
+            <div class="ten wide column">
+              <div class="ui search">
+                <div class="ui icon input big fluid">
+                  <input type="text" placeholder="Pesquisar..." class="prompt"/><i class="search icon"></i>
+                </div>
+                <div class="results"></div>
+              </div>
+            </div>
+            <div class="right aligned three wide column">
+              <button onclick="user_OpenProfile();" class="ui icon button blue"><i class="icon user circle large"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="all">
+        <div class="vertical-center">
+          <div class="ui padded sixteen column centered grid">
+            <div class="wide column row">
+              <div class="ui blue card login">
+                <div class="content">
+                  <div class="ui grid">
+                    <div class="blue column row">
+                      <div class="column"></div>
+                      <div class="left aligned fifteen wide column">
+                        <div class="ui white header">Página não encontrada!</div>
+                      </div>
+                    </div>
+                    <div class="ui padded column row grid">
+                      <div class="sixteen wide column">Algum problema aconteceu e não encontramos essa página, tente novamente.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><br/><br/>
+      </div>
+    </div>
+  </body>
+</html>

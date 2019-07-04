@@ -54,10 +54,10 @@ var db_get = function(path, onSucess, onNullValue, onError) {
 var db_InsertUserOnLogin = function(path, name, providerName, providerToken) {
     var dataToInsert = {
         name: name,
-        tokens : {
-            providerName: providerToken
-        }
+        tokens : {}
     };
+
+    dataToInsert.tokens[providerName] = providerToken;
 
     db_set(path, dataToInsert);
 };

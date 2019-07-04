@@ -1,0 +1,25 @@
+html
+    head
+        title Shared.Farm - {{profile.name}}
+        
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        meta(http-equiv="X-UA-Compatible" content="ie=edge")
+        link( rel="manifest" crossorigin="use-credentials" href="%PUBLIC_URL%/manifest.json")
+        
+        //- CSS
+        include ../../public/templates/styles
+        
+        //- Script
+        include ../../public/templates/scripts
+    body
+        include ../../public/templates/sideBar
+        .pusher
+            include ../../public/templates/header
+            #all
+                ul
+                    li Name: {{profile.name}}
+                    li Name: {{profile.tokens.facebook}}
+                br
+                br
+            include ../../public/templates/footer

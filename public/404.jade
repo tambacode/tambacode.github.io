@@ -1,0 +1,35 @@
+html
+    head
+        title Shared.Farm
+        
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        meta(http-equiv="X-UA-Compatible" content="ie=edge")
+        link( rel="manifest" crossorigin="use-credentials" href="%PUBLIC_URL%/manifest.json")
+        
+        //- CSS
+        include templates/styles
+        
+        //- Script
+        include templates/scripts
+    body
+        include templates/sideBar
+        .pusher
+            include templates/header
+            #all
+                .vertical-center
+                    .ui.padded.sixteen.column.centered.grid
+                        .wide.column.row
+                            .ui.blue.card.login
+                                .content
+                                    .ui.grid
+                                        .blue.column.row
+                                            .column
+                                            .left.aligned.fifteen.wide.column
+                                                .ui.white.header Página não encontrada!
+                                        .ui.padded.column.row.grid
+                                            .sixteen.wide.column
+                                                | Algum problema aconteceu e não encontramos essa página, tente novamente.
+                br
+                br
+            include templates/footer
