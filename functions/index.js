@@ -17,7 +17,7 @@ app.set('views', './views');
 app.set('view engine', 'hbs');
 
 function getProfile() {
-	const ref = firebaseApp.database().ref('users/1TfwGTO3mKdbCeoHcIWAGOJWyQk1');
+	const ref = firebaseApp.database().ref('users/userID');
 	return ref.once('value').then(snap => snap.val());
 }
 
