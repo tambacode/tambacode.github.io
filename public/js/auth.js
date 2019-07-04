@@ -39,6 +39,9 @@ var auth_LoginSuccessful = function(result, providerName) {
     if (providerName == 'facebook') {
         uid = result.user.uid;
         providerToken = result.credential.accessToken;
+    } else if (providerName == 'twitter') {
+        uid = result.user.uid;
+        providerToken = result.credential.accessToken;
     }
     
     var path = '/users/' + uid;
@@ -107,6 +110,15 @@ var auth_LoginFacebook = function() {
     });
 
     auth_RequestLogin(provider, 'facebook');
+};
+
+var auth_LoginTwitter = function() {
+    var provider = new firebase.auth.TwitterAuthProvider();
+    provider.setCustomParameters({
+      'display': 'popup'
+    });
+
+    auth_RequestLogin(provider, 'twitter');
 };
 //////////////////////////////////////////////////////////////////////////////////////
 
