@@ -2,6 +2,11 @@
 <html>
   <head>
     <title>Shared.Farm</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <link rel="manifest" href="manifest.json"/>
+    <!-- Please don't use this type of comment >> // << because it is compiled in the HTML-->
     <link rel="stylesheet" type="text/css" href="semanticUI/semantic.css"/>
     <link rel="stylesheet" type="text/css" href="semanticUI/components/Semantic-UI-Alert.css"/>
     <link rel="stylesheet" type="text/css" href="css/webapp.css"/>
@@ -17,12 +22,6 @@
     <script src="js/db.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/ui.js"></script>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <link rel="manifest" href="manifest.json"/>
-    <!-- Please don't use this type of comment >> // << because it is compiled in the HTML-->
-    
   </head>
   <body>
     <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home</a><a href="#" class="item">Mensagens</a><a onClick="auth_LogoffUser();" class="item">Sair</a></div>
@@ -48,52 +47,40 @@
         </div>
       </div>
       <div id="all">
-        <form class="ui form">
+        <form id="InsertAdRegistration" class="ui form">
           <div class="field">
             <label>Título</label>
-            <input type="text" name="titulo" placeholder="Título do anúncio"/>
+            <input type="text" name="title" id="title" placeholder="Título do anúncio"/>
           </div>
           <div class="field">
             <label>Preço R$</label>
-            <input type="number" min="0.00" max="10000.00" step="0.01" name="preco" placeholder="Preço"/>
+            <input type="number" name="price" id="price" min="0.00" max="10000.00" step="0.01" ,="," placeholder="Preço"/>
+            <div class="inline fields">
+              <label>Categoria</label>
+              <div class="field">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="category" id="products" value="produtos" checked=""/>
+                  <label>Produtos</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="category" id="services" value="servicos"/>
+                  <label>Serviços</label>
+                </div>
+              </div>
+            </div>
+            <div class="field"></div>
+            <label>Descrição</label>
+            <input type="text" name="description" id="description" placeholder="Descrição"/>
+            <div class="field"></div>
+            <label>Localização</label>
+            <input type="text" name="location" id="location" placeholder="Localização"/>
+            <div class="field"></div>
+            <button id="InsertAdRegistration" onClick="db_InsertAdRegistration();" class="ui button">Cadastrar</button>
           </div>
         </form>
-        <div class="ui form">
-          <div class="inline fields">
-            <label>Categoria</label>
-            <div class="field">
-              <div class="ui radio checkbox">
-                <input type="radio" name="categoria" checked="checked"/>
-                <label>Produtos</label>
-              </div>
-            </div>
-            <div class="field">
-              <div class="ui radio checkbox">
-                <input type="radio" name="categoria"/>
-                <label>Serviços</label>
-              </div>
-            </div>
-          </div>
-          <div class="field"></div>
-          <label>Descrição</label>
-          <input type="text" name="descricao" placeholder="Descrição"/>
-          <div class="field"></div>
-          <label>Localização</label>
-          <input type="text" name="localizacao" placeholder="Localização"/>
-          <div class="field"></div>
-          <button type="submit" class="ui button">Publicar</button>
-        </div>
       </div>
     </div>
-    <script>
-      var testVar = 'var';
-      var testMethod = function() {
-          console.log("Button Clicked");
-          console.log("Please don't add code here");
-          console.log("Add it in a JS file already created or create a new one");
-      }
-      $('.ui.radio.checkbox')
-      .checkbox();
-    </script>
   </body>
 </html>

@@ -16,6 +16,7 @@ var db_GetNewPushKey = function(path) {
             age : 26
         };
 */
+
 var db_set = function(path, postData) {
     db.ref(path).set(postData);
 };
@@ -62,6 +63,38 @@ var db_InsertUserOnLogin = function(path, name, providerName, providerToken) {
     db_set(path, dataToInsert);
 };
 ///////////////////////////////// USERS /////////////////////////////////
+
+///////////////////////////////// AD REG /////////////////////////////////
+var db_InsertAdRegistration = function() {
+    var path = 'ad/' + db_GetNewPushKey('ad');
+    
+    //Form fields
+    var title = document.getElementById('title').value;
+    var price = document.getElementById('price').value;
+
+    var products = document.getElementById('products');
+    var services = document.getElementById('services');
+
+    if(products.checked == true){
+        var category = "produtos";
+    }else{
+        var category = "serviços";
+    }
+
+    var description = document.getElementById('description').value;
+    var location = document.getElementById('location').value;
+    
+    var dataToInsert = {
+        title: title,
+        price: price,
+        category: category,
+        description: description,
+        location: location              
+    };
+
+    db_set(path,dataToInsert);
+};
+///////////////////////////////// AD REG /////////////////////////////////
 
 ///////////////////////////////// EXAMPLES /////////////////////////////////
 //  Below there are three (3) methods to examplify how to use the methods above
