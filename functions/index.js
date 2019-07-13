@@ -3,7 +3,7 @@ const firebase = require('firebase-admin');
 const express = require('express');
 const engines = require('consolidate');
 
-var serviceAccount = require("../serviceAccountKey.json");
+var serviceAccount = require("serviceAccountKey.json");
 var firebase_config = {
 	credential: firebase.credential.cert(serviceAccount),
 	databaseURL: "https://shared-farm-dev.firebaseio.com",
