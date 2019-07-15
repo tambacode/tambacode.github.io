@@ -20,32 +20,33 @@ html
         .pusher
             include templates/header
             #all
-                form.ui.form(id='InsertAdRegistration')
-                      .field
-                        label Título
-                        input(type='text', name='title', id='title', maxlength="50", required="required", placeholder='Título do anúncio')
-                      .field
-                        label Preço R$
-                        input(type='number', name='price', id='price' min="0.00" max="10000.00" step="0.01", required="required", placeholder='Preço')
-                                        
-                        .inline.fields
-                            label Categoria
-                            .field
-                                  .ui.radio.checkbox
+                br
+                .ui.container                    
+                    form.ui.form(id='InsertAdRegistration')
+                        .field
+                            label Título
+                            input(type='text', name='title', id='title', maxlength="50", required="required", placeholder='Título do anúncio')
+                        .field
+                            label Preço R$
+                            input(type='number', name='price', id='price' min="0.00" max="10000.00" step="0.01", required="required", placeholder='Preço')
+                        .field                    
+                            .inline.fields
+                                label Categoria
+                                .field
+                                    .ui.radio.checkbox
                                         input(type='radio', name='category', id='products', value="produtos", checked="")
                                         label Produtos
-                            .field
-                                  .ui.radio.checkbox
+                                .field
+                                    .ui.radio.checkbox
                                         input(type='radio', name='category', id='services', value="servicos")
                                         label Serviços
                         .field
-                        label Descrição
-                        input(type='text', name='description', id='description', maxlength="250", required="required", placeholder='Descrição')
+                            label Descrição
+                            textarea.ui.padded.sixteen.column.grid(type='text', name='description', id='description', maxlength="250", required="required", placeholder='Descrição')
                         .field
-                        label Localização
-                        input(type='text', name='location', id='location', maxlength="250", placeholder='Localização')
-
+                            label Localização
+                            input(type='text', name='location', id='location', maxlength="250", placeholder='Localização')
                         .field
-                        button.ui.button(id='InsertAdRegistration' onClick="db_InsertAdRegistration();") Cadastrar
+                            button.ui.button(id='InsertAdRegistration' onClick="db_InsertAdRegistration();") Cadastrar
 
-                        include templates/footer
+            include templates/footer
