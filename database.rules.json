@@ -9,6 +9,14 @@
     "ad": {
       ".read": true,
       ".write": true
+    },
+    "messages": {
+      ".read": true,
+      ".write": true
+    },
+    "messages_last_info": {
+      ".read": true,
+      ".write": true
     }
   }
 }

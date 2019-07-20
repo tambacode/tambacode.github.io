@@ -1,4 +1,5 @@
 var db = firebase.database();
+var rootRef = db.ref();
 
 //  Use to get a new key when inserting a new data on DB
 //  path (string): 'SharedFarm/Users'
@@ -50,6 +51,24 @@ var db_get = function(path, onSucess, onNullValue, onError) {
             onError(error);
         });
 };
+
+var db_getInnerJoin = function(table1, pathInTableOne, table2, onSucess, onNullValue, onError) {
+    table1.child(pathInTableOne).on('child_added', snap => {
+        let lastInfoRef = table2.child(snap.key);
+        
+        lastInfoRef.once('value')
+            .then(function(snapshot) {
+                if (snapshot.val() == null)
+                {
+                    onNullValue(snapshot);
+                } else {
+                    onSucess(snapshot);
+                }
+            }).catch(function(error) {
+                onError(error);
+            });
+    });
+}
 
 ///////////////////////////////// USERS /////////////////////////////////
 var db_InsertUserOnLogin = function(path, name, providerName, providerToken) {

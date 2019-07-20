@@ -3,19 +3,46 @@
 {
 	"db": {
 		"users": {
-			"uid": {
+			"uid_1": {
 				"name": "Test name",
 				"address": "Lorem ipsum dolor sit amet.",
 				"profile_picture_link": "url link containing the source image to the profile image",
 				"phone_number": "(99) 99999-9999",
 				"push_notification_key" : "notification_key",
 				"ads_id": {
-					"uuid_1": "uuid",
-					"uuid_2": "uuid"
+					"uid_1": "uid_1",
+					"uid_2": "uid_2"
 				},
 				"tokens": {
 					"facebook": "facebook_token",
-					"twitter": "facebook_token"
+					"twitter": "twitter_token"
+				},
+				"messages": {
+					"uid_1": "uid_1",
+					"uid_2": "uid_2"
+				}
+			}
+		},
+		"messages_last_info": {
+			"uid_1": {
+				"ad_uid": "uid_1",
+				"ad_title": "Titulo do produto",
+				"ad_image": "Link para a imagem principal do produto",
+				"content": "Max of 27 characthers here...",
+				"timestamp": "1563646315703"
+			}
+		},
+		"messages": {
+			"uid_1": {
+				"ad_uid": "uid_1",
+				"ad_title": "Titulo do produto",
+				"ad_image": "Link para a imagem principal do produto",
+				"msgs": {
+					"msg_uid": {
+						"user": "uid_1",
+						"timestamp": "1563646315703",	
+						"content": "Content message example"
+					}
 				}
 			}
 		}
