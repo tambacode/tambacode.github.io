@@ -34,7 +34,7 @@ const messages_DisplayMessageList = function() {
 };
 
 const messages_GetMessageCard = function(uid, img, title, description, timestamp) {
-    var card = '<div class="four wide column"><a href="message.html?uid={3}"><img src="{5}" class="ui tiny rounded image"></a></div><div class="twelve wide column"><a href="message.html?uid={4}"><h4 id="title">{0}</h4></a><span id="timestamp">{2}</span><span id="description">{1}.</span><div style="width: 100%;" class="ui divider"></div></div>';
+    var card = '<div class="four wide column"><a href="message.html?uid={3}"><img src="{5}" class="ui tiny rounded image"></a></div><div class="twelve wide column"><a href="message.html?uid={4}"><h4 id="title">{0}</h4></a><span id="timestamp">{2}</span><span id="description">{1}</span><div style="width: 100%;" class="ui divider"></div></div>';
     
     card = card.replace('{0}', title);
     card = card.replace('{1}', description);
@@ -142,7 +142,6 @@ const message_GetMessageContent = function(owner, timestamp, content)
 
 ///////////////////////////////// SEND MESSAGE  /////////////////////////////////
 const message_SendMessage = function() {
-    console.log('11');
     const textMessage = $('#textMessage');
 
     if (textMessage.val() == '') { return; }
@@ -156,8 +155,25 @@ const message_SendMessage = function() {
     };
     
     textMessage.val('');
+
+    // Save message
     db_set(newMsgPath, dataToInsert);
+    // Update data in last info table
+    message_UpdateInfoInLastInfoTable(key, dataToInsert.content);
 };
+
+const message_UpdateInfoInLastInfoTable = function(timestamp, content) {
+    const msgUID = misc_GetUrlParam('uid');
+    const path = 'messages_last_info/' + msgUID + '/';
+    LastInfoRef = db.ref(path);
+
+    if (content.length > 25) {
+        content = content.substring(0, 20) + '...';
+    }
+    
+    LastInfoRef.child('timestamp').set(timestamp);
+    LastInfoRef.child('content').set(content);
+}
 ///////////////////////////////// SEND MESSAGE  /////////////////////////////////
 
 ///////////////////////////////// CHAT DETAIL  /////////////////////////////////
