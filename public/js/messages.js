@@ -49,12 +49,12 @@ const messages_GetMessageCard = function(uid, img, title, description, timestamp
 ///////////////////////////////// MESSAGES LIST PAGE /////////////////////////////////
 
 ///////////////////////////////// CHAT DETAIL  /////////////////////////////////
+const msgUID = misc_GetUrlParam('uid');
+const path = 'messages/' + msgUID + '/msgs';
+
 var lastChatDetailTimestamp = new Date(0);
 
 const message_DisplayMessages = function() {
-    const msgUID = misc_GetUrlParam('uid');
-    const path = 'messages/' + msgUID + '/msgs';
-
     var onSucess = function(snapshot) {
         misc_RemoveLoader();
         
@@ -89,9 +89,8 @@ const message_ListenToNewMessages = function(lastTimestamp, path) {
 const message_NewMessageReceived = function(timestamp, value) {
     var tsDate = new Date(parseInt(timestamp));
 
-    if (message_TestAddDay(tsDate, lastChatDetailTimestamp)) {
-        lastChatDetailTimestamp = tsDate;
-    }
+    message_TestAddDay(tsDate, lastChatDetailTimestamp);
+    lastChatDetailTimestamp = tsDate;
 
     let userUID = localStorage.getItem('auth_UserUID');
     message_AddMessage((userUID == value.user), timestamp, value.content);
@@ -99,15 +98,20 @@ const message_NewMessageReceived = function(timestamp, value) {
 
 const message_TestAddDay = function(timestamp1, timestamp2)
 {
-    const millisecondsInADay = 86400000;
-    const dateDiff = timestamp1.getTime() - timestamp2.getTime();
-    
-    if (dateDiff > millisecondsInADay) {
-        message_AddDay(timestamp1);
-        return true;
-    }
+    let isDiffDay = false;
 
-    return false;
+    if (timestamp1.getUTCDate() != timestamp2.getUTCDate()) {
+        isDiffDay = true;
+    }
+     else if (timestamp1.getUTCMonth() != timestamp2.getUTCMonth()) {
+        isDiffDay = true;
+    } else if (timestamp1.getUTCFullYear() != timestamp2.getUTCFullYear()) {
+        isDiffDay = true;
+    }
+    
+    if (isDiffDay) {
+        message_AddDay(timestamp1);
+    }
 };
 
 const message_AddDay = function(timestamp) {
@@ -135,4 +139,25 @@ const message_GetMessageContent = function(owner, timestamp, content)
         return otherMsg.replace('{0}', content);
     }
 };
+
+///////////////////////////////// SEND MESSAGE  /////////////////////////////////
+const message_SendMessage = function() {
+    console.log('11');
+    const textMessage = $('#textMessage');
+
+    if (textMessage.val() == '') { return; }
+
+    const key = Date.now();
+    const newMsgPath = path + '/' + key;
+
+    var dataToInsert = {
+        user: localStorage.getItem('auth_UserUID'),
+        content : textMessage.val()
+    };
+    
+    textMessage.val('');
+    db_set(newMsgPath, dataToInsert);
+};
+///////////////////////////////// SEND MESSAGE  /////////////////////////////////
+
 ///////////////////////////////// CHAT DETAIL  /////////////////////////////////
