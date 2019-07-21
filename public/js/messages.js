@@ -49,40 +49,52 @@ const messages_GetMessageCard = function(uid, img, title, description, timestamp
 ///////////////////////////////// MESSAGES LIST PAGE /////////////////////////////////
 
 ///////////////////////////////// CHAT DETAIL  /////////////////////////////////
-const message_DisplayMessages = function() {
-    let firstMessage = true;
-    let lastTimestamp = new Date(0);
+var lastChatDetailTimestamp = new Date(0);
 
+const message_DisplayMessages = function() {
     const msgUID = misc_GetUrlParam('uid');
     const path = 'messages/' + msgUID + '/msgs';
 
     var onSucess = function(snapshot) {
-        if (firstMessage) {
-            misc_RemoveLoader();
-            firstMessage = false;
-        }
-
-        let userUID = localStorage.getItem('auth_UserUID');
-
-        $.each(snapshot.val(), function( timestamp, value ) {
-            var tsDate = new Date(parseInt(timestamp));
-            if (message_TestAddDay(tsDate, lastTimestamp)) {
-                lastTimestamp = tsDate;
-            }
-
-            message_AddMessage((userUID == value.user), timestamp, value.content);
+        misc_RemoveLoader();
+        
+        $.each(snapshot.val(), function(timestamp, value ) {
+            message_NewMessageReceived(timestamp, value);
         });
+
+        message_ListenToNewMessages(lastChatDetailTimestamp.getTime(), path);
     };
 
     var onNullValue = function(snapshot) {
-        $("#chatMessages").empty().append(misc_GetNullValueMsg(true));
+        misc_RemoveLoader();
+        $("#chatMessages").append(misc_GetNullValueMsg(true));
     };
 
     var onError = function(snapshot) {
-        $("#chatMessages").empty().append(misc_GetErrorMsg(true));
+        misc_RemoveLoader();
+        $("#chatMessages").append(misc_GetErrorMsg(true));
     };
 
     db_get(path, onSucess, onNullValue, onError);
+};
+
+const message_ListenToNewMessages = function(lastTimestamp, path) {
+    lastTimestamp = lastTimestamp + 1;
+    
+    db.ref(path).orderByKey().startAt(lastTimestamp.toString()).on('child_added', snap => {
+        message_NewMessageReceived(snap.key, snap.val());
+    });
+};
+
+const message_NewMessageReceived = function(timestamp, value) {
+    var tsDate = new Date(parseInt(timestamp));
+
+    if (message_TestAddDay(tsDate, lastChatDetailTimestamp)) {
+        lastChatDetailTimestamp = tsDate;
+    }
+
+    let userUID = localStorage.getItem('auth_UserUID');
+    message_AddMessage((userUID == value.user), timestamp, value.content);
 };
 
 const message_TestAddDay = function(timestamp1, timestamp2)

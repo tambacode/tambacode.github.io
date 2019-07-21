@@ -58,7 +58,8 @@ misc_GetNullValueOrder = function(withRow, message) {
 misc_GetHourMin = function(timestamp) {
     const date = new Date(parseInt(timestamp));
 
-    return date.getHours() + ":" + date.getMinutes();
+    var m = date.getMinutes();
+    return date.getHours() + ":" + ((m == 0) ? "00" : m);
 }
 
 misc_GetDate = function(date, includeDate, includeTime) {
