@@ -1,0 +1,41 @@
+html
+    head
+        title Shared.Farm - Message
+        
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        meta(http-equiv="X-UA-Compatible" content="ie=edge")
+        link( rel="manifest" crossorigin="use-credentials" href="%PUBLIC_URL%/manifest.json")
+        
+        //- CSS
+        include templates/styles
+        
+        //- Script
+        include templates/scripts
+    body
+        include templates/sideBar
+        .pusher
+            include templates/header
+            #all
+                #chatMessages.ui.padded.grid
+                    .row
+                    include templates/loader
+                    //-.s
+                        .fourteen.wide.column
+                            .ui.left.pointing.label
+                                | If you use this site regularly and would like to help keep the site on the Internet.
+                        .two.wide.column
+                        .fourteen.wide.column
+                            .ui.left.pointing.label
+                                | If you use this site regularly and would like to help keep the site on the Internet.
+                        .two.wide.column
+                        .two.wide.column
+                        .fourteen.wide.column
+                            .blue.ui.right.pointing.label
+                                | If you use this site regularly and would like to help keep the site on the Internet, please consider donating a small sum to help pay for the hosting and bandwidth bill. There is no minimum donation, any sum is appreciated - click here to donate using PayPal. Thank you for your support.
+                include templates/home
+                br
+                br
+            include templates/footer
+    script.
+        message_DisplayMessages();

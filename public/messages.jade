@@ -18,9 +18,7 @@ html
             include templates/header
             #all
                 #messages.ui.padded.grid
-                    .row
-                    .ui.active.centered.inline.loader
-                    .row
+                    include templates/loader
                     //each val in [1, 2, 3, 4, 5, 6, 7]
                         .four.wide.column
                             img.ui.tiny.rounded.image(src="imgs/black.png")

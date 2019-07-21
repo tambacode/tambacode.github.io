@@ -38,9 +38,8 @@
 				"ad_title": "Titulo do produto",
 				"ad_image": "Link para a imagem principal do produto",
 				"msgs": {
-					"msg_uid": {
+					"1563646315703": {
 						"user": "uid_1",
-						"timestamp": "1563646315703",	
 						"content": "Content message example"
 					}
 				}

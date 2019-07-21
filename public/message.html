@@ -1,7 +1,7 @@
 
 <html>
   <head>
-    <title>Shared.Farm - Messages</title>
+    <title>Shared.Farm - Message</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
@@ -47,25 +47,14 @@
         </div>
       </div>
       <div id="all">
-        <div id="messages" class="ui padded grid">
+        <div id="chatMessages" class="ui padded grid">
+          <div class="row"></div>
           <div id="loader" class="sixteen wide column row">
             <div class="ui active centered inline loader"></div>
           </div>
-          <!--each val in [1, 2, 3, 4, 5, 6, 7]
-          .four.wide.column
-              img.ui.tiny.rounded.image(src="imgs/black.png")
-          .twelve.wide.column
-              h4#title
-                  | Terra para cultivo de batataaa
-              span#timestamp
-                  | 13:42
-              span#description
-                  | Lorem ipsum dolor sit a adipiscasdasdaa...
-              .ui.divider(style="width: 100%;")
-          -->
         </div><br/><br/>
       </div>
     </div>
   </body>
-  <script>messages_DisplayMessageList();</script>
+  <script>message_DisplayMessages();</script>
 </html>

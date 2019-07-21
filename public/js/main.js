@@ -27,6 +27,10 @@ misc_GoToPage = function(url) {
 	window.location.href = url;	
 }
 
+misc_RemoveLoader = function() {
+    $('#loader').remove();
+}
+
 misc_GetErrorMsg = function(withRow) {
     return misc_GetNullValueOrder(withRow, 'Erro ao executar a pesquisa');
 }
@@ -49,4 +53,53 @@ misc_GetNullValueOrder = function(withRow, message) {
     }
 
     return str;
+}
+
+misc_GetHourMin = function(timestamp) {
+    const date = new Date(parseInt(timestamp));
+
+    return date.getHours() + ":" + date.getMinutes();
+}
+
+misc_GetDate = function(date, includeDate, includeTime) {
+    var msg = '';
+
+    if (includeDate) {
+        msg += date.getUTCDate() + ' DE ' + misc_GetDescriptiveMonth(date.getUTCMonth()) + ' DE ' + date.getUTCFullYear();
+    } else if (includeTime) {
+        msg += ' ' + misc_GetHourMin(timestamp);
+    }
+
+    return msg;
+
+    return '';
+}
+
+misc_GetDescriptiveMonth = function(month) {
+    switch(month) {
+        case 0:
+            return 'Janeiro'
+        case 1:
+            return 'Fevereiro'
+        case 2:
+            return 'Março'
+        case 3:
+            return 'Abril'
+        case 4:
+            return 'Maio'
+        case 5:
+            return 'Junho'
+        case 6:
+            return 'Julho'
+        case 7:
+            return 'Agosto'
+        case 8:
+            return 'Setembro'
+        case 9:
+            return 'Outubro'
+        case 10:
+            return 'Novembro'
+        case 11:
+            return 'Dezembro'
+    }
 }
