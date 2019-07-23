@@ -1,3 +1,4 @@
+/*
 const functions = require('firebase-functions');
 const firebase = require('firebase-admin');
 const express = require('express');
@@ -34,3 +35,4 @@ app.get('/profile', (request, response) => {
 });
 
 exports.app = functions.https.onRequest(app);
+*/

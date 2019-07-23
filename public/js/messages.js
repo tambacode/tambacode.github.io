@@ -11,6 +11,8 @@ const messages_DisplayMessageList = function() {
 
     var messages = $("#messages");
     var firstMessage = true;
+    
+    var timestampList = {};
 
     var onSucess = function(snapshot) {
         if (firstMessage) {
@@ -19,7 +21,19 @@ const messages_DisplayMessageList = function() {
         }
 
         var val = snapshot.val();
-        messages.append(messages_GetMessageCard(snapshot.key, val.ad_image, val.ad_title, val.content, val.timestamp));
+        var added = false;
+
+        $.each(timestampList, function(timestamp, obj ) {
+            if (val.timestamp > timestamp) {
+                timestampList[val.timestamp] = messages.prepend(messages_GetMessageCard(snapshot.key, val.ad_image, val.ad_title, val.content, val.timestamp), obj);
+                added = true;
+                return;
+            }
+        });
+        
+        if (!added) {
+            timestampList[val.timestamp] = messages.append(messages_GetMessageCard(snapshot.key, val.ad_image, val.ad_title, val.content, val.timestamp));
+        }
     };
 
     var onNullValue = function(snapshot) {
@@ -174,6 +188,10 @@ const message_UpdateInfoInLastInfoTable = function(timestamp, content) {
     LastInfoRef.child('timestamp').set(timestamp);
     LastInfoRef.child('content').set(content);
 }
+
+const message_FirstMessageSent = function() {
+
+};
 ///////////////////////////////// SEND MESSAGE  /////////////////////////////////
 
 ///////////////////////////////// CHAT DETAIL  /////////////////////////////////

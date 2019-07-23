@@ -14,7 +14,7 @@ firebase.initializeApp(fb.firebaseConfig);
 
 ////////////////// USER //////////////////
 user_OpenProfile = function() {
-	auth_RequireLoggingToAccess('profile');
+	auth_RequireLoggingToAccess('index.html');
 };
 ////////////////// USER //////////////////
 
@@ -32,21 +32,22 @@ misc_RemoveLoader = function() {
 }
 
 misc_GetErrorMsg = function(withRow) {
-    return misc_GetNullValueOrder(withRow, 'Erro ao executar a pesquisa');
+    return misc_GetNullValueOrder(withRow, 'errorMsg', 'Erro ao executar a pesquisa');
 }
 
 misc_GetNullValueMsg = function(withRow) {
-    return misc_GetNullValueOrder(withRow, 'Nenhum valor encontrado');
+    return misc_GetNullValueOrder(withRow, 'nullValueMsg', 'Nenhum valor encontrado');
 }
 
-misc_GetNullValueOrder = function(withRow, message) {
+misc_GetNullValueOrder = function(withRow, id, message) {
     var str = '';
 
     if (withRow) {
-        str += '<div class="row"><div class="sixteen wide column">';
+        str += '<div id="' + id + '" class="row"><div class="sixteen wide column">';
+        str += '<div class="ui segment"><h4 class="ui center aligned header">' + message + '</h4></div>'
+    } else {
+        str += '<div id="' + id + '" class="ui segment"><h4 class="ui center aligned header">' + message + '</h4></div>'
     }
-
-    str += '<div class="ui segment"><h4 class="ui center aligned header">' + message + '</h4></div>'
 
     if (withRow) {
         str += '</div></div>';
