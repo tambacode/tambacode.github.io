@@ -1,0 +1,125 @@
+
+<html>
+  <head>
+    <title>Shared.Farm</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <link rel="manifest" crossorigin="use-credentials" href="%PUBLIC_URL%/manifest.json"/>
+    <!-- Please don't use this type of comment >> // << because it is compiled in the HTML-->
+    <link rel="stylesheet" type="text/css" href="semanticUI/semantic.css"/>
+    <link rel="stylesheet" type="text/css" href="semanticUI/components/Semantic-UI-Alert.css"/>
+    <link rel="stylesheet" type="text/css" href="css/webapp.css"/>
+    <link rel="stylesheet" type="text/css" href="css/sharedfarm.css"/>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
+    <script src="semanticUI/semantic.min.js"></script>
+    <script type="text/javascript" src="semanticUI/components/Semantic-UI-Alert.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/messages.js"></script>
+  </head>
+  <body>
+    <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home</a><a onClick="messages_GoTo();" class="item">Mensagens</a><a onClick="auth_LogoffUser();" class="item">Sair</a></div>
+    <div class="pusher">
+      <div id="menu" class="ui sf_header">
+        <div class="ui padded grid">
+          <div class="blue row">
+            <div class="three wide column">
+              <button onclick="ui_openSidebar();" class="ui icon button blue"><i class="icon list large"></i></button>
+            </div>
+            <div class="ten wide column">
+              <div class="ui search">
+                <div class="ui icon input big fluid">
+                  <input type="text" placeholder="Pesquisar..." class="prompt"/><i class="search icon"></i>
+                </div>
+                <div class="results"></div>
+              </div>
+            </div>
+            <div class="right aligned three wide column">
+              <button onclick="user_OpenProfile();" class="ui icon button blue"><i class="icon user circle large"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="all">
+        <form class="ui form fluid ad_user">
+          <div id="tabnavigation" class="ui pointing secondary menu flexh">
+            <div data-tab="basic" class="item red active">Básico</div>
+            <div data-tab="address" class="item blue">Endereço</div>
+            <div data-tab="password" class="item green">Senha</div>
+          </div>
+          <div data-tab="basic" class="ui tab segment active">
+            <div class="field">
+              <label>Nome</label>
+              <input type="text" name="fullname" placeholder="Nome completo"/>
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input type="email" name="email" placeholder="email"/>
+            </div>
+            <div class="field">
+              <label>Telefone</label>
+              <input type="tel" name="phone" placeholder="(XX) XXXX-XXXX"/>
+            </div>
+          </div>
+          <div data-tab="address" class="ui tab segment address">
+            <div class="field">
+              <label>CEP</label>
+              <input type="text" name="cep" id="cep" placeholder="XXXXXX-XXX"/>
+            </div>
+            <div class="field">
+              <label>Logradouro</label>
+              <input input="input" type="email" name="publicplace" id="publicplace" placeholder="Rua, Avenida, ..."/>
+            </div>
+            <div class="field">
+              <label>Numero</label>
+              <input input="input" type="text" name="number" placeholder="11"/>
+            </div>
+            <div class="field">
+              <label>Bairro</label>
+              <input input="input" type="text" name="district" id="district" placeholder="Bairro ..."/>
+            </div>
+            <div class="field">
+              <label>Complemento</label>
+              <input input="input" type="text" name="complement" id="complement" placeholder="KM12, Fazenda ..."/>
+            </div>
+            <div class="field">
+              <label>Localidade</label>
+              <input input="input" type="text" name="state" id="state" placeholder="São Paulo"/>
+            </div>
+            <div class="field">
+              <label>UF</label>
+              <input input="input" type="text" name="uf" id="uf" placeholder="SAO ..."/>
+            </div>
+          </div>
+          <div data-tab="password" class="ui tab segment">
+            <div class="field">
+              <label>Senha</label>
+              <input type="password" name="password" placeholder="digita sua senha"/>
+            </div>
+            <div class="field">
+              <label>Repetir</label>
+              <input type="password" name="confirmpassword" placeholder="digita sua senha"/>
+            </div>
+            <div class="inline field">
+              <div class="ui checkbox">
+                <input type="checkbox" name="terms"/>
+                <label>Eu concordo com a politica e termos</label>
+              </div>
+            </div>
+          </div>
+          <div class="ui primary submit button">Salvar</div>
+          <div class="ui clear button">Limpar</div>
+          <div class="ui error message"></div>
+        </form><br/><br/>
+      </div>
+    </div>
+    <script src="js/ad_user.js"></script>
+  </body>
+</html>
