@@ -14,7 +14,7 @@ firebase.initializeApp(fb.firebaseConfig);
 
 ////////////////// USER //////////////////
 user_OpenProfile = function() {
-	auth_RequireLoggingToAccess('index.html');
+	auth_RequireLoggingToAccess('ad_user.html');
 };
 ////////////////// USER //////////////////
 
