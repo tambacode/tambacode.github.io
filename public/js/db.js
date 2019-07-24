@@ -22,6 +22,10 @@ var db_set = function(path, postData) {
     db.ref(path).set(postData);
 };
 
+var db_update = function(path, postData) {
+    db.ref(path).update(postData);
+};
+
 var db_get = function(path, onSucess, onNullValue, onError) {
     db.ref(path).once('value')
         .then(function(snapshot) {
@@ -97,8 +101,61 @@ var db_InsertUserOnLogin = function(path, name, providerName, providerToken) {
 
     db_set(path, dataToInsert);
 };
-///////////////////////////////// USERS /////////////////////////////////
 
+var db_getUserInfo = function() {
+    var path = '/users/' + localStorage.getItem('auth_UserUID');
+
+    var onSuccess = function(snapshot) {
+        
+        $.each(snapshot.val(), function(field, value ) {
+            document.getElementById(field).value = value;
+        });
+    };
+
+    var onNullValue = function(snapshot) {
+    };
+
+    var onError = function(snapshot) {
+    };
+
+    db_get(path, onSuccess, onNullValue, onError);
+};
+
+var db_updateUserInfo = function() {
+    var path = '/users/' + localStorage.getItem('auth_UserUID');
+    
+    //Form fields
+    var name = document.getElementById('name').value;
+    var email = document.getElementById('email').value;
+    var phone = document.getElementById('phone').value;
+    var cep = document.getElementById('cep').value;
+
+    var publicplace = document.getElementById('publicplace').value;
+    var number = document.getElementById('number').value;
+    var district = document.getElementById('district').value;
+
+    var complement = document.getElementById('complement').value;
+    var city = document.getElementById('city').value;
+    var state = document.getElementById('state').value;
+
+    var terms = "true";
+    
+    var dataToInsert = {
+        name: name,
+        email: email,
+        phone: phone,
+        cep: cep,
+        publicplace: publicplace,
+        number: number,
+        district: district,
+        complement: complement,
+        city: city,
+        state: state,
+        terms: terms
+    };
+
+    db_update(path,dataToInsert);
+};
 ///////////////////////////////// AD REG /////////////////////////////////
 var db_InsertAdRegistration = function() {
     var path = 'ad/' + db_GetNewPushKey('ad');
