@@ -20,22 +20,18 @@ html
         .pusher
             include templates/header
             #all
-                form.ui.form.fluid.ad_user
-                    .ui.pointing.secondary.menu.flexh(id="tabnavigation")
-                        .item.red.active(data-tab="basic") Básico
-                        .item.blue(data-tab="address") Endereço
-                        .item.green(data-tab="password") Senha
-                    .ui.tab.segment.active(data-tab="basic")
+                br
+                .ui.container                
+                    form.ui.form.fluid.ad_user(onSubmit="return db_updateUserInfo();")
                         .field
                             label Nome
-                            input(type="text" name="fullname" placeholder="Nome completo")
+                            input(type="text" name="name" id="name" placeholder="Nome completo")
                         .field
                             label Email
-                            input(type="email" name="email" placeholder="email")
+                            input(type="email" name="email" id="email" placeholder="email")
                         .field
                             label Telefone
-                            input(type="tel" name="phone" placeholder="(XX) XXXX-XXXX")
-                    .ui.tab.segment.address(data-tab="address")
+                            input(type="tel" name="phone" id="phone" placeholder="YYXXXXXZZZZ")
                         .field
                             label CEP
                             input(type="text" name="cep" id="cep" placeholder="XXXXXX-XXX")
@@ -44,33 +40,28 @@ html
                             input(input type="email" name="publicplace" id="publicplace" placeholder="Rua, Avenida, ...")
                         .field
                             label Numero
-                            input(input type="text" name="number" placeholder="11")
+                            input(input type="text" name="number" id="number" placeholder="11")
                         .field
                             label Bairro
                             input(input type="text" name="district" id="district" placeholder="Bairro ...")
                         .field
                             label Complemento
-                            input(input type="text" name="complement" placeholder="KM12, Fazenda ...")
+                            input(input type="text" name="complement" id="complement" placeholder="KM12, Fazenda ...")
                         .field
                             label Localidade
-                            input(input type="text" name="state" id="state" placeholder="São Paulo")
+                            input(input type="text" name="city" id="city" placeholder="São Paulo")
                         .field
                             label UF
-                            input(input type="text" name="uf" id="uf" placeholder="SAO ...")
-                    .ui.tab.segment(data-tab="password")
-                        .field
-                            label Senha
-                            input(type="password" name="password" placeholder="digita sua senha")
-                        .field
-                            label Repetir
-                            input(type="password" name="confirmpassword" placeholder="digita sua senha")
+                            input(input type="text" name="state" id="state" placeholder="SAO ...")
                         .inline.field
                             .ui.checkbox
-                                input(type="checkbox" name="terms")
+                                input(type="checkbox" name="terms" id="terms")
                                 label Eu concordo com a politica e termos
-                    .ui.primary.submit.button Salvar
-                    .ui.clear.button Limpar
-                    .ui.error.message
+                        .field
+                            .ui.primary.submit.button Salvar
+                            .ui.clear.button Limpar
+                        .field
+                            .ui.error.message
                 include templates/home
                 br
                 br
