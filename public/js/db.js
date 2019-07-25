@@ -1,4 +1,4 @@
-var db = firebase.database();
+﻿var db = firebase.database();
 var rootRef = db.ref();
 
 //  Use to get a new key when inserting a new data on DB
@@ -156,37 +156,6 @@ var db_updateUserInfo = function() {
 
     db_update(path,dataToInsert);
 };
-///////////////////////////////// AD REG /////////////////////////////////
-var db_InsertAdRegistration = function() {
-    var path = 'ad/' + db_GetNewPushKey('ad');
-    
-    //Form fields
-    var title = document.getElementById('title').value;
-    var price = document.getElementById('price').value;
-
-    var products = document.getElementById('products');
-    var services = document.getElementById('services');
-
-    if(products.checked == true){
-        var category = "produtos";
-    }else{
-        var category = "serviços";
-    }
-
-    var description = document.getElementById('description').value;
-    var location = document.getElementById('location').value;
-    
-    var dataToInsert = {
-        title: title,
-        price: price,
-        category: category,
-        description: description,
-        location: location              
-    };
-
-    db_set(path,dataToInsert);
-};
-///////////////////////////////// AD REG /////////////////////////////////
 
 ///////////////////////////////// EXAMPLES /////////////////////////////////
 //  Below there are one (1) method to examplify how to use the methods above
