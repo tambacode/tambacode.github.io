@@ -1,0 +1,90 @@
+
+<html>
+  <head>
+    <title>Shared.Farm</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <link rel="manifest" href="manifest.json"/>
+    <!-- Please don't use this type of comment >> // << because it is compiled in the HTML-->
+    <link rel="stylesheet" type="text/css" href="semanticUI/semantic.css"/>
+    <link rel="stylesheet" type="text/css" href="semanticUI/components/Semantic-UI-Alert.css"/>
+    <link rel="stylesheet" type="text/css" href="css/webapp.css"/>
+    <link rel="stylesheet" type="text/css" href="css/sharedfarm.css"/>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
+    <script src="semanticUI/semantic.min.js"></script>
+    <script type="text/javascript" src="semanticUI/components/Semantic-UI-Alert.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/messages.js"></script>
+  </head>
+  <body>
+    <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home</a><a onClick="messages_GoTo();" class="item">Mensagens</a><a onClick="auth_LogoffUser();" class="item">Sair</a></div>
+    <div class="pusher">
+      <div id="menu" class="ui sf_header">
+        <div class="ui padded grid">
+          <div class="blue row">
+            <div class="three wide column">
+              <button onclick="ui_openSidebar();" class="ui icon button blue"><i class="icon list large"></i></button>
+            </div>
+            <div class="ten wide column">
+              <div class="ui search">
+                <div class="ui icon input big fluid">
+                  <input type="text" placeholder="Pesquisar..." class="prompt"/><i class="search icon"></i>
+                </div>
+                <div class="results"></div>
+              </div>
+            </div>
+            <div class="right aligned three wide column">
+              <button onclick="user_OpenProfile();" class="ui icon button blue"><i class="icon user circle large"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="all"><br/>
+        <div class="ui container">
+          <div id="image" class="ui fluid centered small image"><a class="ui red right corner label"><i class="heart icon"></i></a><img src="imgs/black.png"/></div><br/>
+          <div id="title" class="ui orange label">
+             
+            Serviço de capinagem
+          </div><br/>
+          <div id="location" class="ui message">
+            <div class="header">Localização</div>
+            <p lingdex="1">Vila Sumaúma, Município de Mucajaí, ao lado da E.E. Sadoc Perdeira</p>
+          </div>
+          <div id="description" class="ui message">
+            <div class="header">Descrição do anúncio</div>
+            <p lingdex="1">Realizo serviço de capinagem em qualquer tipo de terreno. Cobro por diária</p>
+          </div>
+          <div class="ui two column grid">
+            <div class="column">
+              <div class="ui raised segment"><a class="ui blue ribbon label">Categoria</a>
+                <label id="category">Serviço                                 </label>
+              </div>
+            </div>
+            <div class="column">
+              <div class="ui segment"><a id="price" class="ui green tag label">R$ 60,00</a></div>
+            </div>
+          </div><br/>
+          <div class="ui two column grid">
+            <div class="five wide column">                   
+              <div id="picture" class="ui tiny circular image"><img src="imgs/elliot.jpg"/></div>
+              <div id="name" class="label">Jeferson Barros                                                    </div>
+            </div>
+            <div class="fourten wide column"><br/>
+              <div id="phone" class="ui label"><i class="phone icon"> 92 98447-4596</i></div><br/>
+              <div id="email" class="ui label"><i class="mail icon"> jeferson.ba@gmail.com</i></div>
+            </div>
+          </div><br/>
+          <div id="SendMessage" onclick="window.location.href='messages.html'" class="button fluid ui primary button">Enviar Mensagem</div><br/>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
