@@ -29,7 +29,7 @@ var auth_RequestLogin = function(provider, providerName) {
 
 var auth_LoginSuccessful = function(result, providerName) {
     // Some params from facebook
-    //result.user.uid | result.user.displayName | result.credential.accessToken
+    //result.user.uid | result.user.displayName | result.credential.accessToken | result.user.photoURL
 
     var providerToken = null;
     var uid = null
@@ -76,7 +76,8 @@ var auth_LogoffUser = function() {
     if (localStorage.getItem('auth_UserOnline'))
     {
         firebase.auth().signOut();
-        localStorage.setItem('auth_UserOnline', false);
+        localStorage.removeItem('auth_UserOnline');
+        localStorage.removeItem('auth_UserUID');
 
         misc_GoToPage('index.html');
     }
