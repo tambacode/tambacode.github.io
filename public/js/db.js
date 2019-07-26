@@ -22,8 +22,15 @@ var db_set = function(path, postData) {
     db.ref(path).set(postData);
 };
 
+//https://firebase.google.com/docs/database/web/read-and-write
 var db_update = function(path, postData) {
-    db.ref(path).update(postData);
+    db.ref(path).update(postData,
+        function (error){
+            if (error === null)
+                misc_DisplaySuccessMessage("Cadastro","Cadastro feito com sucesso");// The write failed...
+            else
+                misc_DisplayErrorMessage("Cadastro","Cadastro não foi realizado");// Data saved successfully!
+        });
 };
 
 var db_get = function(path, onSucess, onNullValue, onError) {
@@ -127,31 +134,30 @@ var db_updateUserInfo = function() {
     //Form fields
     var name = document.getElementById('name').value;
     var email = document.getElementById('email').value;
-    var phone = document.getElementById('phone').value;
+    var phone_ddd = document.getElementById('phone_ddd').value;
+    var phone_number = document.getElementById('phone_number').value;
     var cep = document.getElementById('cep').value;
 
     var publicplace = document.getElementById('publicplace').value;
-    var number = document.getElementById('number').value;
+    var house_number = document.getElementById('house_number').value;
     var district = document.getElementById('district').value;
 
     var complement = document.getElementById('complement').value;
     var city = document.getElementById('city').value;
     var state = document.getElementById('state').value;
-
-    var terms = "true";
     
     var dataToInsert = {
         name: name,
         email: email,
-        phone: phone,
+        phone_ddd: phone_ddd,
+        phone_number: phone_number,
         cep: cep,
         publicplace: publicplace,
-        number: number,
+        house_number: house_number,
         district: district,
         complement: complement,
         city: city,
         state: state,
-        terms: terms
     };
 
     db_update(path,dataToInsert);
