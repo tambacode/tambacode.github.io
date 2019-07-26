@@ -1,5 +1,5 @@
 ///////////////////////////////// DB STRUCTURE /////////////////////////////////
-// Use this file to define the database structure
+// Use this file to define the database structure (For documentation reasons only)
 {
 	"db": {
 		"users": {
