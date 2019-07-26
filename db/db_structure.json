@@ -5,9 +5,17 @@
 		"users": {
 			"uid_1": {
 				"name": "Test name",
-				"address": "Lorem ipsum dolor sit amet.",
+				"email" : "abc@domain.com",
+				"phone_ddd" :"XXX",
+				"phone_number" : "XXYYYYYZZZZ",
+				"cep" : "XXXXXZZZ",
+				"publicplace" : "Rua x",
+				"house_number" : "11",
+				"district" : "Bairro X",
+				"complement" : "Quadra tal, edifico tal",
+				"city" : "Amazonas",
+				"state" : "AM",
 				"profile_picture_link": "url link containing the source image to the profile image",
-				"phone_number": "(99) 99999-9999",
 				"push_notification_key" : "notification_key",
 				"ads_id": {
 					"uid_1": "uid_1",
