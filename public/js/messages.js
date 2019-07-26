@@ -4,18 +4,20 @@ const messages_GoTo = function() {
 };
 
 const messages_DisplayMessageList = function() {
-    var path = localStorage.getItem('auth_UserUID') + '/messages';
-    
-    var userRef = rootRef.child('users');
-    var msgsLastInfoRef = rootRef.child('messages_last_info');
+    const path = localStorage.getItem('auth_UserUID') + '/messages';
+    const userRef = rootRef.child('users');
+    const msgsLastInfoRef = rootRef.child('messages_last_info');
 
-    var messages = $("#messages");
+    const messages = $("#messages");
     var firstMessage = true;
     
     var timestampList = {};
 
+    const bodyRef = $("html, body");
+
     var onSucess = function(snapshot) {
         if (firstMessage) {
+            misc_RemoveErrorNullMsg();
             misc_RemoveLoader();
             firstMessage = false;
         }
@@ -24,16 +26,24 @@ const messages_DisplayMessageList = function() {
         var added = false;
 
         $.each(timestampList, function(timestamp, obj ) {
-            if (val.timestamp > timestamp) {
+            t1 = val.timestamp;
+            t2 = timestamp;
+            
+            if (t1 == t2) {
+                added = true;
+                return false;
+            } else if (t1 > t2) {
                 timestampList[val.timestamp] = messages.prepend(messages_GetMessageCard(snapshot.key, val.ad_image, val.ad_title, val.content, val.timestamp), obj);
                 added = true;
-                return;
+                return false;
             }
         });
         
         if (!added) {
             timestampList[val.timestamp] = messages.append(messages_GetMessageCard(snapshot.key, val.ad_image, val.ad_title, val.content, val.timestamp));
         }
+
+        bodyRef.animate({ scrollTop: $(document).height() }, 0);
     };
 
     var onNullValue = function(snapshot) {
@@ -64,7 +74,7 @@ const messages_GetMessageCard = function(uid, img, title, description, timestamp
 
 ///////////////////////////////// CHAT DETAIL  /////////////////////////////////
 const msgUID = misc_GetUrlParam('uid');
-const path = 'messages/' + msgUID + '/msgs';
+const messagePath = 'messages/' + msgUID + '/msgs';
 
 var lastChatDetailTimestamp = new Date(0);
 
@@ -75,8 +85,9 @@ const message_DisplayMessages = function() {
         $.each(snapshot.val(), function(timestamp, value ) {
             message_NewMessageReceived(timestamp, value);
         });
-
-        message_ListenToNewMessages(lastChatDetailTimestamp.getTime(), path);
+        
+        $("html, body").animate({ scrollTop: $(document).height() }, 10);
+        message_ListenToNewMessages(lastChatDetailTimestamp.getTime(), messagePath);
     };
 
     var onNullValue = function(snapshot) {
@@ -89,14 +100,18 @@ const message_DisplayMessages = function() {
         $("#chatMessages").append(misc_GetErrorMsg(true));
     };
 
-    db_get(path, onSucess, onNullValue, onError);
+    db_get(messagePath, onSucess, onNullValue, onError);
 };
 
 const message_ListenToNewMessages = function(lastTimestamp, path) {
     lastTimestamp = lastTimestamp + 1;
     
+    const bodyRef = $("html, body");
+
     db.ref(path).orderByKey().startAt(lastTimestamp.toString()).on('child_added', snap => {
         message_NewMessageReceived(snap.key, snap.val());
+
+        bodyRef.animate({ scrollTop: $(document).height() }, 10);
     });
 };
 
@@ -156,12 +171,14 @@ const message_GetMessageContent = function(owner, timestamp, content)
 
 ///////////////////////////////// SEND MESSAGE  /////////////////////////////////
 const message_SendMessage = function() {
+    message_FirstMessageSent();
+
     const textMessage = $('#textMessage');
 
     if (textMessage.val() == '') { return; }
 
     const key = Date.now();
-    const newMsgPath = path + '/' + key;
+    const newMsgPath = messagePath + '/' + key;
 
     var dataToInsert = {
         user: localStorage.getItem('auth_UserUID'),
@@ -173,11 +190,10 @@ const message_SendMessage = function() {
     // Save message
     db_set(newMsgPath, dataToInsert);
     // Update data in last info table
-    message_UpdateInfoInLastInfoTable(key, dataToInsert.content);
+    message_UpdateInfoInLastInfoTable(misc_GetUrlParam('uid'), key, dataToInsert.content);
 };
 
-const message_UpdateInfoInLastInfoTable = function(timestamp, content) {
-    const msgUID = misc_GetUrlParam('uid');
+const message_UpdateInfoInLastInfoTable = function(msgUID, timestamp, content) {
     const path = 'messages_last_info/' + msgUID + '/';
     LastInfoRef = db.ref(path);
 
@@ -190,7 +206,103 @@ const message_UpdateInfoInLastInfoTable = function(timestamp, content) {
 }
 
 const message_FirstMessageSent = function() {
+    message_RemoveErrorNullMsg();
+};
 
+const message_RemoveErrorNullMsg = function() {
+    var nullMsg = $('#nullValueMsg');
+    if (nullMsg) {
+        nullMsg.remove();
+        return true;
+    } else {
+        var errorMsg = $('#nullValueMsg');
+        if (errorMsg) {
+            errorMsg.remove();
+            return true;
+        }
+    }
+
+    return false;
+};
+
+const message_StartChatWithProductOwner = function() {
+    //const adUID = misc_GetUrlParam('uid');
+    const currentUID = localStorage.getItem('auth_UserUID');
+    const adUID = '-Lkavh0cBxzZvDpHzMEC';
+
+    const path = 'ad/' + adUID + '/user';
+
+    var onSucess = function(snapshot) {
+        const ownerUID = snapshot.val()
+        message_StartChat(ownerUID, currentUID, adUID);
+    };
+
+    db_get(path, onSucess, message_ErrorFunction, message_ErrorFunction);
+};
+
+const message_StartChat = function(ownerUID, currentUID, adUID) {
+    // Add message to users/message/ (BOTH USERS)
+    // Add info to users/message/ (BOTH USERS)
+    const addMessageToUser = function(userUID, messageUID)
+    {
+        rootRef.child('users').child(userUID).child('messages').child(messageUID).set(messageUID);  
+    }
+
+    // Create message in messages_last_info
+    var createMessageLastInfo = function(messageUID, ad_uid, ad_title, ad_image) {
+        const msgLastInfoPath = 'messages_last_info/' + messageUID;
+        
+        //snapshot.val().title
+        const dataToInsert = {
+            "ad_uid": ad_uid,
+            "ad_title": ad_title,
+            "ad_image": ad_image,
+            "content": "Nova mensagem",
+            "timestamp": Date.now()
+        };
+
+        // Save message
+        db_set(msgLastInfoPath, dataToInsert);
+
+        addMessageToUser(ownerUID, messageUID);
+        addMessageToUser(currentUID, messageUID);
+        auth_RequireLoggingToAccess('message.html?uid=' + messageUID);
+    }
+
+    // Create message in messages
+    var createMessageInMessage = function(snapshot) {
+        var newMsgPath = 'messages/';
+        const messageUID = db_GetNewPushKey(newMsgPath);
+        newMsgPath = newMsgPath + messageUID;
+
+        const adTitle = snapshot.val().title;
+        const adImage = "Test";
+
+        //snapshot.val().title
+        const dataToInsert = {
+            "ad_uid": adUID,
+            "ad_title": adTitle,
+            "ad_image": adImage,
+            "msgs": ""
+        };
+
+        // Save message
+        db_set(newMsgPath, dataToInsert);
+        createMessageLastInfo(messageUID, adUID, adTitle, adImage);
+    };
+
+    // Get Ad Data
+    const adPath = 'ad/' + adUID;
+    const onProductSearchSucess = function(snapshot) {
+        createMessageInMessage(snapshot);
+    };
+
+    db_get(adPath, onProductSearchSucess, message_ErrorFunction, message_ErrorFunction);
+}
+
+const message_ErrorFunction = function(error) {
+    console.log(error);
+    misc_DisplayErrorMessage('Erro ao iniciar um chat', 'Favor tentar mais tarde');
 };
 ///////////////////////////////// SEND MESSAGE  /////////////////////////////////
 

@@ -31,6 +31,20 @@ misc_RemoveLoader = function() {
     $('#loader').remove();
 }
 
+misc_RemoveErrorNullMsg = function() {
+    var errorMSG = $('#errorMsg');
+
+    if (errorMSG) {
+        errorMSG.remove();
+    }
+
+    var nullValueMSG = $('#nullValueMsg');
+
+    if (nullValueMSG) {
+        nullValueMSG.remove();
+    }
+}
+
 misc_GetErrorMsg = function(withRow) {
     return misc_GetNullValueOrder(withRow, 'errorMsg', 'Erro ao executar a pesquisa');
 }
@@ -59,8 +73,18 @@ misc_GetNullValueOrder = function(withRow, id, message) {
 misc_GetHourMin = function(timestamp) {
     const date = new Date(parseInt(timestamp));
 
+    var h = date.getHours();
     var m = date.getMinutes();
-    return date.getHours() + ":" + ((m == 0) ? "00" : m);
+
+    if (h <= 9) {
+        h = "0" + h;
+    }
+
+    if (m <= 9) {
+        m = "0" + m;
+    }
+
+    return h + ":" + m;
 }
 
 misc_GetDate = function(date, includeDate, includeTime) {
@@ -105,3 +129,14 @@ misc_GetDescriptiveMonth = function(month) {
             return 'Dezembro'
     }
 }
+
+const misc_DisplayErrorMessage = function(title, text) {
+    $.uiAlert({
+        textHead: title,
+        text: text,
+        bgcolor: '#DB2828',
+        textcolor: '#fff',
+        position: 'top-center',
+        time: 2
+    });
+};

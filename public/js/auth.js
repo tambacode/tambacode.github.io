@@ -58,14 +58,8 @@ var auth_LoginSuccessful = function(result, providerName) {
 };
 
 var auth_LoginFailed = function(error, providerName) {
-    $.uiAlert({
-        textHead: 'Problema no login',
-        text: 'Não foi possível realizar o login no ' + providerName,
-        bgcolor: '#DB2828',
-        textcolor: '#fff',
-        position: 'top-center',
-        time: 2
-    });
+    const text = 'Não foi possível realizar o login no ' + providerName;
+    misc_DisplayErrorMessage('Problema no login', text);
 };
 
 var auth_LogOnUser = function(firebaseUser) {
