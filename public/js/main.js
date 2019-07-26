@@ -140,3 +140,14 @@ const misc_DisplayErrorMessage = function(title, text) {
         time: 2
     });
 };
+
+const misc_DisplaySuccessMessage = function(title, text) {
+    $.uiAlert({
+        textHead: title,
+        text: text,
+        bgcolor: '#8FE15F',
+        textcolor: '#fff',
+        position: 'top-center',
+        time: 2
+    });
+};
