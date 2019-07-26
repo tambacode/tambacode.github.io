@@ -12,6 +12,8 @@
     <link rel="stylesheet" type="text/css" href="css/webapp.css"/>
     <link rel="stylesheet" type="text/css" href="css/sharedfarm.css"/>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-messaging.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
@@ -23,6 +25,7 @@
     <script src="js/auth.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/messages.js"></script>
+    <script src="js/ad.js"></script>
   </head>
   <body>
     <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home</a><a onClick="messages_GoTo();" class="item">Mensagens</a><a onClick="auth_LogoffUser();" class="item">Sair</a></div>
@@ -49,7 +52,8 @@
       </div>
       <div id="all"><br/>
         <div class="ui container">               
-          <form onSubmit="return db_updateUserInfo();" class="ui form fluid ad_user">
+          <form class="ui form fluid ad_user">
+            <div class="field"><img src="imgs/avatar1.png" class="ui centered small image"/></div>
             <div class="field">
               <label>Nome</label>
               <input type="text" name="name" id="name" placeholder="Nome completo"/>
@@ -59,20 +63,40 @@
               <input type="email" name="email" id="email" placeholder="email"/>
             </div>
             <div class="field">
-              <label>Telefone</label>
-              <input type="tel" name="phone" id="phone" placeholder="YYXXXXXZZZZ"/>
+              <div class="ui grid">                      
+                <div class="six wide column">
+                  <div class="field">
+                    <label>DDD</label>
+                    <input type="tel" name="phone_ddd" id="phone_ddd" placeholder="011"/>
+                  </div>
+                </div>
+                <div class="ten wide column">
+                  <div class="field">
+                    <label>Telefone</label>
+                    <input type="tel" name="phone_number" id="phone_number" placeholder="99999 9999"/>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="field">
-              <label>CEP</label>
-              <input type="text" name="cep" id="cep" placeholder="XXXXXX-XXX"/>
+              <div class="ui grid">
+                <div class="ten wide column">                               
+                  <div class="field">
+                    <label>CEP</label>
+                    <input type="text" name="cep" id="cep" placeholder="XXXXXXZZZ"/>
+                  </div>
+                </div>
+                <div class="six wide column">
+                  <div class="field">
+                    <label>Número</label>
+                    <input input="input" type="text" name="house_number" id="house_number" placeholder="11"/>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="field">
               <label>Logradouro</label>
               <input input="input" type="email" name="publicplace" id="publicplace" placeholder="Rua, Avenida, ..."/>
-            </div>
-            <div class="field">
-              <label>Numero</label>
-              <input input="input" type="text" name="number" id="number" placeholder="11"/>
             </div>
             <div class="field">
               <label>Bairro</label>
@@ -83,17 +107,19 @@
               <input input="input" type="text" name="complement" id="complement" placeholder="KM12, Fazenda ..."/>
             </div>
             <div class="field">
-              <label>Localidade</label>
-              <input input="input" type="text" name="city" id="city" placeholder="São Paulo"/>
-            </div>
-            <div class="field">
-              <label>UF</label>
-              <input input="input" type="text" name="state" id="state" placeholder="SAO ..."/>
-            </div>
-            <div class="inline field">
-              <div class="ui checkbox">
-                <input type="checkbox" name="terms" id="terms"/>
-                <label>Eu concordo com a politica e termos</label>
+              <div class="ui grid">
+                <div class="ten wide column">
+                  <div class="field">
+                    <label>Localidade</label>
+                    <input input="input" type="text" name="city" id="city" placeholder="São Paulo"/>
+                  </div>
+                </div>
+                <div class="six wide column">
+                  <div class="field">
+                    <label>UF</label>
+                    <input input="input" type="text" name="state" id="state" placeholder="SAO ..."/>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="field">
