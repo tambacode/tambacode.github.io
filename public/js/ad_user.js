@@ -48,13 +48,21 @@ let searchCep = function(object){
   } else addressFieldsClear();
 }
 
+let updateUserInfo = function(e){
+  e.preventDefault();
+  db_updateUserInfo();
+}
+
+
 $(document)
   .ready(function() {
+    db_getUserInfo();
     $('#cep')
     	.blur(function(){
       	searchCep(this);
     });
     $('form.ad_user')
+      .submit(updateUserInfo)
       .form({
         fields: {
           name: {
@@ -71,29 +79,28 @@ $(document)
               prompt: 'Coloque um email válido'
             }]
           },
-          phone: {
-            identifier: 'phone',
+          phone_ddd: {
+            identifier: 'phone_ddd',
             rules: [{
-              type: 'regExp[/^[0-9]{11}$/gm]',
-              prompt: 'O telefone não confere com o padrão'
+              type: 'regExp[/^[0-9]{3}$/gm]',
+              prompt: 'O DDD não confere com o padrão XXX'
+            }]
+          },
+          phone_number: {
+            identifier: 'phone_number',
+            rules: [{
+              type: 'regExp[/^[0-9]{9}$/gm]',
+              prompt: 'O telefone não confere com o padrão 999998888'
             }]
           },
           cep: {
             identifier: '',
             rules: [{
               type: 'regExp[/^[0-9]{8}$/gm]',
-              prompt: 'Preencha seu CEP'
-            }]
-          },
-          terms: {
-            identifier: 'terms',
-            rules: [{
-              type: 'checked',
-              prompt: 'Aceite os termos'
+              prompt: 'Preencha seu CEP no formato 99999000'
             }]
           }
         }
     });
-    db_getUserInfo();
   })
 ;
