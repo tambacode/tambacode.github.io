@@ -22,7 +22,7 @@ html
             #all
                 br
                 .ui.container                    
-                    form.ui.form(id='InsertAdRegistration')
+                    form.ui.form(id='InsertAdRegistration', onsubmit="db_InsertAdRegistration(); return false;")
                         .field
                             label Título
                             input(type='text', name='title', id='title', maxlength="50", required="required", placeholder='Título do anúncio')
@@ -53,6 +53,6 @@ html
                             label Telefone
                             input(type='text', name='tel', id='tel', minlength="11", maxlength="11", placeholder='(00) 00000-0000', onkeypress="$(this).mask('(00) 00000-0000');")
                         .field
-                            button.ui.button(id='InsertAdRegistration' onclick="db_InsertAdRegistration();") Cadastrar
+                            button.ui.button(id='InsertAdRegistration') Cadastrar
 
             include templates/footer
