@@ -1,0 +1,34 @@
+html
+    head
+        title Shared.Farm
+        
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        meta(http-equiv="X-UA-Compatible" content="ie=edge")
+        link( rel="manifest" crossorigin="use-credentials" href="%PUBLIC_URL%/manifest.json")
+        
+        // Please don't use this type of comment >> // << because it is compiled in the HTML
+        //- Use this one instead >> //- << because it does not compile in the HTML
+
+        //- CSS
+        include templates/styles
+        
+        //- Script
+        include templates/scripts
+    body
+        include templates/sideBar
+        .pusher
+            include templates/header
+            #all
+                br
+                include templates/loader
+                #display_user_info.ui.container(style="display:blocked")
+                    img.ui.centered.small.image(src="imgs/avatar1.png")
+                    a.ui.primary.button(href="user_edit.html") Edit
+                include templates/home
+                br
+                br
+            include templates/footer
+        script(src='js/user.js')
+        script.
+            misc_RemoveLoader();
