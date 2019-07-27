@@ -27,7 +27,7 @@ var db_update = function(path, postData) {
     db.ref(path).update(postData,
         function (error){
             if (error === null)
-                misc_DisplaySuccessMessage("Cadastro","Cadastro feito com sucesso");// The write failed...
+                misc_GoToPage("user_info.html");// The write failed...
             else
                 misc_DisplayErrorMessage("Cadastro","Cadastro não foi realizado");// Data saved successfully!
         });
@@ -113,10 +113,11 @@ var db_getUserInfo = function() {
     var path = '/users/' + localStorage.getItem('auth_UserUID');
 
     var onSuccess = function(snapshot) {
-        
         $.each(snapshot.val(), function(field, value ) {
-            document.getElementById(field).value = value;
+            $('#' + field).val(value);
         });
+        misc_RemoveLoader();
+        showUserFields();
     };
 
     var onNullValue = function(snapshot) {
