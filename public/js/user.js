@@ -10,9 +10,13 @@ let cepPostmon = function(cep){
     return $.getJSON(urlcep, addressFieldsClear());
 }
 
+let showUserFields = function(){
+  $("#display_user_edit").show();//removeAttr("style");
+}
+
 //Clean fields when load document
 let addressFieldsClear = function(){
-  $('form.ad_user')
+  $('form.user_edit')
   	.form('set values', {
       publicplace : '',
       district : '',
@@ -32,17 +36,17 @@ let searchCep = function(object){
   if (cep != "" && validacep.test(cep)) {
     cepPostmon(cep).done(data => {
         ceperror = 0;
-        $("#publicplace").val(data.logradouro);
-        $("#district").val(data.bairro);
-        $("#city").val(data.cidade);
-        $("#state").val(data.estado);
+        $("form.user_edit#publicplace").val(data.logradouro).prop("disabled", true);
+        $("form.user_edit#district").val(data.bairro).prop("disabled", true);
+        $("form.user_edit#city").val(data.cidade);
+        $("form.user_edit#state").val(data.estado);
     });
     if(ceperror){
       cepViacep(cep).done(data => {
-        $("#publicplace").val(data.logradouro);
-        $("#district").val(data.bairro);
-        $("#city").val(data.localidade);
-        $("#state").val(data.uf);
+        $("form.user_edit#publicplace").val(data.logradouro);
+        $("form.user_edit#district").val(data.bairro);
+        $("form.user_edit#city").val(data.localidade);
+        $("form.user_edit#state").val(data.uf);
       });
     }
   } else addressFieldsClear();
@@ -56,13 +60,11 @@ let updateUserInfo = function(e){
 
 $(document)
   .ready(function() {
-    db_getUserInfo();
     $('#cep')
     	.blur(function(){
       	searchCep(this);
     });
-    $('form.ad_user')
-      .submit(updateUserInfo)
+    $('form.user_edit')
       .form({
         fields: {
           name: {
@@ -100,7 +102,7 @@ $(document)
               prompt: 'Preencha seu CEP no formato 99999000'
             }]
           }
-        }
+        }, onSuccess: function(event){ updateUserInfo(event) }
     });
   })
 ;
