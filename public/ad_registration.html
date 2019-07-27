@@ -26,6 +26,7 @@
     <script src="js/ui.js"></script>
     <script src="js/messages.js"></script>
     <script src="js/ad.js"></script>
+    <script src="js/ad_detail.js"></script>
   </head>
   <body>
     <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home</a><a onClick="messages_GoTo();" class="item">Mensagens</a><a onClick="auth_LogoffUser();" class="item">Sair</a></div>
@@ -95,7 +96,7 @@
               <input type="text" name="tel" id="tel" minlength="11" maxlength="11" placeholder="(00) 00000-0000" onkeypress="$(this).mask('(00) 00000-0000');"/>
             </div>
             <div class="field">
-              <button id="InsertAdRegistration" onClick="db_InsertAdRegistration();" class="ui button">Cadastrar</button>
+              <button id="InsertAdRegistration" onclick="db_InsertAdRegistration();" class="ui button">Cadastrar</button>
             </div>
           </form>
         </div>

@@ -53,6 +53,6 @@ html
                             label Telefone
                             input(type='text', name='tel', id='tel', minlength="11", maxlength="11", placeholder='(00) 00000-0000', onkeypress="$(this).mask('(00) 00000-0000');")
                         .field
-                            button.ui.button(id='InsertAdRegistration' onClick="db_InsertAdRegistration();") Cadastrar
+                            button.ui.button(id='InsertAdRegistration' onclick="db_InsertAdRegistration();") Cadastrar
 
             include templates/footer

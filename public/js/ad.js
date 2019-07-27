@@ -32,8 +32,8 @@ var db_InsertAdRegistration = function() {
     };
 
     db_set(path,dataToInsert);
-
     db_InsertAdRegistrationOnUsers(key);
+    auth_RequireLoggingToAccess('ad_detail.html?keyAd=' + key);
 };
 
 var db_InsertAdRegistrationOnUsers = function(key){
