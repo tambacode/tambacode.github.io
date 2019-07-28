@@ -25,55 +25,61 @@ html
                 #display_user_edit.ui.container(style="display:none")             
                     form.ui.form.fluid.user_edit
                         .field
-                            img.ui.centered.small.image(src="imgs/avatar1.png")
+                            img.ui.centered.small.circular.image(src="imgs/avatar1.png")
                         .field.required
                             label Nome
-                            input(type="text" name="name" id="name" placeholder="Nome completo")
-                        .field.required
+                            input#name(type="text" name="name" placeholder="Nome completo")
+                        .field
                             label Email
-                            input(type="email" name="email" id="email" placeholder="email")
+                            input#email(type="email" name="email" placeholder="email" disabled)
                         .field
                             .ui.grid                       
                                 .six.wide.column
                                     .field.required
                                         label DDD
-                                        input(type="tel" name="phone_ddd" id="phone_ddd" placeholder="011" required)
+                                        input#phone_ddd(type="tel" name="phone_ddd" placeholder="99")
                                 .ten.wide.column
                                     .field.required
                                         label Telefone
-                                        input(type="tel" name="phone_number" id="phone_number" placeholder="99999 9999")
+                                        input#phone_number(type="tel" name="phone_number" placeholder="99999-9999")
                         .field
                             .ui.grid
                                 .ten.wide.column                                
                                     .field.required
                                         label CEP
-                                        input(type="text" name="cep" id="cep" placeholder="XXXXXXZZZ")
+                                        input#cep(type="text" name="cep" placeholder="99999-999")
                                 .six.wide.column
                                     .field
                                         label Número
-                                        input(input type="text" name="house_number" id="house_number" placeholder="11")
+                                        input#house_number(input type="text" name="house_number" placeholder="123")
                         .field
                             label Logradouro
-                            input(input type="email" name="publicplace" id="publicplace" placeholder="Rua, Avenida, ...")
+                            input#publicplace(input type="email" name="publicplace" placeholder="Rua, Avenida, ...")
                         .field
                             label Bairro
-                            input(input type="text" name="district" id="district" placeholder="Bairro ...")
+                            input#district(input type="text" name="district" placeholder="Bairro ...")
                         .field
                             label Complemento
-                            input(input type="text" name="complement" id="complement" placeholder="KM12, Fazenda ...")
+                            input#complement(input type="text" name="complement" placeholder="KM12, Fazenda ...")
                         .field
                             .ui.grid
-                                .ten.wide.column
-                                    .field
-                                        label Localidade
-                                        input(input type="text" name="city" id="city" placeholder="São Paulo")
                                 .six.wide.column
                                     .field
                                         label UF
-                                        input(input type="text" name="state" id="state" placeholder="SAO ...")
+                                        select.ui.compact.dropdown#state
+                                            option(value="") ...
+                                .ten.wide.column
+                                    .field
+                                        label Localidade
+                                        input#city(input type="text" name="city" placeholder="São Paulo")
                         .field
-                            .ui.primary.submit.button Salvar
-                            .ui.clear.button Limpar
+                            .ui.padded.column.row.grid
+                                .two.wide.column
+                                .ten.wide.column.centered
+                                    .ui.fluid.primary.submit.button
+                                        i.save.icon
+                                        |Salvar infomações
+                                .two.wide.column
                         .field
                             .ui.error.message
                 include templates/home
@@ -83,3 +89,4 @@ html
         script(src='js/user.js')
         script.
             db_getUserInfo();
+            initComponent();
