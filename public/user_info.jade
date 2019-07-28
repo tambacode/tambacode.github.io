@@ -20,11 +20,18 @@ html
         .pusher
             include templates/header
             #all
-                br
                 include templates/loader
-                #display_user_info.ui.container(style="display:blocked")
-                    img.ui.centered.small.image(src="imgs/avatar1.png")
-                    a.ui.primary.button(href="user_edit.html") Edit
+                #display_user_info.ui(style="display:blocked")
+                    .ui.purple.inverted.segment
+                        img.ui.small.circular.bordered.image(src="imgs/avatar1.png")
+                    .ui.segment
+                    .ui.padded.column.row.grid
+                        .two.wide.column
+                        .ten.wide.column.centered
+                            a.ui.primary.button(href="user_edit.html")
+                                i.save.icon
+                                |Editar infomações
+                        .two.wide.column
                 include templates/home
                 br
                 br
