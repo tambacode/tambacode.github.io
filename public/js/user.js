@@ -1,21 +1,33 @@
+const getStates = function(){
+  var states_list = ["AC","AL","AM","AP","BA",
+                     "CE","DF","ES","GO","MA",
+                     "MG","MS","MT","PA","PB",
+                     "PE","PI","PR","RJ","RN",
+                     "RO","RR","RS","SC","SE",
+                     "SP","TO"];
+  $.each(states_list, function (i, sigla) {
+    $("#state").append(new Option(sigla, sigla));
+  });
+}
+
 //Search in webservice viacep.com.br
-let cepViacep = function(cep){
+const cepViacep = function(cep){
   var urlcep = "https://viacep.com.br/ws/"+ cep +"/json/";
   return $.getJSON(urlcep, addressFieldsClear());
 }
 
 //Search in webservice api.postmon.com.br
-let cepPostmon = function(cep){
+const cepPostmon = function(cep){
     var urlcep = "https://api.postmon.com.br/v1/cep/" + cep;
     return $.getJSON(urlcep, addressFieldsClear());
 }
 
-let showUserFields = function(){
+const showUserFields = function(){
   $("#display_user_edit").show();//removeAttr("style");
 }
 
 //Clean fields when load document
-let addressFieldsClear = function(){
+const addressFieldsClear = function(){
   $('form.user_edit')
   	.form('set values', {
       publicplace : '',
@@ -24,9 +36,17 @@ let addressFieldsClear = function(){
       state: ''
     });
 }
+//Clean fields when load document
+const stateCityFieldsClear = function(){
+  $('form.user_edit')
+    .form('set values', {
+      city: '',
+      state: ''
+    });
+}
 
 //Search CEP in two sources, if did not find let as it is
-let searchCep = function(object){
+const searchCep = function(object){
   
   var ceperror = 1;
   
@@ -36,73 +56,70 @@ let searchCep = function(object){
   if (cep != "" && validacep.test(cep)) {
     cepPostmon(cep).done(data => {
         ceperror = 0;
-        $("form.user_edit#publicplace").val(data.logradouro).prop("disabled", true);
-        $("form.user_edit#district").val(data.bairro).prop("disabled", true);
-        $("form.user_edit#city").val(data.cidade);
-        $("form.user_edit#state").val(data.estado);
+        $("#publicplace").val(data.logradouro);
+        $("#district").val(data.bairro);
+        $("#city").val(data.cidade);
+        $("#state").dropdown('set selected', data.uf);
     });
     if(ceperror){
       cepViacep(cep).done(data => {
-        $("form.user_edit#publicplace").val(data.logradouro);
-        $("form.user_edit#district").val(data.bairro);
-        $("form.user_edit#city").val(data.localidade);
-        $("form.user_edit#state").val(data.uf);
+        $("#publicplace").val(data.logradouro);
+        $("#district").val(data.bairro);
+        $("#city").val(data.localidade);
+        $("#state").dropdown('set selected', data.uf);
       });
     }
   } else addressFieldsClear();
 }
 
-let updateUserInfo = function(e){
-  e.preventDefault();
-  db_updateUserInfo();
+const initComponent = function(){
+  $('#state').dropdown();
+  getStates();
+  $('#cep')
+    .blur(function(){ searchCep(this); })
+    .mask("00000-000");
+  $('#phone_number').mask('00000-0000');
+  $('form.user_edit')
+    .form({
+      fields: {
+        name: {
+          identifier: 'name',
+          rules: [{
+            type: 'empty',
+            prompt: 'Preencha com seu nome completo'
+          }]
+        },
+        email: {
+          identifier: 'email',
+          rules: [{
+            type: 'email',
+            prompt: 'Coloque um email válido'
+          }]
+        },
+        phone_ddd: {
+          identifier: 'phone_ddd',
+          rules: [{
+            type: 'regExp[/^[0-9]{2}$/gm]',
+            prompt: 'O DDD não confere com o padrão 99'
+          }]
+        },
+        phone_number: {
+          identifier: 'phone_number',
+          rules: [{
+            type: 'regExp[/^[0-9]{5}-[0-9]{4}$/gm]',
+            prompt: 'O telefone não confere com o padrão 99999-8888'
+          }]
+        },
+        cep: {
+          identifier: '',
+          rules: [{
+            type: 'regExp[/^[0-9]{5}-[0-9]{3}$/gm]',
+            prompt: 'Preencha seu CEP no formato 99999-000'
+          }]
+        }
+      }, onSuccess: function(event){
+                        event.preventDefault();
+                        db_updateUserInfo();
+                    }
+    });
 }
-
-
-$(document)
-  .ready(function() {
-    $('#cep')
-    	.blur(function(){
-      	searchCep(this);
-    });
-    $('form.user_edit')
-      .form({
-        fields: {
-          name: {
-            identifier: 'name',
-            rules: [{
-              type: 'empty',
-              prompt: 'Preencha com seu nome completo'
-            }]
-          },
-          email: {
-            identifier: 'email',
-            rules: [{
-              type: 'email',
-              prompt: 'Coloque um email válido'
-            }]
-          },
-          phone_ddd: {
-            identifier: 'phone_ddd',
-            rules: [{
-              type: 'regExp[/^[0-9]{3}$/gm]',
-              prompt: 'O DDD não confere com o padrão XXX'
-            }]
-          },
-          phone_number: {
-            identifier: 'phone_number',
-            rules: [{
-              type: 'regExp[/^[0-9]{9}$/gm]',
-              prompt: 'O telefone não confere com o padrão 999998888'
-            }]
-          },
-          cep: {
-            identifier: '',
-            rules: [{
-              type: 'regExp[/^[0-9]{8}$/gm]',
-              prompt: 'Preencha seu CEP no formato 99999000'
-            }]
-          }
-        }, onSuccess: function(event){ updateUserInfo(event) }
-    });
-  })
-;
