@@ -62,27 +62,27 @@
         </div>
         <div id="display_user_edit" style="display:none" class="ui container">            
           <form class="ui form fluid user_edit">
-            <div class="field"><img src="imgs/avatar1.png" class="ui centered small image"/></div>
+            <div class="field"><img src="imgs/avatar1.png" class="ui centered small circular image"/></div>
             <div class="field required">
               <label>Nome</label>
-              <input type="text" name="name" id="name" placeholder="Nome completo"/>
+              <input id="name" type="text" name="name" placeholder="Nome completo"/>
             </div>
-            <div class="field required">
+            <div class="field">
               <label>Email</label>
-              <input type="email" name="email" id="email" placeholder="email"/>
+              <input id="email" type="email" name="email" placeholder="email" disabled="disabled"/>
             </div>
             <div class="field">
               <div class="ui grid">                      
                 <div class="six wide column">
                   <div class="field required">
                     <label>DDD</label>
-                    <input type="tel" name="phone_ddd" id="phone_ddd" placeholder="011" required="required"/>
+                    <input id="phone_ddd" type="tel" name="phone_ddd" placeholder="99"/>
                   </div>
                 </div>
                 <div class="ten wide column">
                   <div class="field required">
                     <label>Telefone</label>
-                    <input type="tel" name="phone_number" id="phone_number" placeholder="99999 9999"/>
+                    <input id="phone_number" type="tel" name="phone_number" placeholder="99999-9999"/>
                   </div>
                 </div>
               </div>
@@ -92,48 +92,55 @@
                 <div class="ten wide column">                               
                   <div class="field required">
                     <label>CEP</label>
-                    <input type="text" name="cep" id="cep" placeholder="XXXXXXZZZ"/>
+                    <input id="cep" type="text" name="cep" placeholder="99999-999"/>
                   </div>
                 </div>
                 <div class="six wide column">
                   <div class="field">
                     <label>Número</label>
-                    <input input="input" type="text" name="house_number" id="house_number" placeholder="11"/>
+                    <input id="house_number" input="input" type="text" name="house_number" placeholder="123"/>
                   </div>
                 </div>
               </div>
             </div>
             <div class="field">
               <label>Logradouro</label>
-              <input input="input" type="email" name="publicplace" id="publicplace" placeholder="Rua, Avenida, ..."/>
+              <input id="publicplace" input="input" type="email" name="publicplace" placeholder="Rua, Avenida, ..."/>
             </div>
             <div class="field">
               <label>Bairro</label>
-              <input input="input" type="text" name="district" id="district" placeholder="Bairro ..."/>
+              <input id="district" input="input" type="text" name="district" placeholder="Bairro ..."/>
             </div>
             <div class="field">
               <label>Complemento</label>
-              <input input="input" type="text" name="complement" id="complement" placeholder="KM12, Fazenda ..."/>
+              <input id="complement" input="input" type="text" name="complement" placeholder="KM12, Fazenda ..."/>
             </div>
             <div class="field">
               <div class="ui grid">
-                <div class="ten wide column">
-                  <div class="field">
-                    <label>Localidade</label>
-                    <input input="input" type="text" name="city" id="city" placeholder="São Paulo"/>
-                  </div>
-                </div>
                 <div class="six wide column">
                   <div class="field">
                     <label>UF</label>
-                    <input input="input" type="text" name="state" id="state" placeholder="SAO ..."/>
+                    <select id="state" class="ui compact dropdown">
+                      <option value="">...</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="ten wide column">
+                  <div class="field">
+                    <label>Localidade</label>
+                    <input id="city" input="input" type="text" name="city" placeholder="São Paulo"/>
                   </div>
                 </div>
               </div>
             </div>
             <div class="field">
-              <div class="ui primary submit button">Salvar</div>
-              <div class="ui clear button">Limpar</div>
+              <div class="ui padded column row grid">
+                <div class="two wide column"></div>
+                <div class="ten wide column centered">
+                  <div class="ui fluid primary submit button"><i class="save icon"></i>Salvar infomações</div>
+                </div>
+                <div class="two wide column"></div>
+              </div>
             </div>
             <div class="field">
               <div class="ui error message"></div>
@@ -143,6 +150,9 @@
       </div>
     </div>
     <script src="js/user.js"></script>
-    <script>db_getUserInfo();</script>
+    <script>
+      db_getUserInfo();
+      initComponent();
+    </script>
   </body>
 </html>
