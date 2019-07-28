@@ -144,7 +144,10 @@ var db_getUserInfo = function() {
 
     var onSuccess = function(snapshot) {
         $.each(snapshot.val(), function(field, value ) {
-            $('#' + field).val(value);
+            if (field === "state")
+                $('#' + field).dropdown('set selected', value);
+            else
+                $('#' + field).val(value);
         });
         misc_RemoveLoader();
         showUserFields();
