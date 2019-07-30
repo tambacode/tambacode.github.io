@@ -43,38 +43,40 @@ var db_InsertAdRegistrationOnUsers = function(key){
 };
 ///////////////////////////////// AD REG /////////////////////////////////
 
-//AD Images
-//This function add imagens on data base
-const fileButton = document.getElementById('fileButton');
-const uploader = document.getElementById('uploader');
-const uploadMsg = document.getElementById('uploadMsg');
+const pleaseNameME = function() {
+    //AD Images
+    //This function add imagens on data base
+    const fileButton = document.getElementById('fileButton');
+    const uploader = document.getElementById('uploader');
+    const uploadMsg = document.getElementById('uploadMsg');
 
-fileButton.addEventListener('change', function(e) {
+    fileButton.addEventListener('change', function(e) {
 
-    var fileButton = document.getElementById('fileButton');
+        var fileButton = document.getElementById('fileButton');
 
-    // Create a storage ref
-    var storageRef = firebase.storage().ref('images/' + fileButton.files[0].name);
+        // Create a storage ref
+        var storageRef = firebase.storage().ref('images/' + fileButton.files[0].name);
 
-    // Upload file
-    var task = storageRef.put(fileButton.files[0]);
+        // Upload file
+        var task = storageRef.put(fileButton.files[0]);
 
-    SetUploadMsg(uploadMsg, 'Uploading');
+        SetUploadMsg(uploadMsg, 'Uploading');
 
-    // Update progress bar
-    task.on('state_changed',
-        function progress(snapshot) {
-            var perc = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            uploader.value = perc;
-        },
-        function error(err) {
-            SetUploadMsg(uploadMsg, 'Image Upload Error');
-        },
-        function complete() {
-            SetUploadMsg(uploadMsg, 'Image Uploaded');
-        }
-    );
-});
+        // Update progress bar
+        task.on('state_changed',
+            function progress(snapshot) {
+                var perc = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                uploader.value = perc;
+            },
+            function error(err) {
+                SetUploadMsg(uploadMsg, 'Image Upload Error');
+            },
+            function complete() {
+                SetUploadMsg(uploadMsg, 'Image Uploaded');
+            }
+        );
+    });
+}
 
 //Visual feedback for user
 SetUploadMsg = function(p, msg) {
@@ -87,3 +89,15 @@ SetUploadMsg = function(p, msg) {
         p.classList.remove('hide');
     }
 }
+
+///////////////////////////////// ADS SEARCH /////////////////////////////////
+const ads_SearchAd = function()
+{
+    const searchVal = $("#adsSearchInput").val();
+
+    if (searchVal.length > 0)
+    {
+        misc_GoToPage("ad_search.html?searchTerm=" + searchVal);
+    }
+}
+///////////////////////////////// ADS SEARCH /////////////////////////////////

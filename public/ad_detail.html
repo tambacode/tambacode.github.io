@@ -18,6 +18,7 @@
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-messaging.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-storage.js"></script>
     <script src="semanticUI/semantic.min.js"></script>
     <script type="text/javascript" src="semanticUI/components/Semantic-UI-Alert.js"></script>
     <script src="js/main.js"></script>
@@ -40,7 +41,7 @@
             <div class="ten wide column">
               <div class="ui search">
                 <div class="ui icon input big fluid">
-                  <input type="text" placeholder="Pesquisar..." class="prompt"/><i class="search icon"></i>
+                  <input id="adsSearchInput" type="text" placeholder="Pesquisar..." class="prompt"/><i id="adsSearchButton" onclick="ads_SearchAd();" class="link search icon"></i>
                 </div>
                 <div class="results"></div>
               </div>
@@ -48,6 +49,10 @@
             <div class="right aligned three wide column">
               <button onclick="user_OpenProfile();" class="ui icon button blue"><i class="icon user circle large"></i></button>
             </div>
+            <script>
+              const searchTerm = misc_GetUrlParam('searchTerm');
+              $("#adsSearchInput").val(searchTerm);
+            </script>
           </div>
         </div>
       </div>

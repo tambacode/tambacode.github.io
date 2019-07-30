@@ -35,8 +35,8 @@ html
                                 | If you use this site regularly and would like to help keep the site on the Internet, please consider donating a small sum to help pay for the hosting and bandwidth bill. There is no minimum donation, any sum is appreciated - click here to donate using PayPal. Thank you for your support.
                 #messageInput.ui
                     .ui.icon.input.fluid
-                        input#textMessage.prompt(type="text", placeholder="Digite uma mensagem...", onClick="message_SendMessage();")
-                        i.chevron.right.icon
+                        input#textMessage.prompt(type="text", placeholder="Digite uma mensagem...")
+                        i.chevron.right.link.icon(onClick="message_SendMessage();")
                 br
                 br
             include templates/footer

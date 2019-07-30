@@ -1,11 +1,11 @@
 
 <html>
   <head>
-    <title>Shared.Farm - Login</title>
+    <title>Shared.Farm - Pesquisa de anúncios</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <link rel="manifest" href="manifest.json"/>
+    <link rel="manifest" crossorigin="use-credentials" href="%PUBLIC_URL%/manifest.json"/>
     <link rel="stylesheet" type="text/css" href="semanticUI/semantic.css"/>
     <link rel="stylesheet" type="text/css" href="semanticUI/components/Semantic-UI-Alert.css"/>
     <link rel="stylesheet" type="text/css" href="css/webapp.css"/>
@@ -56,38 +56,50 @@
         </div>
       </div>
       <div id="all">
-        <div class="vertical-center">
-          <div class="ui padded sixteen column centered grid">
-            <div class="wide column row">
-              <div class="ui blue card login">
-                <div class="content">
-                  <div class="ui grid">
-                    <div class="blue column row">
-                      <div class="column"></div>
-                      <div class="left aligned ten wide column">
-                        <div class="ui white header">Entrar usando</div>
-                      </div>
-                      <!--.right.aligned.four.wide.column
-                      .ui.icon
-                          i.icon.user.circle.large
-                      -->
-                    </div>
-                    <div class="ui padded column row grid">
-                      <div class="sixteen wide column centered">
-                        <button onClick="auth_LoginFacebook();" class="large ui facebook button"><i class="facebook icon"></i>Entrar com o Facebook</button>
-                      </div>
-                      <div class="sixteen wide column">
-                        <button onClick="auth_LoginTwitter();" class="large ui twitter button"><i class="twitter icon"></i>Entrar com o Twitter&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
-                      </div>
-                      <div class="sixteen wide column">Ao prosseguir você concorda com as <a href="privacy_policy.html">Políticas de Privacidade</a> e <a href="terms_of_service.html">Termos de Responsabilidade</a> da Shared.Farm</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div id="filters" class="ui padded grid">
+          <div id="loader" class="sixteen wide column row">
+            <div class="ui active centered inline loader"></div>
+          </div>
+        </div>
+        <div id="ads" class="ui padded grid">
+          <div class="four wide column"><img src="imgs/black.png" class="ui tiny rounded image"/></div>
+          <div class="twelve wide column">
+            <h4 id="title">Terra para cultivo de batataaa</h4><span id="timestamp">13:42</span><span id="description">Lorem ipsum dolor sit a adipiscasdasdaa...</span>
+            <div style="width: 100%;" class="ui divider"></div>
+          </div>
+          <div class="four wide column"><img src="imgs/black.png" class="ui tiny rounded image"/></div>
+          <div class="twelve wide column">
+            <h4 id="title">Terra para cultivo de batataaa</h4><span id="timestamp">13:42</span><span id="description">Lorem ipsum dolor sit a adipiscasdasdaa...</span>
+            <div style="width: 100%;" class="ui divider"></div>
+          </div>
+          <div class="four wide column"><img src="imgs/black.png" class="ui tiny rounded image"/></div>
+          <div class="twelve wide column">
+            <h4 id="title">Terra para cultivo de batataaa</h4><span id="timestamp">13:42</span><span id="description">Lorem ipsum dolor sit a adipiscasdasdaa...</span>
+            <div style="width: 100%;" class="ui divider"></div>
+          </div>
+          <div class="four wide column"><img src="imgs/black.png" class="ui tiny rounded image"/></div>
+          <div class="twelve wide column">
+            <h4 id="title">Terra para cultivo de batataaa</h4><span id="timestamp">13:42</span><span id="description">Lorem ipsum dolor sit a adipiscasdasdaa...</span>
+            <div style="width: 100%;" class="ui divider"></div>
+          </div>
+          <div class="four wide column"><img src="imgs/black.png" class="ui tiny rounded image"/></div>
+          <div class="twelve wide column">
+            <h4 id="title">Terra para cultivo de batataaa</h4><span id="timestamp">13:42</span><span id="description">Lorem ipsum dolor sit a adipiscasdasdaa...</span>
+            <div style="width: 100%;" class="ui divider"></div>
+          </div>
+          <div class="four wide column"><img src="imgs/black.png" class="ui tiny rounded image"/></div>
+          <div class="twelve wide column">
+            <h4 id="title">Terra para cultivo de batataaa</h4><span id="timestamp">13:42</span><span id="description">Lorem ipsum dolor sit a adipiscasdasdaa...</span>
+            <div style="width: 100%;" class="ui divider"></div>
+          </div>
+          <div class="four wide column"><img src="imgs/black.png" class="ui tiny rounded image"/></div>
+          <div class="twelve wide column">
+            <h4 id="title">Terra para cultivo de batataaa</h4><span id="timestamp">13:42</span><span id="description">Lorem ipsum dolor sit a adipiscasdasdaa...</span>
+            <div style="width: 100%;" class="ui divider"></div>
           </div>
         </div><br/><br/>
       </div>
     </div>
   </body>
+  <script></script>
 </html>
