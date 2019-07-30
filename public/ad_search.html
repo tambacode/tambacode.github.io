@@ -33,9 +33,9 @@
     <div class="pusher">
       <div id="menu" class="ui sf_header">
         <div class="ui padded grid">
-          <div class="blue row">
+          <div class="orange row">
             <div class="three wide column">
-              <button onclick="ui_openSidebar();" class="ui icon button blue"><i class="icon list large"></i></button>
+              <button onclick="ui_openSidebar();" class="ui icon button orange"><i class="icon list large"></i></button>
             </div>
             <div class="ten wide column">
               <div class="ui search">
@@ -46,7 +46,7 @@
               </div>
             </div>
             <div class="right aligned three wide column">
-              <button onclick="user_OpenProfile();" class="ui icon button blue"><i class="icon user circle large"></i></button>
+              <button onclick="user_OpenProfile();" class="ui icon button orange"><i class="icon user circle large"></i></button>
             </div>
             <script>
               const searchTerm = misc_GetUrlParam('searchTerm');
@@ -57,49 +57,53 @@
       </div>
       <div id="all">
         <div id="filters" class="ui padded grid">
-          <div id="loader" class="sixteen wide column row">
-            <div class="ui active centered inline loader"></div>
-          </div>
+          <!--include templates/loader-->
         </div>
-        <div id="ads" class="ui padded grid">
-          <div class="four wide column"><img src="imgs/black.png" class="ui tiny rounded image"/></div>
-          <div class="twelve wide column">
-            <h4 id="title">Terra para cultivo de batataaa</h4><span id="timestamp">13:42</span><span id="description">Lorem ipsum dolor sit a adipiscasdasdaa...</span>
+        <div id="ads" class="ui grid">
+          <div class="four wide column product_image"><a href="ad_detail.html?uid=TESTID"><img src="imgs/black.png" class="ui tiny rounded image"/></a></div>
+          <div class="twelve wide column product_info"><a href="ad_detail.html?uid=TESTID">
+              <h4 id="title">Terra para cultivo de batataaa</h4></a><i onclick="ads_FavoriteAdClick(this);" uid="TESTID" class="red large link heart outline icon favoriteItem"></i>
+            <h3 id="price">R$3.900,00</h3><span id="info">info sobre o produto como localização</span>
             <div style="width: 100%;" class="ui divider"></div>
           </div>
-          <div class="four wide column"><img src="imgs/black.png" class="ui tiny rounded image"/></div>
-          <div class="twelve wide column">
-            <h4 id="title">Terra para cultivo de batataaa</h4><span id="timestamp">13:42</span><span id="description">Lorem ipsum dolor sit a adipiscasdasdaa...</span>
+          <div class="four wide column product_image"><a href="ad_detail.html?uid=TESTID"><img src="imgs/black.png" class="ui tiny rounded image"/></a></div>
+          <div class="twelve wide column product_info"><a href="ad_detail.html?uid=TESTID">
+              <h4 id="title">Terra para cultivo de batataaa</h4></a><i onclick="ads_FavoriteAdClick(this);" uid="TESTID" class="red large link heart outline icon favoriteItem"></i>
+            <h3 id="price">R$3.900,00</h3><span id="info">info sobre o produto como localização</span>
             <div style="width: 100%;" class="ui divider"></div>
           </div>
-          <div class="four wide column"><img src="imgs/black.png" class="ui tiny rounded image"/></div>
-          <div class="twelve wide column">
-            <h4 id="title">Terra para cultivo de batataaa</h4><span id="timestamp">13:42</span><span id="description">Lorem ipsum dolor sit a adipiscasdasdaa...</span>
+          <div class="four wide column product_image"><a href="ad_detail.html?uid=TESTID"><img src="imgs/black.png" class="ui tiny rounded image"/></a></div>
+          <div class="twelve wide column product_info"><a href="ad_detail.html?uid=TESTID">
+              <h4 id="title">Terra para cultivo de batataaa</h4></a><i onclick="ads_FavoriteAdClick(this);" uid="TESTID" class="red large link heart outline icon favoriteItem"></i>
+            <h3 id="price">R$3.900,00</h3><span id="info">info sobre o produto como localização</span>
             <div style="width: 100%;" class="ui divider"></div>
           </div>
-          <div class="four wide column"><img src="imgs/black.png" class="ui tiny rounded image"/></div>
-          <div class="twelve wide column">
-            <h4 id="title">Terra para cultivo de batataaa</h4><span id="timestamp">13:42</span><span id="description">Lorem ipsum dolor sit a adipiscasdasdaa...</span>
+          <div class="four wide column product_image"><a href="ad_detail.html?uid=TESTID"><img src="imgs/black.png" class="ui tiny rounded image"/></a></div>
+          <div class="twelve wide column product_info"><a href="ad_detail.html?uid=TESTID">
+              <h4 id="title">Terra para cultivo de batataaa</h4></a><i onclick="ads_FavoriteAdClick(this);" uid="TESTID" class="red large link heart outline icon favoriteItem"></i>
+            <h3 id="price">R$3.900,00</h3><span id="info">info sobre o produto como localização</span>
             <div style="width: 100%;" class="ui divider"></div>
           </div>
-          <div class="four wide column"><img src="imgs/black.png" class="ui tiny rounded image"/></div>
-          <div class="twelve wide column">
-            <h4 id="title">Terra para cultivo de batataaa</h4><span id="timestamp">13:42</span><span id="description">Lorem ipsum dolor sit a adipiscasdasdaa...</span>
+          <div class="four wide column product_image"><a href="ad_detail.html?uid=TESTID"><img src="imgs/black.png" class="ui tiny rounded image"/></a></div>
+          <div class="twelve wide column product_info"><a href="ad_detail.html?uid=TESTID">
+              <h4 id="title">Terra para cultivo de batataaa</h4></a><i onclick="ads_FavoriteAdClick(this);" uid="TESTID" class="red large link heart outline icon favoriteItem"></i>
+            <h3 id="price">R$3.900,00</h3><span id="info">info sobre o produto como localização</span>
             <div style="width: 100%;" class="ui divider"></div>
           </div>
-          <div class="four wide column"><img src="imgs/black.png" class="ui tiny rounded image"/></div>
-          <div class="twelve wide column">
-            <h4 id="title">Terra para cultivo de batataaa</h4><span id="timestamp">13:42</span><span id="description">Lorem ipsum dolor sit a adipiscasdasdaa...</span>
+          <div class="four wide column product_image"><a href="ad_detail.html?uid=TESTID"><img src="imgs/black.png" class="ui tiny rounded image"/></a></div>
+          <div class="twelve wide column product_info"><a href="ad_detail.html?uid=TESTID">
+              <h4 id="title">Terra para cultivo de batataaa</h4></a><i onclick="ads_FavoriteAdClick(this);" uid="TESTID" class="red large link heart outline icon favoriteItem"></i>
+            <h3 id="price">R$3.900,00</h3><span id="info">info sobre o produto como localização</span>
             <div style="width: 100%;" class="ui divider"></div>
           </div>
-          <div class="four wide column"><img src="imgs/black.png" class="ui tiny rounded image"/></div>
-          <div class="twelve wide column">
-            <h4 id="title">Terra para cultivo de batataaa</h4><span id="timestamp">13:42</span><span id="description">Lorem ipsum dolor sit a adipiscasdasdaa...</span>
+          <div class="four wide column product_image"><a href="ad_detail.html?uid=TESTID"><img src="imgs/black.png" class="ui tiny rounded image"/></a></div>
+          <div class="twelve wide column product_info"><a href="ad_detail.html?uid=TESTID">
+              <h4 id="title">Terra para cultivo de batataaa</h4></a><i onclick="ads_FavoriteAdClick(this);" uid="TESTID" class="red large link heart outline icon favoriteItem"></i>
+            <h3 id="price">R$3.900,00</h3><span id="info">info sobre o produto como localização</span>
             <div style="width: 100%;" class="ui divider"></div>
           </div>
         </div><br/><br/>
       </div>
     </div>
   </body>
-  <script></script>
 </html>

@@ -161,7 +161,7 @@ const message_GetMessageContent = function(owner, timestamp, content)
     let timestampMsg = '<p style="font-size: x-small;margin: 0 10px;">' + misc_GetHourMin(timestamp) + '</p>';
 
     if (owner) {
-        let ownerMsg = '<div class="two wide column"></div><div class="right aligned fourteen wide column"><div class="blue ui right pointing label">{0}</div>' + timestampMsg + '</div>';
+        let ownerMsg = '<div class="two wide column"></div><div class="right aligned fourteen wide column"><div class="orange ui right pointing label">{0}</div>' + timestampMsg + '</div>';
         return ownerMsg.replace('{0}', content);
     } else {
         let otherMsg = '<div class="fourteen wide column"><div class="ui left pointing label">{0}</div>' + timestampMsg + '</div><div class="two wide column"></div>'; 

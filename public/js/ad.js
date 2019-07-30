@@ -100,4 +100,37 @@ const ads_SearchAd = function()
         misc_GoToPage("ad_search.html?searchTerm=" + searchVal);
     }
 }
+
+const ads_FavoriteAdClick = function(self)
+{
+    const item = $(self);
+    var favoriteAdd = false;
+    const uid = $(self).attr("uid");
+    
+    if ($(self).hasClass('outline'))
+    {
+        item.removeClass('outline');
+        favoriteAdd = true;
+    } else {
+        item.addClass('outline');
+    }
+
+    if (favoriteAdd) {
+        ads_FavoriteAd(uid);
+    } else {
+        ads_UnfavoriteAd(uid);
+    }
+}
+
+const ads_FavoriteAd = function(uid)
+{
+    console.log(uid);
+    console.log("ads_FavoriteAd method needs to be implemented");
+}
+
+const ads_UnfavoriteAd = function(uid)
+{
+    console.log(uid);
+    console.log("ads_UnfavoriteAd method needs to be implemented");   
+}
 ///////////////////////////////// ADS SEARCH /////////////////////////////////
