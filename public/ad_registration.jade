@@ -13,14 +13,14 @@ html
         //- CSS
         include templates/styles
         
-        //- Script
-        include templates/scripts
+        
     body
+
         include templates/sideBar
         .pusher
             include templates/header
             #all
-                br
+                br                
                 .ui.container                    
                     form.ui.form(id='InsertAdRegistration', onsubmit="db_InsertAdRegistration(); return false;")
                         .field
@@ -41,8 +41,13 @@ html
                                         input(type='radio', name='category', id='services', value="servicos")
                                         label Serviços
                         .field
+                            label Imagem
+                            p#uploadMsg.red.hide
+                            input#fileButton(type='file', value='upload', name='fileButton')
+                            progress#uploader(value="0" max="100") 0%                            
+                        .field
                             label Preço R$
-                            input(type='text', name='price', id='price', minlength="1", maxlength="14", data-symbol="R$ " data-thousands="." data-decimal="," required="required", onClick='$(this).maskMoney();')
+                            input(type='text', name='price', id='price', minlength="1", maxlength="14", data-symbol="R$ " data-thousands="." data-decimal="," required="required", onclick='$(this).maskMoney();')
                         .field
                             label Localização
                             input(type='text', name='location', id='location', maxlength="100", placeholder='Localização')
@@ -54,5 +59,7 @@ html
                             input(type='text', name='tel', id='tel', minlength="11", maxlength="11", placeholder='(00) 00000-0000', onkeypress="$(this).mask('(00) 00000-0000');")
                         .field
                             button.ui.button(id='InsertAdRegistration') Cadastrar
-
+            
             include templates/footer
+        //- Script
+        include templates/scripts    

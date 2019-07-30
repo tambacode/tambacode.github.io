@@ -5,7 +5,7 @@ fb.firebaseConfig = {
     authDomain: "shared-farm-dev.firebaseapp.com",
     databaseURL: "https://shared-farm-dev.firebaseio.com",
     projectId: "shared-farm-dev",
-    storageBucket: "",
+    storageBucket: "shared-farm-dev.appspot.com",
     messagingSenderId: "619465723035",
     appId: "1:619465723035:web:4dac067dc0eb3abf"
   };
