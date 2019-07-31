@@ -34,9 +34,9 @@
     <div class="pusher">
       <div id="menu" class="ui sf_header">
         <div class="ui padded grid">
-          <div class="blue row">
+          <div class="orange row">
             <div class="three wide column">
-              <button onclick="ui_openSidebar();" class="ui icon button blue"><i class="icon list large"></i></button>
+              <button onclick="ui_openSidebar();" class="ui icon button orange"><i class="icon list large"></i></button>
             </div>
             <div class="ten wide column">
               <div class="ui search">
@@ -47,7 +47,7 @@
               </div>
             </div>
             <div class="right aligned three wide column">
-              <button onclick="user_OpenProfile();" class="ui icon button blue"><i class="icon user circle large"></i></button>
+              <button onclick="user_OpenProfile();" class="ui icon button orange"><i class="icon user circle large"></i></button>
             </div>
             <script>
               const searchTerm = misc_GetUrlParam('searchTerm');
@@ -58,19 +58,10 @@
       </div>
       <div id="all"><br/>
         <div class="ui container">
-          <div id="image" class="ui fluid centered small image"><a class="ui red right corner label"><i class="heart icon"></i></a><img src="imgs/black.png"/></div><br/>
-          <div id="title" class="ui orange label">
-             
-            Serviço de capinagem
-          </div><br/>
-          <div id="location" class="ui message">
-            <div class="header">Localização</div>
-            <p lingdex="1">Vila Sumaúma, Município de Mucajaí, ao lado da E.E. Sadoc Perdeira</p>
-          </div>
-          <div id="description" class="ui message">
-            <div class="header">Descrição do anúncio</div>
-            <p lingdex="1">Realizo serviço de capinagem em qualquer tipo de terreno. Cobro por diária</p>
-          </div>
+          <div id="image" class="ui fluid centered small image"><a class="ui red right corner label"><i class="heart icon"></i></a><img src="imgs/black.png"/></div>
+          <h1 id="title" class="label"></h1>
+          <h3 id="location" class="label"></h3>
+          <h3 id="description" class="label"></h3>
           <div class="ui two column grid">
             <div class="column">
               <div class="ui raised segment"><a class="ui blue ribbon label">Categoria</a>
@@ -96,5 +87,5 @@
       </div>
     </div>
   </body>
-  <script>detail_GetAllValues(); </script>
+  <script>ad_GetAllValues(); </script>
 </html>

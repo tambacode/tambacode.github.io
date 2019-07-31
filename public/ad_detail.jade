@@ -26,20 +26,9 @@ html
                         a.ui.red.right.corner.label
                             i.heart.icon
                         img(src="imgs/black.png")
-                    br
-                    .ui.orange.label#title 
-                        | Serviço de capinagem
-                    br
-                    .ui.message#location
-                        .header
-                            | Localização
-                        p(lingdex='1')
-                            | Vila Sumaúma, Município de Mucajaí, ao lado da E.E. Sadoc Perdeira
-                    .ui.message#description
-                        .header
-                            | Descrição do anúncio
-                        p(lingdex='1')
-                            | Realizo serviço de capinagem em qualquer tipo de terreno. Cobro por diária
+                    h1.label#title
+                    h3.label#location
+                    h3.label#description
                     .ui.two.column.grid
                         .column
                             .ui.raised.segment
@@ -70,4 +59,4 @@ html
                     br
             include templates/footer
     script.
-        detail_GetAllValues(); 
+        ad_GetAllValues(); 

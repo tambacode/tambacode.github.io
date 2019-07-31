@@ -34,7 +34,7 @@ var db_InsertAdRegistration = function() {
 
     db_set(path,dataToInsert);
     db_InsertAdRegistrationOnUsers(key);
-    auth_RequireLoggingToAccess('ad_detail.html?keyAd=' + key);
+    auth_RequireLoggingToAccess('ad_detail.html?uid=' + key);
 };
 
 var db_InsertAdRegistrationOnUsers = function(key){
@@ -134,3 +134,51 @@ const ads_UnfavoriteAd = function(uid)
     console.log("ads_UnfavoriteAd method needs to be implemented");   
 }
 ///////////////////////////////// ADS SEARCH /////////////////////////////////
+
+/////////////////////////////////  AD DETAIL /////////////////////////////////
+const ad_GetAllValues = function(){
+    const adUID = misc_GetUrlParam('uid');
+    var adPath = 'ad/' + adUID;
+    var title = document.getElementById(title);
+    var location = document.getElementById(location);
+    var description = document.getElementById(description);
+    var category = document.getElementById(category);
+    var price = document.getElementById(price);
+    var name = document.getElementById(name);
+
+    var onSucess = function(snapshot) {
+        console.log("onSucess from db_get()");
+        var val = snapshot.val();
+        console.log("val");
+        console.log(val);
+        ad_ValuesIntoDetail(val);
+    };
+
+    db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
+/*
+category: "produtos"
+cep: "12312-312"
+description: "123123"
+location: "1231231231"
+price: "1.231,23"
+tel: "(12) 31231-2312"
+title: "123123"
+user: "ATZNxS0zbdZRX8Apy7JiHZmujaG2"
+*/
+}
+
+const ad_ValuesIntoDetail = function(val) {
+    category.innerText = val.category;
+    description.innerText = val.description;
+    location.innerText = val.location;
+    price.innerText = val.price;
+    title.innerText = val.title;
+    name.innerText = val.user;
+};
+
+const ad_ErrorFunction = function(error) {
+    console.log(error);
+    misc_DisplayErrorMessage('Erro ao exibir anúncio', 'Favor tentar mais tarde');
+};
+
+/////////////////////////////////  AD DETAIL /////////////////////////////////
