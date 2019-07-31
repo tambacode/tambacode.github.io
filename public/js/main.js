@@ -28,7 +28,14 @@ misc_GoToPage = function(url) {
 }
 
 misc_RemoveLoader = function() {
-    $('#loader').remove();
+    var loader = $('#loader');
+
+    if (loader != null) {
+        loader.remove();
+        return true;
+    }
+
+    return false;
 }
 
 misc_RemoveErrorNullMsg = function() {
@@ -151,3 +158,16 @@ const misc_DisplaySuccessMessage = function(title, text) {
         time: 2
     });
 };
+
+const misc_GetPrice = function(value) {
+    var val = "R$" + value;
+    return val;
+}
+
+const misc_GetStringWithMaxCharacthers = function(string, maxChars) {
+    if (string.length <= maxChars) {
+        return string;
+    }
+
+    return string.substring(0, maxChars) + "...";
+}

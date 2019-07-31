@@ -18,9 +18,9 @@ html
             include templates/header
             #all
                 #filters.ui.padded.grid
-                    //include templates/loader
                 #ads.ui.grid
-                    each val in [1, 2, 3, 4, 5, 6, 7]
+                    include templates/loader
+                    //each val in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
                         .four.wide.column.product_image
                             a(href="ad_detail.html?uid=TESTID")
                                 img.ui.tiny.rounded.image(src="imgs/black.png")
@@ -37,3 +37,5 @@ html
                 br
                 br
             include templates/footer
+        script.
+            ads_List_ListAdsByTerm(misc_GetUrlParam("searchTerm"));

@@ -61,6 +61,36 @@ var db_getOrderByChild = function(path, orderByChild, onSucess, onNullValue, onE
         });
 };
 
+var db_getOrderByChildLimitToLast = function(path, orderByChild, limitToLast, onSucess, onNullValue, onError) {
+    db.ref(path).orderByChild(orderByChild).limitToLast(limitToLast).once('value')
+        .then(function(snapshot) {
+            if (snapshot.val() == null)
+            {
+                onNullValue(snapshot);
+            } else {
+                onSucess(snapshot);
+            }
+        }).catch(function(error) {
+            onError(error);
+        });
+};
+
+var db_getOrderByChildContainsLimitToLast = function(path, orderByChild, containsString, limitToLast, onSucess, onNullValue, onError) {
+    db.ref(path).orderByChild(orderByChild)
+                .startAt(containsString).endAt(containsString + "\uf8ff")
+                .limitToLast(limitToLast).once('value')
+        .then(function(snapshot) {
+            if (snapshot.val() == null)
+            {
+                onNullValue(snapshot);
+            } else {
+                onSucess(snapshot);
+            }
+        }).catch(function(error) {
+            onError(error);
+        });
+};
+
 const db_getInnerJoinorderByValue = function(table1, pathInTableOne, table2, onSucess, onNullValue, onError) {
     table1.child(pathInTableOne).orderByValue().on('child_added', snap => {
         let lastInfoRef = table2.child(snap.key);
