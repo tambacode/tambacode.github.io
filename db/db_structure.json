@@ -52,6 +52,26 @@
 					}
 				}
 			}
-		}
+		},
+		"ad": {
+			"uid_1": {
+				"users_uid": "users_uid",
+				"title": "Titulo do produto",
+				"description": "Descricao do produto ou serviço",
+				"category": "Categoria do produto ou serviço, ",
+				"subcategory": "Sub-categoria do produto ou serviço",
+				"price": "preço do porduto ou serviço anunciado",
+				"location": "Localizacao ou ponto de referencia",
+        		"cep": "cep",
+        		"tel": "Telefone do anunciante",
+        		"tel_visible": "1 pra visivel e 0 p invisivel", 
+        		"images": {
+        			"http://img1lalala.jpg": "http://img1lalala.jpg",
+        			"http://img2lalala.jpg": "http://img2lalala.jpg",
+        			"http://img3lalala.jpg": "http://img3lalala.jpg"
+        		},
+				"timestamp": "1563646315703"
+			}
+		},
 	}
 }
