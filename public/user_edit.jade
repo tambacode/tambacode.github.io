@@ -20,12 +20,16 @@ html
         .pusher
             include templates/header
             #all
-                br
                 include templates/loader
-                #display_user_edit.ui.container(style="display:none")             
+                #display_user_edit.ui.container(style="display:none")         
                     form.ui.form.fluid.user_edit
                         .field
-                            img.ui.centered.small.circular.image(src="imgs/avatar1.png")
+                            .ui.grid(style="background-color: red; background-image: url('imgs/elliot.jpg');")
+                                .row
+                                .row
+                                    img.ui.centered.small.circular.image(src="imgs/elliot.jpg" style="border:3px solid white;")
+                                .row
+                        br
                         .field.required
                             label Nome
                             input#name(type="text" name="name" placeholder="Nome completo")
@@ -88,5 +92,5 @@ html
             include templates/footer
         script(src='js/user.js')
         script.
-            db_getUserInfo();
+            db_getUserToEdit();
             initComponent();

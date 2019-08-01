@@ -21,10 +21,25 @@ html
             include templates/header
             #all
                 include templates/loader
-                #display_user_info.ui(style="display:blocked")
-                    .ui.purple.inverted.segment
-                        img.ui.small.circular.bordered.image(src="imgs/avatar1.png")
-                    .ui.segment
+                #display_user_edit.ui(style="display:none;")
+                    .ui.grid(style="background-image: url('imgs/elliot.jpg');")
+                        .row
+                        .row
+                            img.ui.medium.centered.circular.image(src="imgs/elliot.jpg" style="border:3px solid white;")
+                        .row
+                    .ui.centered.segments
+                        .ui.segment
+                            i.user.icon
+                            label#name ...
+                        .ui.segment
+                            i.mail.icon
+                            label#email ...
+                        .ui.segment
+                            i.phone.icon
+                            label#phone_with_ddd ...
+                        .ui.segment
+                            i.map.marker.alternate.icon
+                            label#city_state ...
                     .ui.padded.column.row.grid
                         .two.wide.column
                         .ten.wide.column.centered
@@ -38,4 +53,4 @@ html
             include templates/footer
         script(src='js/user.js')
         script.
-            misc_RemoveLoader();
+            db_getUserInfo();

@@ -34,9 +34,9 @@
     <div class="pusher">
       <div id="menu" class="ui sf_header">
         <div class="ui padded grid">
-          <div class="blue row">
+          <div class="orange row">
             <div class="three wide column">
-              <button onclick="ui_openSidebar();" class="ui icon button blue"><i class="icon list large"></i></button>
+              <button onclick="ui_openSidebar();" class="ui icon button orange"><i class="icon list large"></i></button>
             </div>
             <div class="ten wide column">
               <div class="ui search">
@@ -47,7 +47,7 @@
               </div>
             </div>
             <div class="right aligned three wide column">
-              <button onclick="user_OpenProfile();" class="ui icon button blue"><i class="icon user circle large"></i></button>
+              <button onclick="user_OpenProfile();" class="ui icon button orange"><i class="icon user circle large"></i></button>
             </div>
             <script>
               const searchTerm = misc_GetUrlParam('searchTerm');
@@ -60,9 +60,26 @@
         <div id="loader" class="sixteen wide column row">
           <div class="ui active centered inline loader"></div>
         </div>
-        <div id="display_user_info" style="display:blocked" class="ui">
-          <div class="ui purple inverted segment"><img src="imgs/avatar1.png" class="ui small circular bordered image"/></div>
-          <div class="ui segment"></div>
+        <div id="display_user_edit" style="display:none;" class="ui">
+          <div style="background-image: url('imgs/elliot.jpg');" class="ui grid">
+            <div class="row"></div>
+            <div class="row"><img src="imgs/elliot.jpg" style="border:3px solid white;" class="ui medium centered circular image"/></div>
+            <div class="row"></div>
+          </div>
+          <div class="ui centered segments">
+            <div class="ui segment"><i class="user icon"></i>
+              <label id="name">...</label>
+            </div>
+            <div class="ui segment"><i class="mail icon"></i>
+              <label id="email">...</label>
+            </div>
+            <div class="ui segment"><i class="phone icon"></i>
+              <label id="phone_with_ddd">...</label>
+            </div>
+            <div class="ui segment"><i class="map marker alternate icon"></i>
+              <label id="city_state">...</label>
+            </div>
+          </div>
           <div class="ui padded column row grid">
             <div class="two wide column"></div>
             <div class="ten wide column centered"><a href="user_edit.html" class="ui primary button"><i class="save icon"></i>Editar infomações</a></div>
@@ -72,6 +89,6 @@
       </div>
     </div>
     <script src="js/user.js"></script>
-    <script>misc_RemoveLoader();</script>
+    <script>db_getUserInfo();</script>
   </body>
 </html>

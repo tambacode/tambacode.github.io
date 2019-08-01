@@ -139,7 +139,7 @@ var db_InsertUserOnLogin = function(path, name, providerName, providerToken) {
     db_set(path, dataToInsert);
 };
 
-var db_getUserInfo = function() {
+var db_getUserToEdit = function() {
     var path = '/users/' + localStorage.getItem('auth_UserUID');
 
     var onSuccess = function(snapshot) {
@@ -149,6 +149,30 @@ var db_getUserInfo = function() {
             else
                 $('#' + field).val(value);
         });
+        misc_RemoveLoader();
+        showUserFields();
+    };
+
+    var onNullValue = function(snapshot) {
+    };
+
+    var onError = function(snapshot) {
+    };
+
+    db_get(path, onSuccess, onNullValue, onError);
+};
+
+var db_getUserInfo = function() {
+    var path = '/users/' + localStorage.getItem('auth_UserUID');
+
+    var onSuccess = function(snapshot) {
+        $("#name").text(snapshot.val().name);
+        $("#email").text(snapshot.val().email);
+        if (snapshot.val().phone_ddd !== undefined && snapshot.val().phone_number !== undefined)
+            $("#phone_with_ddd").text("(" + snapshot.val().phone_ddd + ") " + snapshot.val().phone_number);
+        if (snapshot.val().city !== undefined && snapshot.val().state !== undefined)
+            $("#city_state").text(snapshot.val().city + " - " + snapshot.val().state);
+
         misc_RemoveLoader();
         showUserFields();
     };
