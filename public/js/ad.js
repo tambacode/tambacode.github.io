@@ -5,31 +5,44 @@
 var db_InsertAdRegistration = function() {
     var key =  db_GetNewPushKey('ad');
     var path = 'ad/' + key;
-    
+    let tel_visible_info = 0;
+
     //Form fields
     var title = document.getElementById('title').value;
     var description = document.getElementById('description').value;
 
     if(products.checked == true){
         var category = "produtos";
-    }else{
-        var category = "serviços";
+    }else if(services.checked == true){
+        var category = "servicos";
     }
+    const subcategory = document.getElementById('subcategory').innerText;
 
     var price = document.getElementById('price').value;
     var location = document.getElementById('location').value;
     var cep = document.getElementById('cep').value;
 	var tel = document.getElementById('tel').value;
+    var tel_visible = document.getElementById('tel_visible');
+    if(tel_visible.checked == true){
+        tel_visible_info = 1;
+    }
+    else{
+        tel_visible_info = 0;
+    }
     
     var dataToInsert = {
         user: localStorage.getItem('auth_UserUID'),
         title: title,
         description: description,
         category: category,
+        subcategory: subcategory,
         price: price,      
         location: location,
         cep: cep,
-        tel: tel              
+        tel: tel,
+        tel_visible: tel_visible_info,
+        images: "",
+        timestamp: Date.now()             
     };
 
     db_set(path,dataToInsert);
@@ -41,21 +54,95 @@ var db_InsertAdRegistrationOnUsers = function(key){
     var path = 'users/' + localStorage.getItem('auth_UserUID') + '/ad/' + key;
     db_set(path, key);
 };
+
+const ad_GetCategory = function(){
+    
+
+
+    const products = document.getElementById('products');
+    const services = document.getElementById('services');
+
+    if(products.checked == true){
+                $('#subcategory')
+                  .dropdown({
+                    values: [
+                      {
+                        name: 'Cereais',
+                        value: 'Cereais',
+                        selected: true
+                      },
+                      {
+                        name     : 'Organicos',
+                        value    : 'Organicos'                        
+                      },
+                      {
+                        name     : 'Proteina',
+                        value    : 'Proteina'                        
+                      },
+                      {
+                        name     : 'Vegetais',
+                        value    : 'Vegetais'                        
+                      },
+                      {
+                        name     : 'Frutas',
+                        value    : 'Frutas'                        
+                      },
+                      {
+                        name     : 'Laticinios',
+                        value    : 'Laticinios'                        
+                      },
+                      {
+                        name     : 'Flores e Plantas',
+                        value    : 'Flores e Plantas'                        
+                      }
+                    ]
+                  })
+                ;
+    }else if(services.checked == true){
+            $('#subcategory')
+                  .dropdown({
+                    values: [
+                      {
+                        name: 'Tratorista',
+                        value: 'Tratorista',
+                        selected : true
+                      },
+                      {
+                        name     : 'Agricultor',
+                        value    : 'Agricultor'                        
+                      },
+                      {
+                        name     : 'Manutencao de Maquinario',
+                        value    : 'Manutencao de Maquinario'                        
+                      },
+                      {
+                        name     : 'Medico Veterinario',
+                        value    : 'Medico Veterinario'                        
+                      },
+                      {
+                        name     : 'Caseiro',
+                        value    : 'Caseiro'                        
+                      }
+                    ]
+                  })
+                ;
+    }
+}
 ///////////////////////////////// AD REG /////////////////////////////////
 
-const pleaseNameME = function() {
+const uploadImage = function() {
     //AD Images
     //This function add imagens on data base
-    const fileButton = document.getElementById('fileButton');
     const uploader = document.getElementById('uploader');
     const uploadMsg = document.getElementById('uploadMsg');
+  
 
-    fileButton.addEventListener('change', function(e) {
-
-        var fileButton = document.getElementById('fileButton');
+        const fileButton = document.getElementById('fileButton');
 
         // Create a storage ref
         var storageRef = firebase.storage().ref('images/' + fileButton.files[0].name);
+
+
 
         // Upload file
         var task = storageRef.put(fileButton.files[0]);
@@ -73,9 +160,20 @@ const pleaseNameME = function() {
             },
             function complete() {
                 SetUploadMsg(uploadMsg, 'Image Uploaded');
+
+                
+                 // Upload completed successfully, now we can get the download URL
+                task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                console.log('File available at', downloadURL);
+                });
+
+              
+                
+                $('#imgpreview').attr('src', test23);
             }
         );
-    });
+        
+
 }
 
 //Visual feedback for user

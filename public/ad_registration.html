@@ -11,15 +11,32 @@
     <link rel="stylesheet" type="text/css" href="semanticUI/components/Semantic-UI-Alert.css"/>
     <link rel="stylesheet" type="text/css" href="css/webapp.css"/>
     <link rel="stylesheet" type="text/css" href="css/sharedfarm.css"/>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-storage.js"></script>
+    <script src="semanticUI/semantic.min.js"></script>
+    <script type="text/javascript" src="semanticUI/components/Semantic-UI-Alert.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/messages.js"></script>
+    <script src="js/ad.js"></script>
+    <script src="js/ad_detail.js"></script>
   </head>
   <body>
     <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home</a><a onClick="messages_GoTo();" class="item">Mensagens</a><a onClick="auth_LogoffUser();" class="item">Sair</a></div>
     <div class="pusher">
       <div id="menu" class="ui sf_header">
         <div class="ui padded grid">
-          <div class="blue row">
+          <div class="orange row">
             <div class="three wide column">
-              <button onclick="ui_openSidebar();" class="ui icon button blue"><i class="icon list large"></i></button>
+              <button onclick="ui_openSidebar();" class="ui icon button orange"><i class="icon list large"></i></button>
             </div>
             <div class="ten wide column">
               <div class="ui search">
@@ -30,7 +47,7 @@
               </div>
             </div>
             <div class="right aligned three wide column">
-              <button onclick="user_OpenProfile();" class="ui icon button blue"><i class="icon user circle large"></i></button>
+              <button onclick="user_OpenProfile();" class="ui icon button orange"><i class="icon user circle large"></i></button>
             </div>
             <script>
               const searchTerm = misc_GetUrlParam('searchTerm');
@@ -50,28 +67,33 @@
               <label>Descrição</label>
               <textarea type="text" name="description" id="description" maxlength="250" required="required" placeholder="Descrição" class="ui padded sixteen column grid"></textarea>
             </div>
-            <div class="field">                   
-              <div class="inline fields">
-                <label>Categoria</label>
-                <div class="field">
-                  <div class="ui radio checkbox">
-                    <input type="radio" name="category" id="products" value="produtos" checked=""/>
-                    <label>Produtos</label>
-                  </div>
+            <div class="field"></div>
+            <div class="inline fields">
+              <label>Categoria</label>
+              <div class="field">
+                <div onclick="ad_GetCategory();" class="ui radio checkbox">
+                  <input type="radio" name="category" id="products" value="produtos" checked=""/>
+                  <label>Produtos</label>
                 </div>
-                <div class="field">
-                  <div class="ui radio checkbox">
-                    <input type="radio" name="category" id="services" value="servicos"/>
-                    <label>Serviços</label>
-                  </div>
+              </div>
+              <div class="field">
+                <div onclick="ad_GetCategory();" class="ui radio checkbox">
+                  <input type="radio" name="category" id="services" value="servicos"/>
+                  <label>Serviços                    </label>
                 </div>
+              </div>
+            </div>
+            <label>Subcategoria</label>
+            <div class="field">
+              <div id="subcategory" class="ui dropdown">
+                <div class="text"></div><i class="dropdown icon"></i>
               </div>
             </div>
             <div class="field">
               <label>Imagem</label>
               <p id="uploadMsg" class="red hide"></p>
-              <input id="fileButton" type="file" value="upload" name="fileButton"/>
-              <progress id="uploader" value="0" max="100">0%                            </progress>
+              <input id="fileButton" type="file" value="upload" name="fileButton[]"/>
+              <progress id="uploader" value="0" max="100">0%   </progress><img id="imgpreview" style="width: 500px"/>
             </div>
             <div class="field">
               <label>Preço R$</label>
@@ -87,7 +109,23 @@
             </div>
             <div class="field">
               <label>Telefone</label>
-              <input type="text" name="tel" id="tel" minlength="11" maxlength="11" placeholder="(00) 00000-0000" onkeypress="$(this).mask('(00) 00000-0000');"/>
+              <div class="inline fields">
+                <div class="ui equal width grid">
+                  <div class="column">
+                    <div class="field">
+                      <input type="text" name="tel" id="tel" minlength="11" maxlength="11" placeholder="(00) 00000-0000" onkeypress="$(this).mask('(00) 00000-0000');"/>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div class="field">                                                                                         
+                      <div class="ui checkbox">
+                        <input type="checkbox" id="tel_visible" name="tel_visible" checked=""/>
+                        <label>Visível no anúncio?</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="field">
               <button id="InsertAdRegistration" class="ui button">Cadastrar</button>
@@ -96,22 +134,11 @@
         </div>
       </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-messaging.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-storage.js"></script>
-    <script src="semanticUI/semantic.min.js"></script>
-    <script type="text/javascript" src="semanticUI/components/Semantic-UI-Alert.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/db.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/messages.js"></script>
-    <script src="js/ad.js"></script>
-    <script src="js/ad_detail.js"></script>
+    <script>
+      fileButton.addEventListener('change', function(e) {
+          uploadImage();
+      });
+      ad_GetCategory();
+    </script>
   </body>
 </html>

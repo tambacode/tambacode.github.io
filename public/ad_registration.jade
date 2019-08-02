@@ -13,7 +13,8 @@ html
         //- CSS
         include templates/styles
         
-        
+        //- Script
+        include templates/scripts  
     body
 
         include templates/sideBar
@@ -29,22 +30,29 @@ html
                         .field
                             label Descrição
                             textarea.ui.padded.sixteen.column.grid(type='text', name='description', id='description', maxlength="250", required="required", placeholder='Descrição')
-                        .field                    
-                            .inline.fields
+                        .field
+                        .inline.fields
                                 label Categoria
                                 .field
-                                    .ui.radio.checkbox
+                                    .ui.radio.checkbox(onclick='ad_GetCategory();')
                                         input(type='radio', name='category', id='products', value="produtos", checked="")
                                         label Produtos
                                 .field
-                                    .ui.radio.checkbox
+                                    .ui.radio.checkbox(onclick='ad_GetCategory();')
                                         input(type='radio', name='category', id='services', value="servicos")
-                                        label Serviços
+                                        label Serviços                    
+                                                                 
+                        label Subcategoria
+                        .field
+                            .ui.dropdown#subcategory
+                              .text
+                              i.dropdown.icon
                         .field
                             label Imagem
                             p#uploadMsg.red.hide
-                            input#fileButton(type='file', value='upload', name='fileButton')
-                            progress#uploader(value="0" max="100") 0%                            
+                            input#fileButton(type='file', value='upload', name='fileButton[]')
+                            progress#uploader(value="0" max="100") 0%   
+                            img#imgpreview(style="width: 500px")                                                  
                         .field
                             label Preço R$
                             input(type='text', name='price', id='price', minlength="1", maxlength="14", data-symbol="R$ " data-thousands="." data-decimal="," required="required", onclick='$(this).maskMoney();')
@@ -56,10 +64,23 @@ html
                             input(type='text', name='cep', id='cep', minlength="8", maxlength="8", placeholder='00000-000', onkeypress="$(this).mask('00000-000');")
                         .field
                             label Telefone
-                            input(type='text', name='tel', id='tel', minlength="11", maxlength="11", placeholder='(00) 00000-0000', onkeypress="$(this).mask('(00) 00000-0000');")
+                            .inline.fields
+                                    .ui.equal.width.grid
+                                        .column
+                                            .field
+                                                input(type='text', name='tel', id='tel', minlength="11", maxlength="11", placeholder='(00) 00000-0000', onkeypress="$(this).mask('(00) 00000-0000');")
+                                        .column
+                                            .field                                                                                          
+                                                .ui.checkbox
+                                                    input(type='checkbox', id="tel_visible", name='tel_visible', checked="")
+                                                    label Visível no anúncio?
                         .field
                             button.ui.button(id='InsertAdRegistration') Cadastrar
             
             include templates/footer
-        //- Script
-        include templates/scripts    
+          
+        script.
+            fileButton.addEventListener('change', function(e) {
+                uploadImage();
+            });
+            ad_GetCategory();
