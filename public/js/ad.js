@@ -274,8 +274,13 @@ const ads_List_ListAdsByTerm = function(term) {
         $.each(snapshot.val(), function(uid, obj) {
             lastAdUIDReceived = uid;
 
-            //TODO: SET CORRECT IMAGE
-            ad_List_AddCardToList(holder, ad_GetAdCard(uid, "imgs/black.png", obj.title, obj.price, obj.description, true, false));
+            db_get("ads_images",
+                function(snapshot) {
+                    const imgsRef = snapshot.val();
+                    const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
+
+                    ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, false));
+                }, null, null);
         });
     };
 
@@ -288,8 +293,9 @@ const ads_List_ListAdsByTerm = function(term) {
     if (firstCall) {
         //TODO: Change "title" to "timestamp", when this field is added to database, so we can order the ads list by their creation date.
         db_getOrderByChildContainsLimitToLast("ad", "title", term, 10, onSucess, onError, onError);
+        //db_get("ad", onSucess, onError, onError);
     } else {
-        console.log("SE");
+        console.log("ADD PAGINATION HERE");
     }
 };
 
@@ -365,7 +371,6 @@ const ad_ValuesIntoDetail = function(val) {
 };
 
 const ad_ErrorFunction = function(error) {
-    console.log(error);
     misc_DisplayErrorMessage('Erro ao exibir anúncio', 'Favor tentar mais tarde');
 };
 

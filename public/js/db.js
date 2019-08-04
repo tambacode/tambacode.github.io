@@ -76,8 +76,9 @@ var db_getOrderByChildLimitToLast = function(path, orderByChild, limitToLast, on
 };
 
 var db_getOrderByChildContainsLimitToLast = function(path, orderByChild, containsString, limitToLast, onSucess, onNullValue, onError) {
+    //.endAt(endAt + "\uf8ff")
     db.ref(path).orderByChild(orderByChild)
-                .startAt(containsString).endAt(containsString + "\uf8ff")
+                .startAt(containsString)
                 .limitToLast(limitToLast).once('value')
         .then(function(snapshot) {
             if (snapshot.val() == null)
