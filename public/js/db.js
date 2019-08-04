@@ -1,5 +1,7 @@
 ﻿var db = firebase.database();
+var db_storage = firebase.storage()
 var rootRef = db.ref();
+var rootStorageRef = db_storage.ref();
 
 //  Use to get a new key when inserting a new data on DB
 //  path (string): 'SharedFarm/Users'
@@ -23,11 +25,11 @@ var db_set = function(path, postData) {
 };
 
 //https://firebase.google.com/docs/database/web/read-and-write
-var db_update = function(path, postData) {
+var db_update = function(path, postData, callback) {
     db.ref(path).update(postData,
         function (error){
             if (error === null)
-                misc_GoToPage("user_info.html");// The write failed...
+                callback;
             else
                 misc_DisplayErrorMessage("Cadastro","Cadastro não foi realizado");// Data saved successfully!
         });
@@ -147,11 +149,19 @@ var db_getUserToEdit = function() {
         $.each(snapshot.val(), function(field, value ) {
             if (field === "state")
                 $('#' + field).dropdown('set selected', value);
+            else if (field === "profile_picture_link" ) {
+                if (value !== undefined) {
+                    $('#imageuploaded')
+                        .attr('src', value);
+                    $('#imagebackgrounded')
+                        .attr('style','background-image: url("' + value +'"); background-size: auto, cover;');
+                }
+            }
             else
                 $('#' + field).val(value);
         });
         misc_RemoveLoader();
-        showUserFields();
+        user_showFields();
     };
 
     var onNullValue = function(snapshot) {
@@ -173,9 +183,15 @@ var db_getUserInfo = function() {
             $("#phone_with_ddd").text("(" + snapshot.val().phone_ddd + ") " + snapshot.val().phone_number);
         if (snapshot.val().city !== undefined && snapshot.val().state !== undefined)
             $("#city_state").text(snapshot.val().city + " - " + snapshot.val().state);
-
+        
+        if (snapshot.val().profile_picture_link !== undefined) {
+            $('#imageuploaded')
+                .attr('src', snapshot.val().profile_picture_link);
+            $('#imagebackgrounded')
+                .attr('style','background-image: url("' + snapshot.val().profile_picture_link +'"); background-size: auto, cover;');
+        }
         misc_RemoveLoader();
-        showUserFields();
+        user_showFields();
     };
 
     var onNullValue = function(snapshot) {
@@ -216,11 +232,67 @@ var db_updateUserInfo = function() {
         district: district,
         complement: complement,
         city: city,
-        state: state,
+        state: state
+    };
+    
+    db_update(path,dataToInsert,misc_GoToPage("user_info.html"));
+
+};
+
+const db_updateUserImage = function(url){
+    var path = '/users/' + localStorage.getItem('auth_UserUID');
+
+    const dummy = function(){
+        console.log("uploaded");
+    }
+
+    var dataToInsert = {    
+        profile_picture_link: url
+    }
+
+    db_update(path,dataToInsert,dummy);
+}
+
+/*
+Params: Function to update files to storage
+path: storage path from root on e.g. users_image/
+file: array from input type=file e.g. document.getElementById('fileInput').files[0];
+callback: function to be executed when uploaded is success to get url of uploaded file
+*/
+const db_saveImage = function(path, file, callback) {
+    //This function add imagens on data base
+    const name = path + "_" + file.name;
+    const metadata = {
+        contentType: file.type
     };
 
-    db_update(path,dataToInsert);
-};
+    // Create a storage ref
+    var storageRef = db_storage.ref(name);
+    // Upload file
+    var task = storageRef.put(file, metadata);
+
+    // Update progress bar
+    task.on('state_changed',
+        function progress(snapshot) {
+            var perc = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        },
+        function error(err) {
+            misc_DisplayErrorMessage("Upload imagem","Image Upload Error: " + err);
+        },
+        function complete() {  
+             // Upload completed successfully, now we can get the download URL
+            task.snapshot.ref.getDownloadURL().then(callback);
+        }
+    );
+}
+
+const db_saveUserImage = function(){
+    var image_path = 'users_images/' + localStorage.getItem('auth_UserUID');
+
+    var file = document.getElementById('fileInput').files[0];
+
+    db_saveImage(image_path, file, db_updateUserImage);
+}
 
 ///////////////////////////////// EXAMPLES /////////////////////////////////
 //  Below there are one (1) method to examplify how to use the methods above
@@ -233,4 +305,4 @@ var insertData = function(userId, name, notificationKey) {
 
     db_set(path, postData);
 };
-////////////////////////////// END OF EXAMPLES //////////////////////////////
+////////////////////////////// END OF EXAMPLES /////////////////////////////

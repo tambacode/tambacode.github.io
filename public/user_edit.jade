@@ -24,10 +24,15 @@ html
                 #display_user_edit.ui.container(style="display:none")         
                     form.ui.form.fluid.user_edit
                         .field
-                            .ui.grid(style="background-color: red; background-image: url('imgs/elliot.jpg');")
+                            .ui.grid#imagebackgrounded(style="background-image: url('');")
                                 .row
                                 .row
-                                    img.ui.centered.small.circular.image(src="imgs/elliot.jpg" style="border:3px solid white;")
+                                    .ui.centered.circular.image#user_image
+                                        .ui.dimmer
+                                            .content
+                                                .ui.small.primary.button(onclick="user_openFileDialog()") Subir nova
+                                                input#fileInput(type="file" style="display: none;")
+                                        img.ui.small.image#imageuploaded(src="" style="border:5px solid white;")
                                 .row
                         br
                         .field.required
@@ -93,4 +98,4 @@ html
         script(src='js/user.js')
         script.
             db_getUserToEdit();
-            initComponent();
+            user_initComponent();

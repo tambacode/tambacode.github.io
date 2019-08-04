@@ -1,4 +1,4 @@
-const getStates = function(){
+const user_getStates = function(){
   var states_list = ["AC","AL","AM","AP","BA",
                      "CE","DF","ES","GO","MA",
                      "MG","MS","MT","PA","PB",
@@ -11,23 +11,23 @@ const getStates = function(){
 }
 
 //Search in webservice viacep.com.br
-const cepViacep = function(cep){
+const user_cepViacep = function(cep){
   var urlcep = "https://viacep.com.br/ws/"+ cep +"/json/";
   return $.getJSON(urlcep, addressFieldsClear());
 }
 
 //Search in webservice api.postmon.com.br
-const cepPostmon = function(cep){
+const user_cepPostmon = function(cep){
     var urlcep = "https://api.postmon.com.br/v1/cep/" + cep;
     return $.getJSON(urlcep, addressFieldsClear());
 }
 
-const showUserFields = function(){
+const user_showFields = function(){
   $("#display_user_edit").show();//removeAttr("style");
 }
 
 //Clean fields when load document
-const addressFieldsClear = function(){
+const user_addressFieldsClear = function(){
   $('form.user_edit')
   	.form('set values', {
       publicplace : '',
@@ -37,7 +37,7 @@ const addressFieldsClear = function(){
     });
 }
 //Clean fields when load document
-const stateCityFieldsClear = function(){
+const user_stateCityFieldsClear = function(){
   $('form.user_edit')
     .form('set values', {
       city: '',
@@ -46,7 +46,7 @@ const stateCityFieldsClear = function(){
 }
 
 //Search CEP in two sources, if did not find let as it is
-const searchCep = function(object){
+const user_searchCep = function(object){
   
   var ceperror = 1;
   
@@ -54,7 +54,7 @@ const searchCep = function(object){
   var validacep = /^[0-9]{8}$/;                 //Regular expression to validate CEP.
 
   if (cep != "" && validacep.test(cep)) {
-    cepPostmon(cep).done(data => {
+    user_cepPostmon(cep).done(data => {
         ceperror = 0;
         $("#publicplace").val(data.logradouro);
         $("#district").val(data.bairro);
@@ -62,19 +62,43 @@ const searchCep = function(object){
         $("#state").dropdown('set selected', data.uf);
     });
     if(ceperror){
-      cepViacep(cep).done(data => {
+      user_cepViacep(cep).done(data => {
         $("#publicplace").val(data.logradouro);
         $("#district").val(data.bairro);
         $("#city").val(data.localidade);
         $("#state").dropdown('set selected', data.uf);
       });
     }
-  } else addressFieldsClear();
+  } else user_addressFieldsClear();
 }
 
-const initComponent = function(){
+const user_openFileDialog = function(){
+  $('#fileInput').click();
+}
+
+const user_previewImage = function(evt){
+  if (evt.target.files[0].size > 5242880){
+    misc_DisplayErrorMessage("Tamanho da imagem","Imagem maior de 5MB");
+    return;
+  }
+  if (evt.target.files && evt.target.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        $('#imageuploaded')
+          .attr('src', e.target.result);
+        $('#imagebackgrounded')
+          .attr('style','background-image: url("' + e.target.result +'"); background-size: auto, cover;');
+    };
+    reader.readAsDataURL(evt.target.files[0]);
+    db_saveUserImage();
+  }
+}
+
+const user_initComponent = function(){
   $('#state').dropdown();
-  getStates();
+  user_getStates();
+  $('#user_image').dimmer({ on: 'hover' });
+  $('#fileInput').change(user_previewImage);
   $('#cep')
     .blur(function(){ searchCep(this); })
     .mask("00000-000");

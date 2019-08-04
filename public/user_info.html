@@ -9,6 +9,8 @@
     <!-- Please don't use this type of comment >> // << because it is compiled in the HTML-->
     <link rel="stylesheet" type="text/css" href="semanticUI/semantic.css"/>
     <link rel="stylesheet" type="text/css" href="semanticUI/components/Semantic-UI-Alert.css"/>
+    <link rel="stylesheet" type="text/css" href="semanticUI/components/dimmer.min.css"/>
+    <link rel="stylesheet" type="text/css" href="semanticUI/components/transition.min.css"/>
     <link rel="stylesheet" type="text/css" href="css/webapp.css"/>
     <link rel="stylesheet" type="text/css" href="css/sharedfarm.css"/>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
@@ -21,6 +23,8 @@
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-storage.js"></script>
     <script src="semanticUI/semantic.min.js"></script>
     <script type="text/javascript" src="semanticUI/components/Semantic-UI-Alert.js"></script>
+    <script type="text/javascript" src="semanticUI/components/dimmer.min.js"></script>
+    <script type="text/javascript" src="semanticUI/components/transition.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/db.js"></script>
     <script src="js/auth.js"></script>
@@ -61,9 +65,9 @@
           <div class="ui active centered inline loader"></div>
         </div>
         <div id="display_user_edit" style="display:none;" class="ui">
-          <div style="background-image: url('imgs/elliot.jpg');" class="ui grid">
+          <div id="imagebackgrounded" style="background-image: url('');" class="ui grid">
             <div class="row"></div>
-            <div class="row"><img src="imgs/elliot.jpg" style="border:3px solid white;" class="ui medium centered circular image"/></div>
+            <div class="row"><img id="imageuploaded" src="" style="border:5px solid white;" class="ui medium centered circular image"/></div>
             <div class="row"></div>
           </div>
           <div class="ui centered segments">

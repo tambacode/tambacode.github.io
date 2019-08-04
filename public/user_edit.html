@@ -63,9 +63,18 @@
         <div id="display_user_edit" style="display:none" class="ui container">        
           <form class="ui form fluid user_edit">
             <div class="field">
-              <div style="background-color: red; background-image: url('imgs/elliot.jpg');" class="ui grid">
+              <div id="imagebackgrounded" style="background-image: url('');" class="ui grid">
                 <div class="row"></div>
-                <div class="row"><img src="imgs/elliot.jpg" style="border:3px solid white;" class="ui centered small circular image"/></div>
+                <div class="row">
+                  <div id="user_image" class="ui centered circular image">
+                    <div class="ui dimmer">
+                      <div class="content">
+                        <div onclick="user_openFileDialog()" class="ui small primary button">Subir nova</div>
+                        <input id="fileInput" type="file" style="display: none;"/>
+                      </div>
+                    </div><img id="imageuploaded" src="" style="border:5px solid white;" class="ui small image"/>
+                  </div>
+                </div>
                 <div class="row"></div>
               </div>
             </div><br/>
@@ -158,7 +167,7 @@
     <script src="js/user.js"></script>
     <script>
       db_getUserToEdit();
-      initComponent();
+      user_initComponent();
     </script>
   </body>
 </html>
