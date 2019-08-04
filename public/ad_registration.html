@@ -1,12 +1,11 @@
 
 <html>
   <head>
-    <title>Shared.Farm</title>
+    <title>Shared.Farm - Cadastro de Anúncio</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <link rel="manifest" href="manifest.json"/>
-    <!-- Please don't use this type of comment >> // << because it is compiled in the HTML-->
     <link rel="stylesheet" type="text/css" href="semanticUI/semantic.css"/>
     <link rel="stylesheet" type="text/css" href="semanticUI/components/Semantic-UI-Alert.css"/>
     <link rel="stylesheet" type="text/css" href="css/webapp.css"/>
@@ -27,7 +26,6 @@
     <script src="js/ui.js"></script>
     <script src="js/messages.js"></script>
     <script src="js/ad.js"></script>
-    <script src="js/ad_detail.js"></script>
   </head>
   <body>
     <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home</a><a onClick="messages_GoTo();" class="item">Mensagens</a><a onClick="auth_LogoffUser();" class="item">Sair</a></div>
@@ -91,9 +89,8 @@
             </div>
             <div class="field">
               <label>Imagem</label>
-              <p id="uploadMsg" class="red hide"></p>
-              <input id="fileButton" type="file" value="upload" name="fileButton[]"/>
-              <progress id="uploader" value="0" max="100">0%   </progress><img id="imgpreview" style="width: 500px"/>
+              <div id="ImagesGrid" class="ui padded centered grid">
+              </div>
             </div>
             <div class="field">
               <label>Preço R$</label>
@@ -110,14 +107,14 @@
             <div class="field">
               <label>Telefone</label>
               <div class="inline fields">
-                <div class="ui equal width grid">
+                <div class="ui equal width center grid">
                   <div class="column">
                     <div class="field">
                       <input type="text" name="tel" id="tel" minlength="11" maxlength="11" placeholder="(00) 00000-0000" onkeypress="$(this).mask('(00) 00000-0000');"/>
                     </div>
                   </div>
                   <div class="column">
-                    <div class="field">                                                                                         
+                    <div style="padding-top: 10px;" class="field">
                       <div class="ui checkbox">
                         <input type="checkbox" id="tel_visible" name="tel_visible" checked=""/>
                         <label>Visível no anúncio?</label>
@@ -128,16 +125,19 @@
               </div>
             </div>
             <div class="field">
-              <button id="InsertAdRegistration" class="ui button">Cadastrar</button>
+              <button id="InsertAdRegistration" class="orange ui button">Cadastrar</button>
             </div>
           </form>
         </div>
       </div>
     </div>
     <script>
-      fileButton.addEventListener('change', function(e) {
-          uploadImage();
+      /*
+      $('#fileInput').on('change', function(e) {
+          ad_RegisterUploadImage();
       });
+      */
+      ad_Register_AddNewImage();
       ad_GetCategory();
     </script>
   </body>

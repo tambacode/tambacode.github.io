@@ -1,8 +1,13 @@
 /* This file is dedicate to store all logic part about ad_registration interface */
 
-
 ///////////////////////////////// AD REG /////////////////////////////////
-var db_InsertAdRegistration = function() {
+const db_InsertAdRegistration = function() {
+    // Test if there is any image being uploaded
+    if (ad_UploadingImage > 0) {
+        misc_DisplayErrorMessage('Imagem carregando', 'Favor aguardar todas as imagens finalizarem o upload');
+        return
+    }
+
     var key =  db_GetNewPushKey('ad');
     var path = 'ad/' + key;
     let tel_visible_info = 0;
@@ -11,9 +16,9 @@ var db_InsertAdRegistration = function() {
     var title = document.getElementById('title').value;
     var description = document.getElementById('description').value;
 
-    if(products.checked == true){
+    if (products.checked == true) {
         var category = "produtos";
-    }else if(services.checked == true){
+    } else if(services.checked == true) {
         var category = "servicos";
     }
     const subcategory = document.getElementById('subcategory').innerText;
@@ -23,6 +28,7 @@ var db_InsertAdRegistration = function() {
     var cep = document.getElementById('cep').value;
 	var tel = document.getElementById('tel').value;
     var tel_visible = document.getElementById('tel_visible');
+
     if(tel_visible.checked == true){
         tel_visible_info = 1;
     }
@@ -45,9 +51,20 @@ var db_InsertAdRegistration = function() {
         timestamp: Date.now()             
     };
 
-    db_set(path,dataToInsert);
+    ad_Register_SaveImagePathToDB(key, ad_CurrentlyAddedImages);
+    db_set(path, dataToInsert);
     db_InsertAdRegistrationOnUsers(key);
     auth_RequireLoggingToAccess('ad_detail.html?uid=' + key);
+};
+
+const ad_Register_SaveImagePathToDB = function(adUID, imagesArray) {
+    var path = 'ads_images/' + adUID;
+    var adImagesRef = db.ref(path);
+
+    for (var i = 0; i < imagesArray.length; i++) {
+        const imageKey = db_GetNewPushKey(path)
+        adImagesRef.child(imageKey).set(imagesArray[i]);
+    }
 };
 
 var db_InsertAdRegistrationOnUsers = function(key){
@@ -55,14 +72,11 @@ var db_InsertAdRegistrationOnUsers = function(key){
     db_set(path, key);
 };
 
-const ad_GetCategory = function(){
-    
-
-
+const ad_GetCategory = function() {
     const products = document.getElementById('products');
     const services = document.getElementById('services');
 
-    if(products.checked == true){
+    if (products.checked == true) {
                 $('#subcategory')
                   .dropdown({
                     values: [
@@ -98,7 +112,7 @@ const ad_GetCategory = function(){
                     ]
                   })
                 ;
-    }else if(services.checked == true){
+    } else if(services.checked == true) {
             $('#subcategory')
                   .dropdown({
                     values: [
@@ -129,64 +143,87 @@ const ad_GetCategory = function(){
     }
 }
 ///////////////////////////////// AD REG /////////////////////////////////
+// Informs how many imagens user has added
+var ad_QtdRegisterImages = 0;
+// Informs the uploaded images URLS 
+var ad_CurrentlyAddedImages = [];
+// Informs how many images are currently being uploaded
+var ad_UploadingImage = 0;
 
-const uploadImage = function() {
-    //AD Images
-    //This function add imagens on data base
-    const uploader = document.getElementById('uploader');
-    const uploadMsg = document.getElementById('uploadMsg');
-  
+const ad_RegisterUploadImage = function(fileInput) {
+    ad_UploadingImage += 1;
 
-        const fileButton = document.getElementById('fileButton');
+    ad_Register_RemovePlusIcon(fileInput);
+    ad_Register_SetImageLoading(fileInput);
 
-        // Create a storage ref
-        var storageRef = firebase.storage().ref('images/' + fileButton.files[0].name);
-
-
-
-        // Upload file
-        var task = storageRef.put(fileButton.files[0]);
-
-        SetUploadMsg(uploadMsg, 'Uploading');
-
-        // Update progress bar
-        task.on('state_changed',
-            function progress(snapshot) {
-                var perc = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                uploader.value = perc;
-            },
-            function error(err) {
-                SetUploadMsg(uploadMsg, 'Image Upload Error');
-            },
-            function complete() {
-                SetUploadMsg(uploadMsg, 'Image Uploaded');
-
-                
-                 // Upload completed successfully, now we can get the download URL
-                task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                console.log('File available at', downloadURL);
-                });
-
-              
-                
-                $('#imgpreview').attr('src', test23);
-            }
-        );
-        
-
-}
-
-//Visual feedback for user
-SetUploadMsg = function(p, msg) {
-    p.innerHTML = msg;
-
-    if (msg == '')
-    {
-        p.classList.add('hide');
-    } else {
-        p.classList.remove('hide');
+    //Limit images quantity to 5
+    if (ad_QtdRegisterImages < 5) {
+        ad_Register_AddNewImage();
     }
-}
+    
+    // Create a storage ref
+    const adsImagePath = "ads_images/";
+    const imgName = db_GetNewPushKey(adsImagePath);
+    //var storageRef = firebase.storage().ref('ads_images/' + fileInput.files[0].name);
+    var storageRef = firebase.storage().ref(adsImagePath + imgName);
+
+    // Upload file
+    var task = storageRef.put(fileInput.files[0]);
+
+    // Update progress bar
+    task.on('state_changed',
+        function progress(snapshot) {
+            //const perc = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        },
+        function error(err) {
+            ad_UploadingImage -= 1;
+            misc_DisplayErrorMessage('Upload imagem', 'Erro ao subir a imagem, tente novamente');
+        },
+        function complete() {
+            ad_UploadingImage -= 1;
+            // Upload completed successfully, now we can get the download URL
+            task.snapshot.ref.getDownloadURL().then(function(imageURL) {
+                ad_CurrentlyAddedImages.push(imageURL);
+                
+                $(fileInput).parent().find('img').attr('src', imageURL);
+
+                ad_Register_RemoveLoadingIconFromImage(fileInput);
+            });
+        }
+    );
+};
+
+const ad_Register_RemoveLoadingIconFromImage = function(target) {
+    $(target).parent().find('div').remove();
+};
+
+const ad_Register_RemovePlusIcon = function(target) {
+    $(target).parent().find('div').remove();
+};
+
+const ad_Register_SetImageLoading = function(target) {
+    var loading = '<div class="ui active inverted dimmer"><div class="ui text loader">Carregando</div></div>';
+
+    $(target).parent().append(loading);
+};
+
+const ad_Register_AddNewImage = function() {
+    var imageCard = '<div class="five wide column row" id="{0}"><div class="ui active inverted dimmer"><i onclick="$(this).parent().parent().find(\'input\').click();" class="plus big click icon"></i></div><img src="imgs/black.png" class="ui tiny image"><input id="{1}" type="file" value="upload" style="display: none;"></div>';
+
+    const columnId = 'ImageColumn' + ad_QtdRegisterImages;
+    const inputId = 'ImageInput' + ad_QtdRegisterImages;
+
+    imageCard = imageCard.replace('{0}', columnId);
+    imageCard = imageCard.replace('{1}', inputId);
+
+    $("#ImagesGrid").append(imageCard);
+
+    $('#' + inputId).on('change', function(e) {
+        ad_RegisterUploadImage(e.target);
+    });
+
+    ad_QtdRegisterImages = ad_QtdRegisterImages + 1;
+};
 
 ///////////////////////////////// ADS SEARCH /////////////////////////////////
 var lastAdUIDReceived = null;

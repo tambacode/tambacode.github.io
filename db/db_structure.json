@@ -65,13 +65,14 @@
         		"cep": "cep",
         		"tel": "Telefone do anunciante",
         		"tel_visible": "1 pra visivel e 0 p invisivel", 
-        		"images": {
-        			"http://img1lalala.jpg": "http://img1lalala.jpg",
-        			"http://img2lalala.jpg": "http://img2lalala.jpg",
-        			"http://img3lalala.jpg": "http://img3lalala.jpg"
-        		},
-				"timestamp": "1563646315703"
+        		"timestamp": "1563646315703"
 			}
 		},
+		"ad_images": {
+			"ad_uid_-LlP6HtKyfEVRBdFaAb6": {
+				"-LlP6HtKyfEVRBdFaAb6": "https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/ads_images%2F-LlP6CYEiOz13fDD8i7-?alt=media&token=972aec08-30f1-4709-9e1a-48c7bf5a9a19",
+				"-LlP9c0v0KHMqDkaLi5n": "https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/ads_images%2F-LlP6DZn1E7KlpyR0rA1?alt=media&token=89f70e80-3777-4a27-8637-4a45aad5deaa",
+			}
+		}
 	}
 }
