@@ -65,8 +65,8 @@ const messages_GetMessageCard = function(uid, img, title, description, timestamp
     card = card.replace('{2}', misc_GetHourMin(timestamp));
     card = card.replace('{3}', uid);
     card = card.replace('{4}', uid);
-    //card = card.replace('{5}', img);
-    card = card.replace('{5}', 'imgs/black.png');
+    card = card.replace('{5}', img);
+    //card = card.replace('{5}', 'imgs/black.png');
 
     return card;
 };
