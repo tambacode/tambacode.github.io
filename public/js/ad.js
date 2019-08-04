@@ -8,6 +8,11 @@ const db_InsertAdRegistration = function() {
         return
     }
 
+    if (ad_CurrentlyAddedImages.length == 0) {
+        misc_DisplayErrorMessage('Nenhuma imagem', 'Favor adicionar ao menos uma imagem para efetuar o cadastro do anúncio.');
+        return
+    }
+
     var key =  db_GetNewPushKey('ad');
     var path = 'ad/' + key;
     let tel_visible_info = 0;
