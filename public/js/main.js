@@ -24,7 +24,9 @@ misc_GetUrlParam = function(param) {
 };
 
 misc_GoToPage = function(url) {
-	window.location.href = url;	
+    if (window.location.pathname.replace('/', '') != url) {
+        window.location.href = url; 
+    }
 }
 
 misc_RemoveLoader = function() {
