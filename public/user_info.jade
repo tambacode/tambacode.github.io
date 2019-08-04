@@ -20,6 +20,7 @@ html
         .pusher
             include templates/header
             #all
+                br
                 include templates/loader
                 #display_user_edit.ui(style="display:none;")
                     .ui.grid#imagebackgrounded(style="background-image: url('');")
@@ -43,7 +44,7 @@ html
                     .ui.padded.column.row.grid
                         .two.wide.column
                         .ten.wide.column.centered
-                            a.ui.primary.button(href="user_edit.html")
+                            a.ui.orange.button(href="user_edit.html")
                                 i.save.icon
                                 |Editar infomações
                         .two.wide.column

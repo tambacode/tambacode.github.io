@@ -28,7 +28,7 @@
     <script src="js/ad.js"></script>
   </head>
   <body>
-    <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home</a><a onClick="messages_GoTo();" class="item">Mensagens</a><a onClick="auth_LogoffUser();" class="item">Sair</a></div>
+    <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home<i class="home icon Large"></i></a><a href="auth_RequireLoggingToAccess('ads_MyAds.html');" class="item">Meus Anúncios<i class="shopping bag icon Large"></i></a><a href="auth_RequireLoggingToAccess('ads_MyFavorites.html');" class="item">Favoritos<i class="heart icon Large"></i></a><a onClick="messages_GoTo();" class="item">Mensagens<i class="comment icon Large"></i></a><a id="LogoutButton" onClick="auth_LogoffUser();" class="item hidden">Sair<i class="user circle icon Large"></i></a></div>
     <div class="pusher">
       <div id="menu" class="ui sf_header">
         <div class="ui padded grid">
@@ -132,11 +132,6 @@
       </div>
     </div>
     <script>
-      /*
-      $('#fileInput').on('change', function(e) {
-          ad_RegisterUploadImage();
-      });
-      */
       ad_Register_AddNewImage();
       ad_GetCategory();
     </script>

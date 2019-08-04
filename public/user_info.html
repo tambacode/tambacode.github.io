@@ -9,8 +9,6 @@
     <!-- Please don't use this type of comment >> // << because it is compiled in the HTML-->
     <link rel="stylesheet" type="text/css" href="semanticUI/semantic.css"/>
     <link rel="stylesheet" type="text/css" href="semanticUI/components/Semantic-UI-Alert.css"/>
-    <link rel="stylesheet" type="text/css" href="semanticUI/components/dimmer.min.css"/>
-    <link rel="stylesheet" type="text/css" href="semanticUI/components/transition.min.css"/>
     <link rel="stylesheet" type="text/css" href="css/webapp.css"/>
     <link rel="stylesheet" type="text/css" href="css/sharedfarm.css"/>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
@@ -23,18 +21,15 @@
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-storage.js"></script>
     <script src="semanticUI/semantic.min.js"></script>
     <script type="text/javascript" src="semanticUI/components/Semantic-UI-Alert.js"></script>
-    <script type="text/javascript" src="semanticUI/components/dimmer.min.js"></script>
-    <script type="text/javascript" src="semanticUI/components/transition.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/db.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/messages.js"></script>
     <script src="js/ad.js"></script>
-    <script src="js/ad_detail.js"></script>
   </head>
   <body>
-    <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home</a><a onClick="messages_GoTo();" class="item">Mensagens</a><a onClick="auth_LogoffUser();" class="item">Sair</a></div>
+    <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home<i class="home icon Large"></i></a><a href="auth_RequireLoggingToAccess('ads_MyAds.html');" class="item">Meus Anúncios<i class="shopping bag icon Large"></i></a><a href="auth_RequireLoggingToAccess('ads_MyFavorites.html');" class="item">Favoritos<i class="heart icon Large"></i></a><a onClick="messages_GoTo();" class="item">Mensagens<i class="comment icon Large"></i></a><a id="LogoutButton" onClick="auth_LogoffUser();" class="item hidden">Sair<i class="user circle icon Large"></i></a></div>
     <div class="pusher">
       <div id="menu" class="ui sf_header">
         <div class="ui padded grid">
@@ -60,7 +55,7 @@
           </div>
         </div>
       </div>
-      <div id="all">
+      <div id="all"><br/>
         <div id="loader" class="sixteen wide column row">
           <div class="ui active centered inline loader"></div>
         </div>
@@ -86,7 +81,7 @@
           </div>
           <div class="ui padded column row grid">
             <div class="two wide column"></div>
-            <div class="ten wide column centered"><a href="user_edit.html" class="ui primary button"><i class="save icon"></i>Editar infomações</a></div>
+            <div class="ten wide column centered"><a href="user_edit.html" class="ui orange button"><i class="save icon"></i>Editar infomações</a></div>
             <div class="two wide column"></div>
           </div>
         </div><br/><br/>
