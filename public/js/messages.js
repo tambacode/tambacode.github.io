@@ -226,9 +226,8 @@ const message_RemoveErrorNullMsg = function() {
 };
 
 const message_StartChatWithProductOwner = function() {
-    //const adUID = misc_GetUrlParam('uid');
     const currentUID = localStorage.getItem('auth_UserUID');
-    const adUID = '-Lkavh0cBxzZvDpHzMEC';
+    const adUID = misc_GetUrlParam('uid');
 
     const path = 'ad/' + adUID + '/user';
 
