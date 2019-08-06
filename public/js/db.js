@@ -134,6 +134,7 @@ var db_getInnerJoin = function(table1, pathInTableOne, table2, onSucess, onNullV
 var db_InsertUserOnLogin = function(path, name, providerName, providerToken) {
     var dataToInsert = {
         name: name,
+        profile_picture_link: 'https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/users_images%2Fimage.png?alt=media&token=eeddedea-0ead-4ced-8741-651f58bcd9ff',
         tokens : {}
     };
 

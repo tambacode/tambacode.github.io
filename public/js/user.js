@@ -13,13 +13,13 @@ const user_getStates = function(){
 //Search in webservice viacep.com.br
 const user_cepViacep = function(cep){
   var urlcep = "https://viacep.com.br/ws/"+ cep +"/json/";
-  return $.getJSON(urlcep, addressFieldsClear());
+  return $.getJSON(urlcep, user_addressFieldsClear());
 }
 
 //Search in webservice api.postmon.com.br
 const user_cepPostmon = function(cep){
     var urlcep = "https://api.postmon.com.br/v1/cep/" + cep;
-    return $.getJSON(urlcep, addressFieldsClear());
+    return $.getJSON(urlcep, user_addressFieldsClear());
 }
 
 const user_showFields = function(){
@@ -91,6 +91,8 @@ const user_previewImage = function(evt){
     };
     reader.readAsDataURL(evt.target.files[0]);
     db_saveUserImage();
+    $('#user_image').dimmer('hide');
+;
   }
 }
 
@@ -100,7 +102,7 @@ const user_initComponent = function(){
   $('#user_image').dimmer({ on: 'hover' });
   $('#fileInput').change(user_previewImage);
   $('#cep')
-    .blur(function(){ searchCep(this); })
+    .blur(function(){ user_searchCep(this); })
     .mask("00000-000");
   $('#phone_number').mask('00000-0000');
   $('form.user_edit')
