@@ -1,7 +1,7 @@
 /* This file is dedicate to store all logic part about ad_registration interface */
 
 ///////////////////////////////// AD REG /////////////////////////////////
-const db_InsertAdRegistration = function() {
+const db_InsertAdRegistration = function(flagUpdate, adUID) {
     // Test if there is any image being uploaded
     if (ad_UploadingImage > 0) {
         misc_DisplayErrorMessage('Imagem carregando', 'Favor aguardar todas as imagens finalizarem o upload');
@@ -13,7 +13,12 @@ const db_InsertAdRegistration = function() {
         return
     }
 
-    var key =  db_GetNewPushKey('ad');
+    if(!flagUpdate){
+        var key =  db_GetNewPushKey('ad');
+    }else if(flagUpdate == 'yes'){
+        var key = adUID;
+    }
+    
     var path = 'ad/' + key;
     let tel_visible_info = 0;
 
@@ -29,7 +34,7 @@ const db_InsertAdRegistration = function() {
     const subcategory = document.getElementById('subcategory').innerText;
 
     var price = document.getElementById('price').value;
-    var location = document.getElementById('location').value;
+    var location = document.getElementById('locationad').value;
     var cep = document.getElementById('cep').value;
 	var tel = document.getElementById('tel').value;
     var tel_visible = document.getElementById('tel_visible');
@@ -56,10 +61,15 @@ const db_InsertAdRegistration = function() {
         timestamp: Date.now()             
     };
 
-    ad_Register_SaveImagePathToDB(key, ad_CurrentlyAddedImages);
-    db_set(path, dataToInsert);
-    db_InsertAdRegistrationOnUsers(key);
-    auth_RequireLoggingToAccess('ad_detail.html?uid=' + key);
+    if(!flagUpdate){
+        ad_Register_SaveImagePathToDB(key, ad_CurrentlyAddedImages);
+        db_set(path, dataToInsert);
+        db_InsertAdRegistrationOnUsers(key);
+        auth_RequireLoggingToAccess('ad_detail.html?uid=' + key);
+    }else if(flagUpdate == 'yes'){
+        db_update(path,dataToInsert,misc_GoToPage('ad_detail.html?uid=' + key));
+    }
+    
 };
 
 const ad_Register_SaveImagePathToDB = function(adUID, imagesArray) {
@@ -230,6 +240,64 @@ const ad_Register_AddNewImage = function() {
     ad_QtdRegisterImages = ad_QtdRegisterImages + 1;
 };
 
+///////////////////////////////// ADS UPDATE /////////////////////////////////
+const ad_RedirectForEditAd = function(){
+    //Get Uid of Ad
+    const adUID = misc_GetUrlParam('uid');
+    //Redirect user to edit page
+    misc_GoToPage("ad_registration.html?isitforEdit=1&uid=" + adUID);
+}
+
+//Fill all filds
+const ad_fillfieldforEdit = function(){
+    const adUID = misc_GetUrlParam('uid');
+
+    //Get all fields
+    if (adUID){
+        $('#InsertAdRegistrationButton').addClass('hidden');
+        $('#updateButton').removeClass('hidden');
+        ad_GetAllValues();
+        //Get images
+        var adPath = 'ads_images/' + adUID;
+        var onSucess = function(snapshot) {
+            //var val = snapshot.val();
+
+            snapshot.forEach(function(childSnapshot) {
+                var item = childSnapshot.val();
+                item.key = childSnapshot.key;
+
+                ad_CurrentlyAddedImages.push(item);
+
+                var imageCard = '<div class="five wide column row" id="{0}"><div class="ui active inverted dimmer"><i onclick="$(this).parent().parent().find(\'input\').click();" class="plus big click icon"></i></div><img src="imgs/black.png" class="ui tiny image"><input id="{1}" type="file" value="upload" style="display: none;"></div>';
+
+                const columnId = 'ImageColumn' + ad_QtdRegisterImages;
+                const inputId = 'ImageInput' + ad_QtdRegisterImages;
+
+                imageCard = imageCard.replace('{0}', columnId);
+                imageCard = imageCard.replace('{1}', inputId);
+
+                $("#ImagesGrid").append(imageCard);
+                
+                $('#' + inputId).parent().find('img').attr('src', item);
+
+                ad_Register_RemoveLoadingIconFromImage('#' + inputId);
+
+                ad_QtdRegisterImages = ad_QtdRegisterImages + 1;
+                
+            });
+
+        };
+        db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
+    }
+    
+}
+
+const ad_update = function(){
+    const adUID = misc_GetUrlParam('uid');
+    db_InsertAdRegistration('yes', adUID);
+}
+///////////////////////////////// ADS UPDATE /////////////////////////////////
+
 ///////////////////////////////// ADS SEARCH /////////////////////////////////
 var lastAdUIDReceived = null;
 const ads_SearchAd = function() {
@@ -362,12 +430,29 @@ user: "ATZNxS0zbdZRX8Apy7JiHZmujaG2"
 }
 
 const ad_ValuesIntoDetail = function(val) {
-    category.innerText = val.category;
-    description.innerText = val.description;
-    location.innerText = val.location;
-    price.innerText = val.price;
-    title.innerText = val.title;
-    name.innerText = val.user;
+    const edit = misc_GetUrlParam('isitforEdit');
+    if (edit){
+        title.value = val.title;
+        description.value = val.description;
+        if(val.category = 'Produtos'){
+            products.checked = true;
+        }else{
+            services.checked = true;
+        }
+        ad_GetCategory();
+        $('#subcategory').dropdown('set selected', val.subcategory);
+        price.value = val.price;
+        locationad.value = val.location;
+        cep.value = val.cep;
+        tel.value = val.tel;
+    }else{
+        category.innerText = val.category;
+        description.innerText = val.description;
+        location.innerText = val.location;
+        price.innerText = val.price;
+        title.innerText = val.title;
+        name.innerText = val.user;
+    }
 };
 
 const ad_ErrorFunction = function(error) {

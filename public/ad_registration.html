@@ -98,7 +98,7 @@
             </div>
             <div class="field">
               <label>Localização</label>
-              <input type="text" name="location" id="location" maxlength="100" placeholder="Localização"/>
+              <input type="text" name="locationad" id="locationad" maxlength="100" placeholder="Localização"/>
             </div>
             <div class="field">
               <label>CEP</label>
@@ -125,7 +125,10 @@
               </div>
             </div>
             <div class="field">
-              <button id="InsertAdRegistration" class="orange ui button">Cadastrar</button>
+              <button id="InsertAdRegistrationButton" class="orange ui button">Cadastrar</button>
+            </div>
+            <div class="field">
+              <button onclick="ad_update();" id="updateButton" class="orange ui button hidden">Editar</button>
             </div>
           </form>
         </div>
@@ -134,6 +137,7 @@
     <script>
       ad_Register_AddNewImage();
       ad_GetCategory();
+      ad_fillfieldforEdit();
     </script>
   </body>
 </html>

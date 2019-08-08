@@ -68,7 +68,7 @@ html
                             input(type='text', name='price', id='price', minlength="1", maxlength="14", data-symbol="R$ " data-thousands="." data-decimal="," required="required", onclick='$(this).maskMoney();')
                         .field
                             label Localização
-                            input(type='text', name='location', id='location', maxlength="100", placeholder='Localização')
+                            input(type='text', name='locationad', id='locationad', maxlength="100", placeholder='Localização')
                         .field
                             label CEP
                             input(type='text', name='cep', id='cep', minlength="8", maxlength="8", placeholder='00000-000', onkeypress="$(this).mask('00000-000');")
@@ -85,10 +85,13 @@ html
                                                     input(type='checkbox', id="tel_visible", name='tel_visible', checked="")
                                                     label Visível no anúncio?
                         .field
-                            button.orange.ui.button(id='InsertAdRegistration') Cadastrar
+                            button.orange.ui.button(id='InsertAdRegistrationButton') Cadastrar
+                        .field
+                            button.orange.ui.button.hidden(onclick='ad_update();', id='updateButton') Editar
             
             include templates/footer
           
         script.
             ad_Register_AddNewImage();
             ad_GetCategory();
+            ad_fillfieldforEdit();
