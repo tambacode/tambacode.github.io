@@ -57,6 +57,8 @@ html
                     .button.fluid.ui.primary.button(id='SendMessage' onclick="message_StartChatWithProductOwner();")
                         | Enviar Mensagem
                     br
+                    .button.fluid.ui.primary.button(id='EditAd' onclick="ad_RedirectForEditAd();")
+                        | Editar Anuncio
             include templates/footer
     script.
         ad_GetAllValues(); 
