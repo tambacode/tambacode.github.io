@@ -17,22 +17,22 @@ html
         .pusher
             include templates/header
             #all
-                //-#adHolder
-                    .four.wide.column.product_image
+                br
+                #ads.ui.grid
+                    //-ADICIONAR PRODUTO NA TELA DE MENSAGEM
+                    //-.four.wide.column.product_image
                         a(href="ad_detail.html?uid=TESTID")
                             img.ui.tiny.rounded.image(src="imgs/black.png")
-                    .twelve.wide.column.product_info
+                    //-.twelve.wide.column.product_info
                         a(href="ad_detail.html?uid=TESTID")
                             h4#title
                                 | Terra para cultivo de batataaa
-                        i.red.large.link.heart.outline.icon.favoriteItem(onclick="ads_FavoriteAdClick(this);", uid="TESTID")
                         h3#price
                             | R$3.900,00
                         span#info
                             | info sobre o produto como localização
                         .ui.divider(style="width: 100%;")
                 #chatMessages.ui.padded.grid
-                    .row
                     include templates/loader
                     //-.s
                         .fourteen.wide.column
