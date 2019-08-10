@@ -401,35 +401,28 @@ const ads_List_UnfavoriteAd = function(uid) {
 const ad_GetAllValues = function(){
     const adUID = misc_GetUrlParam('uid');
     var adPath = 'ad/' + adUID;
-    var title = document.getElementById(title);
-    var location = document.getElementById(location);
-    var description = document.getElementById(description);
-    var category = document.getElementById(category);
-    var price = document.getElementById(price);
-    var name = document.getElementById(name);
 
     var onSucess = function(snapshot) {
-        console.log("onSucess from db_get()");
         var val = snapshot.val();
-        console.log("val");
-        console.log(val);
-        ad_ValuesIntoDetail(val);
+
+        db_get("ads_images", 
+            function(snapshot) {
+                const imgsRef = snapshot.val();
+                const imgURL = imgsRef[adUID][Object.keys(imgsRef[adUID])[0]];
+                ad_ValuesIntoDetail(val,imgURL);
+            }
+            , null
+            , null
+        );
+
     };
 
-    db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
-/*
-category: "produtos"
-cep: "12312-312"
-description: "123123"
-location: "1231231231"
-price: "1.231,23"
-tel: "(12) 31231-2312"
-title: "123123"
-user: "ATZNxS0zbdZRX8Apy7JiHZmujaG2"
-*/
+    db_get('ad/' + adUID, onSucess, ad_ErrorFunction, ad_ErrorFunction);
+    document.getElementById("EditAd").style.visibility = "hidden";
+    //visible
 }
 
-const ad_ValuesIntoDetail = function(val) {
+const ad_ValuesIntoDetail = function(val, imgURL) {
     const edit = misc_GetUrlParam('isitforEdit');
     if (edit){
         title.value = val.title;
@@ -446,12 +439,33 @@ const ad_ValuesIntoDetail = function(val) {
         cep.value = val.cep;
         tel.value = val.tel;
     }else{
-        category.innerText = val.category;
-        description.innerText = val.description;
-        location.innerText = val.location;
-        price.innerText = val.price;
+        image.src = imgURL;
         title.innerText = val.title;
-        name.innerText = val.user;
+        address.innerText = val.location;
+        price.innerText = "R$ " + val.price;
+        description.innerText = val.description;
+        category.innerText = val.category;
+        subcategory.innerText = val.subcategory;
+
+        db_get('/users/'+val.user, 
+            function(snapshot) {
+                const valUser = snapshot.val();
+                console.log(valUser);
+                $("#name").text(valUser.name);
+                $("#district").text(valUser.district);
+                console.log(valUser.district);
+                //$("#district").text(valUser.district + ", " + valUser.city);
+                $("#email").text(valUser.email);
+                $("#phone").text(valUser.phone);
+            }
+            , null
+            , null
+        );
+        
+        if (firebase.auth().currentUser.uid == val.user) {
+            document.getElementById("EditAd").style.visibility = "visible";
+        }
+
     }
 };
 

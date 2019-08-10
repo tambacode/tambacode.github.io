@@ -55,34 +55,41 @@
           </div>
         </div>
       </div>
-      <div id="all"><br/>
+      <div id="all">
         <div class="ui container">
-          <div id="image" class="ui fluid centered small image"><a class="ui red right corner label"><i class="heart icon"></i></a><img src="imgs/black.png"/></div>
-          <h1 id="title" class="label"></h1>
-          <h3 id="location" class="label"></h3>
-          <h3 id="description" class="label"></h3>
+          <div class="ui fluid centered small image"><img id="image" src=""/></div>
+          <h1 class="ui header">
+            <div id="title"> </div>
+            <div class="sub header"><i class="map marker alternate icon"></i>
+              <div id="address" class="content"></div>
+            </div>
+          </h1>
+          <h2 class="ui orange header">
+            <div id="price"> </div>
+            <div id="description" class="sub header"></div>
+          </h2>
+          <div class="ui dividing header"></div>
           <div class="ui two column grid">
             <div class="column">
               <div class="ui raised segment"><a class="ui blue ribbon label">Categoria</a>
-                <label id="category">Serviço                                 </label>
+                <label id="category"></label>
               </div>
             </div>
             <div class="column">
-              <div class="ui segment"><a id="price" class="ui green tag label">R$ 60,00</a></div>
+              <div class="ui raised segment"><a class="ui green ribbon label">Subcategoria</a>
+                <label id="subcategory"></label>
+              </div>
             </div>
-          </div><br/>
-          <div class="ui two column grid">
-            <div class="five wide column">                   
-              <div id="picture" class="ui tiny circular image"><img src="imgs/elliot.jpg"/></div>
-              <div id="name" class="label">Jeferson Barros                                                    </div>
+          </div>
+          <h3 class="ui dividing header"></h3>
+          <h1 class="ui header">
+            <div id="name"> </div>
+            <div class="sub header"><i class="map marker alternate icon"></i>
+              <div id="district" class="content"></div>
             </div>
-            <div class="fourten wide column"><br/>
-              <div id="phone" class="ui label"><i class="phone icon"> 92 98447-4596</i></div><br/>
-              <div id="email" class="ui label"><i class="mail icon"> jeferson.ba@gmail.com</i></div>
-            </div>
-          </div><br/>
+          </h1>
           <div id="SendMessage" onclick="message_StartChatWithProductOwner();" class="button fluid ui primary button">Enviar Mensagem</div><br/>
-          <div id="EditAd" onclick="ad_RedirectForEditAd();" class="button fluid ui primary button">Editar Anuncio</div>
+          <button id="EditAd" onclick="ad_RedirectForEditAd();" class="fluid ui primary button">Editar Anuncio</button>
         </div>
       </div>
     </div>
