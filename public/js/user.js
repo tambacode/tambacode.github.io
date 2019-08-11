@@ -82,21 +82,13 @@ const user_previewImage = function(evt){
     return;
   }
   if (evt.target.files && evt.target.files[0]) {
+    db_saveUserImage();
     var reader = new FileReader();
     reader.onload = function (e) {
         $('#imageuploaded')
           .attr('src', e.target.result)
-          .one("load", function() {
-            $('#user_image').dimmer('hide');
-          })
-          .each(function() {
-            if(this.complete) {
-              $(this).load();
-            }
-          });
-    };
+    }
     reader.readAsDataURL(evt.target.files[0]);
-    db_saveUserImage();
   }
 }
 

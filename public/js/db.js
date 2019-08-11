@@ -31,7 +31,7 @@ var db_update = function(path, postData, callback) {
             if (error === null)
                 callback;
             else
-                misc_DisplayErrorMessage("Cadastro","Cadastro não foi realizado");// Data saved successfully!
+                misc_DisplayErrorMessage("Cadastro","Cadastro não foi realizado");
         });
 };
 
@@ -278,15 +278,13 @@ var db_updateUserInfo = function() {
 const db_updateUserImage = function(url){
     var path = '/users/' + localStorage.getItem('auth_UserUID');
 
-    const dummy = function(){
-        console.log("uploaded");
-    }
+    const dummy = $('#user_image').dimmer('hide');
 
     var dataToInsert = {    
         profile_picture_link: url
     }
 
-    db_update(path,dataToInsert,dummy);
+    db_update(path,dataToInsert, dummy);
 }
 
 /*
