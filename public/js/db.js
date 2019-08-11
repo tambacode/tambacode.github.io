@@ -153,17 +153,10 @@ var db_getUserToEdit = function() {
                 $('#' + field).dropdown('set selected', value);
             else if (field === "profile_picture_link" ) {
                 if (value !== undefined) {
-                    $('#imageuploaded')
-                        .attr('src', value)
-                        .one("load", function() {
-                            user_showFields();
-                            misc_RemoveLoader();
-                        })
-                        .each(function() {
-                            if(this.complete) {
-                                $(this).load();
-                            }
-                        });
+                    misc_waitImageLoadReady($('#imageuploaded'), value, function(){
+                        user_showFields();
+                        misc_RemoveLoader();
+                    });
                 }
             }
             else
@@ -192,17 +185,10 @@ var db_getUserInfo = function() {
         var temp_info = "";
 
         if (snapshot.val().profile_picture_link !== undefined) {
-            $('#imageuploaded')
-                .attr('src', snapshot.val().profile_picture_link)
-                .one("load", function() {
-                    user_showFields();
-                    misc_RemoveLoader();
-                })
-                .each(function() {
-                  if(this.complete) {
-                      $(this).load();
-                  }
-                });
+            misc_waitImageLoadReady($('#imageuploaded'), snapshot.val().profile_picture_link, function(){
+                user_showFields();
+                misc_RemoveLoader();                
+            });
         }
         $("#name").text(snapshot.val().name);
         $("#email").text(snapshot.val().email);
@@ -275,16 +261,21 @@ var db_updateUserInfo = function() {
 
 };
 
+const doneSuccess = function(url){
+    misc_waitImageLoadReady($('#imageuploaded'), url, function() {
+            $('#user_image').dimmer('hide');
+            ad_Register_RemoveLoadingIconFromImage($('#fileInput'));
+    });
+}
+
 const db_updateUserImage = function(url){
     var path = '/users/' + localStorage.getItem('auth_UserUID');
 
-    const dummy = $('#user_image').dimmer('hide');
-
-    var dataToInsert = {    
+    var dataToInsert = {
         profile_picture_link: url
     }
 
-    db_update(path,dataToInsert, dummy);
+    db_update(path,dataToInsert, doneSuccess(url));
 }
 
 /*
