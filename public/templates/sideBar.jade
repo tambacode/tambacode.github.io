@@ -1,7 +1,10 @@
-.ui.sidebar.vertical.menu
+.ui.left.sidebar.vertical.menu
     a.item(href="index.html")
         | Home
         i.home.icon.Large
+    a.item.hidden#PerfilButton(onClick="user_OpenProfile();")
+        | Meu Perfil
+        i.user.circle.icon.Large
     a.item(onclick="auth_RequireLoggingToAccess('ads_MyAds.html');")
         | Meus Anúncios
         i.shopping.bag.icon.Large
@@ -13,4 +16,4 @@
         i.comment.icon.Large
     a.item.hidden#LogoutButton(onClick="auth_LogoffUser();")
         | Sair
-        i.user.circle.icon.Large
+        i.sign-out.icon.Large
