@@ -71,6 +71,7 @@ var auth_LogOnUser = function(firebaseUser) {
         auth_RequireLoggingToAccess(redirectUrl);
     } else {
         $('#LogoutButton').removeClass("hidden");
+        $('#PerfilButton').removeClass("hidden");
     }
 }
 
