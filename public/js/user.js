@@ -81,15 +81,8 @@ const user_previewImage = function(evt){
     misc_DisplayErrorMessage("Tamanho da imagem","Imagem maior de 5MB");
     return;
   }
-  if (evt.target.files && evt.target.files[0]) {
-    db_saveUserImage();
-    var reader = new FileReader();
-    reader.onload = function (e) {
-        $('#imageuploaded')
-          .attr('src', e.target.result)
-    }
-    reader.readAsDataURL(evt.target.files[0]);
-  }
+  ad_Register_SetImageLoading($('#fileInput'));
+  db_saveUserImage();
 }
 
 const user_initComponent = function(){
