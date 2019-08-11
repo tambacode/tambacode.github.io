@@ -49,7 +49,7 @@ var auth_LoginSuccessful = function(result, providerName) {
     };
 
     var onNullValue = function(snapshot) {
-        db_InsertUserOnLogin(path, result.user.displayName, providerName, providerToken);
+        db_InsertUserOnLogin(path, result.user.displayName, result.user.email, providerName, providerToken);
 
         auth_LogOnUser(snapshot);
     };

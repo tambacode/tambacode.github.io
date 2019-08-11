@@ -131,9 +131,10 @@ var db_getInnerJoin = function(table1, pathInTableOne, table2, onSucess, onNullV
 }
 
 ///////////////////////////////// USERS /////////////////////////////////
-var db_InsertUserOnLogin = function(path, name, providerName, providerToken) {
+var db_InsertUserOnLogin = function(path, name, email, providerName, providerToken) {
     var dataToInsert = {
         name: name,
+        email: email,
         profile_picture_link: 'https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/users_images%2Fimage.png?alt=media&token=eeddedea-0ead-4ced-8741-651f58bcd9ff',
         tokens : {}
     };
@@ -153,22 +154,31 @@ var db_getUserToEdit = function() {
             else if (field === "profile_picture_link" ) {
                 if (value !== undefined) {
                     $('#imageuploaded')
-                        .attr('src', value);
-                    $('#imagebackgrounded')
-                        .attr('style','background-image: url("' + value +'"); background-size: auto, cover;');
+                        .attr('src', value)
+                        .one("load", function() {
+                            user_showFields();
+                            misc_RemoveLoader();
+                        })
+                        .each(function() {
+                            if(this.complete) {
+                                $(this).load();
+                            }
+                        });
                 }
             }
             else
                 $('#' + field).val(value);
         });
-        misc_RemoveLoader();
-        user_showFields();
     };
 
     var onNullValue = function(snapshot) {
+        user_showFields();
+        misc_RemoveLoader();
     };
 
     var onError = function(snapshot) {
+        user_showFields();
+        misc_RemoveLoader();
     };
 
     db_get(path, onSuccess, onNullValue, onError);
@@ -178,27 +188,52 @@ var db_getUserInfo = function() {
     var path = '/users/' + localStorage.getItem('auth_UserUID');
 
     var onSuccess = function(snapshot) {
-        $("#name").text(snapshot.val().name);
-        $("#email").text(snapshot.val().email);
-        if (snapshot.val().phone_ddd !== undefined && snapshot.val().phone_number !== undefined)
-            $("#phone_with_ddd").text("(" + snapshot.val().phone_ddd + ") " + snapshot.val().phone_number);
-        if (snapshot.val().city !== undefined && snapshot.val().state !== undefined)
-            $("#city_state").text(snapshot.val().city + " - " + snapshot.val().state);
-        
+
+        var temp_info = "";
+
         if (snapshot.val().profile_picture_link !== undefined) {
             $('#imageuploaded')
-                .attr('src', snapshot.val().profile_picture_link);
-            $('#imagebackgrounded')
-                .attr('style','background-image: url("' + snapshot.val().profile_picture_link +'"); background-size: auto, cover;');
+                .attr('src', snapshot.val().profile_picture_link)
+                .one("load", function() {
+                    user_showFields();
+                    misc_RemoveLoader();
+                })
+                .each(function() {
+                  if(this.complete) {
+                      $(this).load();
+                  }
+                });
         }
-        misc_RemoveLoader();
-        user_showFields();
+        $("#name").text(snapshot.val().name);
+        $("#email").text(snapshot.val().email);
+        
+        (snapshot.val().phone_ddd !== undefined)    ? temp_info = snapshot.val().phone_ddd : temp_info = "";
+        (snapshot.val().phone_number !== undefined) ? temp_info += " " + snapshot.val().phone_number : temp_info;
+        $("#phone_with_ddd").text(temp_info);
+
+        (snapshot.val().publicplace !== undefined)  ? temp_info = snapshot.val().publicplace : temp_info = "";
+        (snapshot.val().house_number !== undefined) ? temp_info += " " + snapshot.val().house_number : temp_info;
+        $("#publicplace_with_number").text(temp_info);
+
+        (snapshot.val().complement !== undefined)   ? temp_info = snapshot.val().complement : temp_info = "";
+        (snapshot.val().district !== undefined)     ? temp_info += " " + snapshot.val().district : temp_info;
+        $("#complement_district").text(temp_info);
+
+        (snapshot.val().cep !== undefined)   ? temp_info = " " + snapshot.val().cep : temp_info = "";
+        (snapshot.val().city !== undefined)  ? temp_info += " " + snapshot.val().city : temp_info;
+        (snapshot.val().state !== undefined) ? temp_info += " - " + snapshot.val().state : temp_info;
+        $("#cep_city_state").text(temp_info);
+
     };
 
     var onNullValue = function(snapshot) {
+        user_showFields();
+        misc_RemoveLoader();
     };
 
     var onError = function(snapshot) {
+        user_showFields();
+        misc_RemoveLoader();
     };
 
     db_get(path, onSuccess, onNullValue, onError);
@@ -209,7 +244,7 @@ var db_updateUserInfo = function() {
     
     //Form fields
     var name = document.getElementById('name').value;
-    var email = document.getElementById('email').value;
+    //var email = document.getElementById('email').value;
     var phone_ddd = document.getElementById('phone_ddd').value;
     var phone_number = document.getElementById('phone_number').value;
     var cep = document.getElementById('cep').value;
@@ -224,7 +259,7 @@ var db_updateUserInfo = function() {
     
     var dataToInsert = {
         name: name,
-        email: email,
+        //email: email,
         phone_ddd: phone_ddd,
         phone_number: phone_number,
         cep: cep,

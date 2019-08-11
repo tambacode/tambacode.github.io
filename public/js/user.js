@@ -85,14 +85,18 @@ const user_previewImage = function(evt){
     var reader = new FileReader();
     reader.onload = function (e) {
         $('#imageuploaded')
-          .attr('src', e.target.result);
-        $('#imagebackgrounded')
-          .attr('style','background-image: url("' + e.target.result +'"); background-size: auto, cover;');
+          .attr('src', e.target.result)
+          .one("load", function() {
+            $('#user_image').dimmer('hide');
+          })
+          .each(function() {
+            if(this.complete) {
+              $(this).load();
+            }
+          });
     };
     reader.readAsDataURL(evt.target.files[0]);
     db_saveUserImage();
-    $('#user_image').dimmer('hide');
-;
   }
 }
 
@@ -115,13 +119,13 @@ const user_initComponent = function(){
             prompt: 'Preencha com seu nome completo'
           }]
         },
-        email: {
+        /*email: {
           identifier: 'email',
           rules: [{
             type: 'email',
             prompt: 'Coloque um email válido'
           }]
-        },
+        },*/
         phone_ddd: {
           identifier: 'phone_ddd',
           rules: [{
@@ -135,14 +139,14 @@ const user_initComponent = function(){
             type: 'regExp[/^[0-9]{5}-[0-9]{4}$/gm]',
             prompt: 'O telefone não confere com o padrão 99999-8888'
           }]
-        },
+        } /*, Removed
         cep: {
           identifier: '',
           rules: [{
             type: 'regExp[/^[0-9]{5}-[0-9]{3}$/gm]',
             prompt: 'Preencha seu CEP no formato 99999-000'
           }]
-        }
+        }*/
       }, onSuccess: function(event){
                         event.preventDefault();
                         db_updateUserInfo();

@@ -62,7 +62,7 @@
         <div id="display_user_edit" style="display:none" class="ui container">        
           <form class="ui form fluid user_edit">
             <div class="field">
-              <div id="imagebackgrounded" style="background-image: url('');" class="ui grid">
+              <div class="ui grid">
                 <div class="row"></div>
                 <div class="row">
                   <div id="user_image" class="ui centered circular image">
@@ -71,7 +71,7 @@
                         <div onclick="user_openFileDialog()" class="ui small primary button">Subir nova</div>
                         <input id="fileInput" type="file" style="display: none;"/>
                       </div>
-                    </div><img id="imageuploaded" src="" style="border:5px solid white;" class="ui small image"/>
+                    </div><img id="imageuploaded" src="" style="height: 200px; width: 200px;" class="ui image"/>
                   </div>
                 </div>
                 <div class="row"></div>
@@ -81,9 +81,9 @@
               <label>Nome</label>
               <input id="name" type="text" name="name" placeholder="Nome completo"/>
             </div>
-            <div class="field required">
+            <div class="field">
               <label>Email</label>
-              <input id="email" type="email" name="email" placeholder="email"/>
+              <input id="email" type="email" name="email" placeholder="email" disabled="disabled"/>
             </div>
             <div class="field">
               <div class="ui grid">                      
@@ -104,7 +104,7 @@
             <div class="field">
               <div class="ui grid">
                 <div class="ten wide column">                               
-                  <div class="field required">
+                  <div class="field">
                     <label>CEP</label>
                     <input id="cep" type="text" name="cep" placeholder="99999-999"/>
                   </div>
@@ -151,7 +151,7 @@
               <div class="ui padded column row grid">
                 <div class="two wide column"></div>
                 <div class="ten wide column centered">
-                  <div class="ui fluid primary submit button"><i class="save icon"></i>Salvar infomações</div>
+                  <div class="ui fluid orange submit button"><i class="save icon"></i>Salvar infomações</div>
                 </div>
                 <div class="two wide column"></div>
               </div>

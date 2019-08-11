@@ -23,11 +23,9 @@ html
                 br
                 include templates/loader
                 #display_user_edit.ui(style="display:none;")
-                    .ui.grid#imagebackgrounded(style="background-image: url('');")
+                    .ui.grid
                         .row
-                        .row
-                            img.ui.medium.centered.circular.image#imageuploaded(src="" style="border:5px solid white;")
-                        .row
+                            img.ui.centered.circular.image#imageuploaded(src="" style="height: 250px; width: 250px;")
                     .ui.centered.segments
                         .ui.segment
                             i.user.icon
@@ -39,8 +37,19 @@ html
                             i.phone.icon
                             label#phone_with_ddd ...
                         .ui.segment
+                            .ui.grid
+                                .row
+                                    .two.wide.column
+                                        i.building.icon
+                                    .fourteen.wide.column
+                                        label#publicplace_with_number ...
+                                .row
+                                    .two.wide.column
+                                    .fourteen.wide.column
+                                        label#complement_district ...
+                        .ui.segment
                             i.map.marker.alternate.icon
-                            label#city_state ...
+                            label#cep_city_state
                     .ui.padded.column.row.grid
                         .two.wide.column
                         .ten.wide.column.centered

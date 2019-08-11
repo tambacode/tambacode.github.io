@@ -60,10 +60,8 @@
           <div class="ui active centered inline loader"></div>
         </div>
         <div id="display_user_edit" style="display:none;" class="ui">
-          <div id="imagebackgrounded" style="background-image: url('');" class="ui grid">
-            <div class="row"></div>
-            <div class="row"><img id="imageuploaded" src="" style="border:5px solid white;" class="ui medium centered circular image"/></div>
-            <div class="row"></div>
+          <div class="ui grid">
+            <div class="row"><img id="imageuploaded" src="" style="height: 250px; width: 250px;" class="ui centered circular image"/></div>
           </div>
           <div class="ui centered segments">
             <div class="ui segment"><i class="user icon"></i>
@@ -75,8 +73,24 @@
             <div class="ui segment"><i class="phone icon"></i>
               <label id="phone_with_ddd">...</label>
             </div>
+            <div class="ui segment">
+              <div class="ui grid">
+                <div class="row">
+                  <div class="two wide column"><i class="building icon"></i></div>
+                  <div class="fourteen wide column">
+                    <label id="publicplace_with_number">...</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="two wide column"></div>
+                  <div class="fourteen wide column">
+                    <label id="complement_district">...</label>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="ui segment"><i class="map marker alternate icon"></i>
-              <label id="city_state">...</label>
+              <label id="cep_city_state"></label>
             </div>
           </div>
           <div class="ui padded column row grid">
