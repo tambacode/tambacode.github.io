@@ -18,6 +18,10 @@ user_OpenProfile = function() {
 };
 ////////////////// USER //////////////////
 
+misc_GoToHome = function() {
+    auth_RequireLoggingToAccess('index.html');
+};
+
 misc_GetUrlParam = function(param) {
 	var url = new URL(window.location.href);
 	return url.searchParams.get(param);
@@ -38,6 +42,17 @@ misc_RemoveLoader = function() {
     }
 
     return false;
+}
+
+misc_waitImageLoadReady = function(objHandler, url, callback){
+    $(objHandler)
+        .attr('src', url)
+        .one("load", callback)
+        .each(function() {
+            if(this.complete) {
+                $(this).load();
+            }
+        });
 }
 
 misc_RemoveErrorNullMsg = function() {
