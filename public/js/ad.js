@@ -223,7 +223,7 @@ const ad_Register_SetImageLoading = function(target) {
 };
 
 const ad_Register_AddNewImage = function() {
-    var imageCard = '<div class="five wide column row" id="{0}"><div class="ui active inverted dimmer"><i onclick="$(this).parent().parent().find(\'input\').click();" class="plus big click icon"></i></div><img src="imgs/black.png" class="ui tiny image"><input id="{1}" type="file" value="upload" style="display: none;"></div>';
+    var imageCard = '<div class="five wide column row" id="{0}"><div class="ui active inverted dimmer"><i onclick="$(this).parent().parent().find(\'input\').click();" class="plus big click icon"></i></div><img src="imgs/black.png" class="ui tiny image list"><input id="{1}" type="file" value="upload" style="display: none;"></div>';
 
     const columnId = 'ImageColumn' + ad_QtdRegisterImages;
     const inputId = 'ImageInput' + ad_QtdRegisterImages;
@@ -268,7 +268,7 @@ const ad_fillfieldforEdit = function(){
 
                 ad_CurrentlyAddedImages.push(item);
 
-                var imageCard = '<div class="five wide column row" id="{0}"><div class="ui active inverted dimmer"><i onclick="$(this).parent().parent().find(\'input\').click();" class="plus big click icon"></i></div><img src="imgs/black.png" class="ui tiny image"><input id="{1}" type="file" value="upload" style="display: none;"></div>';
+                var imageCard = '<div class="five wide column row" id="{0}"><div class="ui active inverted dimmer"><i onclick="$(this).parent().parent().find(\'input\').click();" class="plus big click icon"></i></div><img src="imgs/black.png" class="ui tiny list image"><input id="{1}" type="file" value="upload" style="display: none;"></div>';
 
                 const columnId = 'ImageColumn' + ad_QtdRegisterImages;
                 const inputId = 'ImageInput' + ad_QtdRegisterImages;
@@ -310,7 +310,7 @@ const ads_SearchAd = function() {
 };
 
 const ad_GetAdCard = function(uid, image, title, price, description, showFavoriteButton, favoriteSelected) {
-    const addImage = '<div class="four wide column product_image"><a href="ad_detail.html?uid={0}"><img src="{1}" class="ui tiny rounded image"></a></div>';
+    const addImage = '<div class="four wide column product_image"><a href="ad_detail.html?uid={0}"><img src="{1}" class="ui tiny rounded image list"></a></div>';
     const addInfo  = '<div class="twelve wide column product_info"><a href="ad_detail.html?uid={2}"><h4 id="title">{3}</h4></a><i onclick="ads_List_FavoriteAdClick(this);" uid="{4}" class="red large link {5} {6} icon favoriteItem"></i><h3 id="price">{7}</h3><span id="info">{8}</span><div style="width: 100%;" class="ui divider"></div></div>';
 
     var card = addImage + addInfo;
