@@ -24,10 +24,6 @@
 				"tokens": {
 					"facebook": "facebook_token",
 					"twitter": "twitter_token"
-				},
-				"messages": {
-					"uid_1": "uid_1",
-					"uid_2": "uid_2"
 				}
 			}
 		},
@@ -52,6 +48,10 @@
 					}
 				}
 			}
+		},
+		"users_messages": {
+			"uid_1": "uid_1",
+			"uid_2": "uid_2"
 		},
 		"ad": {
 			"uid_1": {
