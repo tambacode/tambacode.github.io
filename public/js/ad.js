@@ -217,7 +217,7 @@ const ad_Register_RemovePlusIcon = function(target) {
 };
 
 const ad_Register_SetImageLoading = function(target) {
-    var loading = '<div class="ui active inverted dimmer"><div class="ui text loader">Carregando</div></div>';
+    var loading = '<div class="ui active inverted dimmer" id="divloader"><div class="ui text loader">Carregando</div></div>';
 
     $(target).parent().append(loading);
 };
@@ -254,6 +254,8 @@ const ad_fillfieldforEdit = function(){
 
     //Get all fields
     if (adUID){
+        ad_Register_SetImageLoading('#all');
+
         $('#InsertAdRegistrationButton').addClass('hidden');
         $('#updateButton').removeClass('hidden');
         ad_GetAllValues();
@@ -285,7 +287,7 @@ const ad_fillfieldforEdit = function(){
                 ad_QtdRegisterImages = ad_QtdRegisterImages + 1;
                 
             });
-
+                $('#divloader').remove();
         };
         db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
     }
