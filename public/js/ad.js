@@ -402,6 +402,7 @@ const ads_List_UnfavoriteAd = function(uid) {
 /////////////////////////////////  AD DETAIL /////////////////////////////////
 const ad_GetAllValues = function(){
     const adUID = misc_GetUrlParam('uid');
+    const edit = misc_GetUrlParam('isitforEdit');
     var adPath = 'ad/' + adUID;
 
     var onSucess = function(snapshot) {
@@ -420,7 +421,10 @@ const ad_GetAllValues = function(){
     };
 
     db_get('ad/' + adUID, onSucess, ad_ErrorFunction, ad_ErrorFunction);
-    document.getElementById("EditAd").style.visibility = "hidden";
+    if(!edit){
+        document.getElementById("EditAd").style.visibility = "hidden";
+    }
+    
     //visible
 }
 
