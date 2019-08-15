@@ -422,6 +422,7 @@ const ad_GetAllValues = function(){
 
     db_get('ad/' + adUID, onSucess, ad_ErrorFunction, ad_ErrorFunction);
     if(!edit){
+        document.getElementById("SendMessage").style.visibility = "hidden";
         document.getElementById("EditAd").style.visibility = "hidden";
     }
     
@@ -470,6 +471,8 @@ const ad_ValuesIntoDetail = function(val, imgURL) {
         
         if (firebase.auth().currentUser.uid == val.user) {
             document.getElementById("EditAd").style.visibility = "visible";
+        } else {
+            document.getElementById("SendMessage").style.visibility = "visible";
         }
 
     }
