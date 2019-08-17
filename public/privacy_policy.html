@@ -29,6 +29,98 @@
   </head>
   <body>
     <div class="ui left sidebar vertical menu"><a href="index.html" class="item">Home<i class="home icon Large"></i></a><a id="PerfilButton" onClick="user_OpenProfile();" class="item hidden">Meu Perfil<i class="user circle icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ads_MyAds.html');" class="item">Meus Anúncios<i class="shopping bag icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ads_MyFavorites.html');" class="item">Favoritos<i class="heart icon Large"></i></a><a onClick="messages_GoTo();" class="item">Mensagens<i class="comment icon Large"></i></a><a id="LogoutButton" onClick="auth_LogoffUser();" class="item hidden">Sair<i class="sign-out icon Large"></i></a></div>
+    <div class="ui right sidebar vertical menu">
+      <div class="ui padded grid">
+        <div class="ui wide column">
+          <div class="ui form">
+            <div class="ui dividing header">Filtro de Busca</div>
+            <div class="field">
+              <label>Busca</label>
+            </div>
+            <div class="field">
+              <input type="text" name="term" id="filter_term" placeholder="Busca"/>
+            </div>
+            <div class="field">           
+              <label>Estado</label>
+            </div>
+            <div class="field">
+              <div id="state" class="ui dropdown">
+                <div class="text"></div><i class="dropdown icon"></i>
+              </div>
+            </div>
+            <div class="field">
+              <label>Cidade</label>
+            </div>
+            <div class="field">
+              <div id="city" class="ui dropdown">
+                <div class="text"></div><i class="dropdown icon"></i>
+              </div>
+            </div>
+            <div class="field">
+              <div onclick="ad_InitDropDownWithProducts($('#subcategory'));" class="ui radio checkbox">
+                <input type="radio" name="category" id="produtos" value="produtos" checked=""/>
+                <label>Produtos</label>
+              </div>
+              <div onclick="ad_InitDropDownWithServices($('#subcategory'));" class="ui radio checkbox">
+                <input type="radio" name="category" id="servicos" value="servicos"/>
+                <label>Serviços</label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Sub-Categoria</label>
+            </div>
+            <div class="field">
+              <div id="subcategory" class="ui dropdown">
+                <div class="text"></div><i class="dropdown icon"></i>
+              </div>
+            </div>
+            <div class="field">
+              <label>Preço</label>
+              <div class="two fields">
+                <div class="field">
+                  <input type="text" name="minprice" id="minprice" minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," onclick="$(this).maskMoney();" placeholder="Mín."/>
+                </div>
+                <div class="field">
+                  <input type="text" name="maxprice" id="maxprice" minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," onclick="$(this).maskMoney();" placeholder="Max."/>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <button id="btnApplyFilter" onclick="ads_ApplyFilter();" class="orange ui button">Aplicar Filtro</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const filterSideBar_InitFields = function() {
+          // Get values
+          const fields = ads_GetFilterFields(true);
+      
+          // Set Values
+          if (fields['searchTerm']) { $('#filter_term').val(fields['searchTerm']); }
+          if (fields['category']) {
+              $("#" + fields['category']).prop("checked", true);
+      
+              if (fields['category'] == 'servicos') {
+                  ad_InitDropDownWithServices($('#subcategory'), true);
+              }
+          }
+          
+          if (fields['state']) { $('#state').dropdown('set selected', fields['state']); }
+          if (fields['city']) { $('#city').dropdown('set selected', fields['city']); }
+      
+          if (fields['subcategory']) { $('#subcategory').dropdown('set selected', fields['subcategory']); }
+      
+          if (fields['minprice']) { console.log('21'); $('#minprice').val(fields['minprice']); }
+          if (fields['maxprice']) { console.log('22'); $('#maxprice').val(fields['maxprice']); }
+      };
+      
+      ad_InitDropDownWithProducts($('#subcategory'), true);
+      ui_InitDropDownWithStates($('#state'), true);
+      ui_InitDropDownWithStates($('#city'), true);
+      filterSideBar_InitFields();
+    </script>
     <div class="pusher">
       <div id="menu" class="ui sf_header">
         <div class="ui padded grid">

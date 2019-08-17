@@ -44,7 +44,7 @@
               <label>Estado</label>
             </div>
             <div class="field">
-              <div id="drop_state" class="ui dropdown">
+              <div id="state" class="ui dropdown">
                 <div class="text"></div><i class="dropdown icon"></i>
               </div>
             </div>
@@ -52,25 +52,25 @@
               <label>Cidade</label>
             </div>
             <div class="field">
-              <div id="drop_city" class="ui dropdown">
+              <div id="city" class="ui dropdown">
                 <div class="text"></div><i class="dropdown icon"></i>
               </div>
             </div>
             <div class="field">
-              <div onclick="ad_InitDropDownWithProducts($('#drop_subCategory'));" class="ui radio checkbox">
+              <div onclick="ad_InitDropDownWithProducts($('#subcategory'));" class="ui radio checkbox">
                 <input type="radio" name="category" id="produtos" value="produtos" checked=""/>
-                <label>Produto</label>
+                <label>Produtos</label>
               </div>
-              <div onclick="ad_InitDropDownWithServices($('#drop_subCategory'));" class="ui radio checkbox">
+              <div onclick="ad_InitDropDownWithServices($('#subcategory'));" class="ui radio checkbox">
                 <input type="radio" name="category" id="servicos" value="servicos"/>
-                <label>Serviço</label>
+                <label>Serviços</label>
               </div>
             </div>
             <div class="field">
               <label>Sub-Categoria</label>
             </div>
             <div class="field">
-              <div id="drop_subCategory" class="ui dropdown">
+              <div id="subcategory" class="ui dropdown">
                 <div class="text"></div><i class="dropdown icon"></i>
               </div>
             </div>
@@ -78,10 +78,10 @@
               <label>Preço</label>
               <div class="two fields">
                 <div class="field">
-                  <input type="text" name="min_price" id="min_price" minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," onclick="$(this).maskMoney();" placeholder="Mín."/>
+                  <input type="text" name="minprice" id="minprice" minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," onclick="$(this).maskMoney();" placeholder="Mín."/>
                 </div>
                 <div class="field">
-                  <input type="text" name="max_price" id="max_price" minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," onclick="$(this).maskMoney();" placeholder="Max."/>
+                  <input type="text" name="maxprice" id="maxprice" minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," onclick="$(this).maskMoney();" placeholder="Max."/>
                 </div>
               </div>
             </div>
@@ -98,27 +98,27 @@
           const fields = ads_GetFilterFields(true);
       
           // Set Values
-          if (fields['term']) { $('#filter_term').val(term); }
+          if (fields['searchTerm']) { $('#filter_term').val(fields['searchTerm']); }
           if (fields['category']) {
-              $("#" + category).prop("checked", true);
+              $("#" + fields['category']).prop("checked", true);
       
               if (fields['category'] == 'servicos') {
-                  ad_InitDropDownWithServices($('#drop_subCategory'));
+                  ad_InitDropDownWithServices($('#subcategory'), true);
               }
           }
           
-          if (fields['drop_state']) { $('#drop_state').dropdown('set selected', drop_state); }
-          if (fields['drop_city']) { $('#drop_city').dropdown('set selected', drop_city); }
+          if (fields['state']) { $('#state').dropdown('set selected', fields['state']); }
+          if (fields['city']) { $('#city').dropdown('set selected', fields['city']); }
       
-          if (fields['drop_subCategory']) { $('#drop_subCategory').dropdown('set selected', drop_subCategory); }
+          if (fields['subcategory']) { $('#subcategory').dropdown('set selected', fields['subcategory']); }
       
-          if (fields['minPrice']) { $('#min_price').val(minPrice); }
-          if (fields['maxPrice']) { $('#max_price').val(maxPrice); }
+          if (fields['minprice']) { console.log('21'); $('#minprice').val(fields['minprice']); }
+          if (fields['maxprice']) { console.log('22'); $('#maxprice').val(fields['maxprice']); }
       };
       
-      ad_InitDropDownWithProducts($('#drop_subCategory'));
-      ad_InitDropDownWithStates($('#drop_state'))
-      ad_InitDropDownWithStates($('#drop_city'))
+      ad_InitDropDownWithProducts($('#subcategory'), true);
+      ui_InitDropDownWithStates($('#state'), true);
+      ui_InitDropDownWithStates($('#city'), true);
       filterSideBar_InitFields();
     </script>
     <div class="pusher">
@@ -174,6 +174,6 @@
         </div><br/><br/>
       </div>
     </div>
-    <script>ads_List_ListAdsByTerm(misc_GetUrlParam("searchTerm"));</script>
+    <script>ads_List_ListAdsByTerm();</script>
   </body>
 </html>

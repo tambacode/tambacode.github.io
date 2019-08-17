@@ -87,69 +87,42 @@ var db_InsertAdRegistrationOnUsers = function(key){
     db_set(path, key);
 };
 
-const ad_InitDropDownWithServices = function(dropDownField) {
-    dropDownField.dropdown({
-        values: [
-          {
-            name: 'Cereais',
-            value: 'Cereais',
-            selected: true
-          },
-          {
-            name     : 'Organicos',
-            value    : 'Organicos'                        
-          },
-          {
-            name     : 'Proteina',
-            value    : 'Proteina'                        
-          },
-          {
-            name     : 'Vegetais',
-            value    : 'Vegetais'                        
-          },
-          {
-            name     : 'Frutas',
-            value    : 'Frutas'                        
-          },
-          {
-            name     : 'Laticinios',
-            value    : 'Laticinios'                        
-          },
-          {
-            name     : 'Flores e Plantas',
-            value    : 'Flores e Plantas'                        
-          }
-        ]
-      });
+const ad_InitDropDownWithServices = function(dropDownField, adAny) {
+    var values = [];
+
+    if (adAny) {
+        values.push({ name: 'Selecione', value: '', selected : true });
+        values.push({ name: 'Tratorista', value: 'Tratorista'});
+    } else {
+        values.push({ name: 'Tratorista', value: 'Tratorista', selected : true });
+    }
+
+    values.push({ name : 'Agricultor', value : 'Agricultor' });
+    values.push({ name : 'Manutencao de Maquinario', value : 'Manutencao de Maquinario' });
+    values.push({ name : 'Medico Veterinario', value : 'Medico Veterinario' });
+    values.push({ name : 'Caseiro', value : 'Caseiro' });
+
+    dropDownField.dropdown({ values: values });
 };
 
-const ad_InitDropDownWithProducts = function(dropDownField) {
-    dropDownField.dropdown({
-        values: [
-          {
-            name: 'Tratorista',
-            value: 'Tratorista',
-            selected : true
-          },
-          {
-            name     : 'Agricultor',
-            value    : 'Agricultor'                        
-          },
-          {
-            name     : 'Manutencao de Maquinario',
-            value    : 'Manutencao de Maquinario'                        
-          },
-          {
-            name     : 'Medico Veterinario',
-            value    : 'Medico Veterinario'                        
-          },
-          {
-            name     : 'Caseiro',
-            value    : 'Caseiro'                        
-          }
-        ]
-      })
-    ;
+const ad_InitDropDownWithProducts = function(dropDownField, adAny) {
+    var values = [];
+
+    if (adAny) {
+        values.push({ name: 'Selecione', value: '', selected : true });
+        values.push({ name: 'Cereais', value: 'Cereais'});
+    } else {
+        values.push({ name: 'Cereais', value: 'Cereais', selected: true });
+    }
+
+    values.push({ name : 'Organicos', value : 'Organicos' });
+    values.push({ name : 'Proteina', value : 'Proteina' });
+    values.push({ name : 'Vegetais', value : 'Vegetais' });
+    values.push({ name : 'Frutas', value : 'Frutas' });
+    values.push({ name : 'Laticinios', value : 'Laticinios' });
+    values.push({ name : 'Flores e Plantas', value : 'Flores e Plantas' });
+    
+    dropDownField.dropdown({ values: values });
 };
 
 const ad_GetCategory = function() {
@@ -343,21 +316,21 @@ const ads_GetFilterFields = function(byUrl) {
     var fields = {};
 
     if (!byUrl) {
-        fields['term'] = $('#filter_term').val();
+        fields['searchTerm'] = $('#filter_term').val();
         fields['category'] = $("input[name='category']:checked").val();
-        fields['drop_state'] = $('#drop_state').dropdown('get value');
-        fields['drop_city'] = $('#drop_city').dropdown('get value');
-        fields['drop_subCategory'] = $('#drop_subCategory').dropdown('get value');
-        fields['minPrice'] = $('#min_price').val();
-        fields['maxPrice'] = $('#max_price').val();
+        fields['state'] = $('#state').dropdown('get value');
+        fields['city'] = $('#city').dropdown('get value');
+        fields['subcategory'] = $('#subcategory').dropdown('get value');
+        fields['minprice'] = $('#minprice').val();
+        fields['maxprice'] = $('#maxprice').val();
     } else {
-        fields['term'] = misc_GetUrlParam('searchTerm');
+        fields['searchTerm'] = misc_GetUrlParam('searchTerm');
         fields['category'] = misc_GetUrlParam('category');
-        fields['drop_state'] = misc_GetUrlParam('drop_state');
-        fields['drop_city'] = misc_GetUrlParam('drop_city');
-        fields['drop_subCategory'] = misc_GetUrlParam('drop_subCategory');
-        fields['minPrice'] = misc_GetUrlParam('minPrice');
-        fields['maxPrice'] = misc_GetUrlParam('maxPrice');
+        fields['state'] = misc_GetUrlParam('state');
+        fields['city'] = misc_GetUrlParam('city');
+        fields['subcategory'] = misc_GetUrlParam('subcategory');
+        fields['minprice'] = misc_GetUrlParam('minprice');
+        fields['maxprice'] = misc_GetUrlParam('maxprice');
     }
 
     return fields;
@@ -366,27 +339,59 @@ const ads_GetFilterFields = function(byUrl) {
 const ads_ApplyFilter = function() {
     const fields = ads_GetFilterFields(false);
 
-    misc_GoToPage('ad_search.html?searchTerm=' + fields['term'] + '&drop_state=' + fields['drop_state'] + '&drop_city=' + fields['drop_city'] +
-        '&drop_subCategory=' + drop_subCategory + '&category=' + fields['category'] + '&minPrice=' + fields['minPrice'] + '&maxPrice=' + fields['maxPrice']);
+    misc_GoToPage('ad_search.html?searchTerm=' + fields['searchTerm'] + '&state=' + fields['state'] + '&city=' + fields['city'] +
+        '&subcategory=' + fields['subcategory'] + '&category=' + fields['category'] + '&minprice=' + fields['minprice'] + '&maxprice=' + fields['maxprice']);
 };
 
-const ads_List_ListAdsByTerm = function(term) {
+const ads_IsObjectFiltersValid = function(filters, obj) {
+    var searchTerm = misc_LowerCase(filters['searchTerm']);
+    var title = misc_LowerCase(obj['title']);
+    if (title.includes(searchTerm) == false) { return false; }
+
+    if (filters['category']) {
+        if (filters['category'] != obj['category']) { return false; }
+    }
+
+    //if (filters['state'] != obj['state']) { return false; }
+    //if (filters['citys'] != obj['citys']) { return false; }
+
+    if (filters['subcategory']) {
+        if (filters['subcategory'] != obj['subcategory']) { return false; }
+    }
+
+    const price = parseFloat(obj['price']);
+    if (filters['minprice']) {
+        if (price < parseFloat(filters['minprice'])) { return false; }
+    }
+
+    if (filters['maxprice']) {
+        if (price > parseFloat(filters['maxprice'])) { return false; }
+    }
+
+    console.log(obj);
+    return true;
+};
+
+const ads_List_ListAdsByTerm = function() {
     const firstCall = (lastAdUIDReceived == null);
 
     var onSucess = function(snapshot) {
         misc_RemoveLoader();
-        
         const holder = $("#ads");
+        const filters = ads_GetFilterFields(true);
+        
         $.each(snapshot.val(), function(uid, obj) {
             lastAdUIDReceived = uid;
 
-            db_get("ads_images",
-                function(snapshot) {
-                    const imgsRef = snapshot.val();
-                    const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
+            if (ads_IsObjectFiltersValid(filters, obj)) {
+                db_get("ads_images",
+                    function(snapshot) {
+                        const imgsRef = snapshot.val();
+                        const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
 
-                    ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, false));
-                }, null, null);
+                        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, false));
+                    }, null, null);
+            }
         });
     };
 
@@ -398,8 +403,8 @@ const ads_List_ListAdsByTerm = function(term) {
 
     if (firstCall) {
         //TODO: Change "title" to "timestamp", when this field is added to database, so we can order the ads list by their creation date.
-        db_getOrderByChildContainsLimitToLast("ad", "title", term, 10, onSucess, onError, onError);
-        //db_get("ad", onSucess, onError, onError);
+        //db_getOrderByChildContainsLimitToLast("ad", "title", term, 10, onSucess, onError, onError);
+        db_get("ad", onSucess, onError, onError);
     } else {
         console.log("ADD PAGINATION HERE");
     }

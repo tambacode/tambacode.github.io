@@ -10,39 +10,46 @@ var ui_openFilterSidebar = function() {
         .sidebar('toggle')
 };
 
-const ad_InitDropDownWithStates = function(dropDownField) {
-    dropDownField.dropdown({
-        values: [
-          { name : 'Acre', value : 'AC', selected: true },
-          { name : 'Alagoas', value : 'AL' },
-          { name : 'Amapá', value : 'AP' },
-          { name : 'Amazonas', value : 'AM' },
-          { name : 'Bahia', value : 'BA' },
-          { name : 'Ceará', value : 'CE' },
-          { name : 'Distrito Federal', value : 'DF' },
-          { name : 'Espírito Santo', value : 'ES' },
-          { name : 'Goiás', value : 'GO' },
-          { name : 'Maranhão', value : 'MA' },
-          { name : 'Mato Grosso', value : 'MT' },
-          { name : 'Minas Gerais', value : 'MG' },
-          { name : 'Mato Grosso do Sul', value : 'MS' },
-          { name : 'Minas Gerais', value : 'MG' },
-          { name : 'Pará', value : 'PA' },
-          { name : 'Paraíba', value : 'PB' },
-          { name : 'Paraná', value : 'PR' },
-          { name : 'Pernambuco', value : 'PE' },
-          { name : 'Piauí', value : 'PI' },
-          { name : 'Rio de Janeiro', value : 'RJ' },
-          { name : 'Rio Grande do Norte', value : 'RN' },
-          { name : 'Rio Grande do Sul', value : 'RS' },
-          { name : 'Rondônia', value : 'RO' },
-          { name : 'Roraima', value : 'RR' },
-          { name : 'Santa Catarina', value : 'SC' },
-          { name : 'São Paulo', value : 'SP' },
-          { name : 'Sergipe', value : 'SE' },
-          { name : 'Tocantins', value : 'TO' }
-        ]
-      });
+const ui_InitDropDownWithStates = function(dropDownField, adAny) {
+    var values = [];
+
+    if (adAny) {
+        values.push({ name: 'Selecione', value: '', selected : true });
+        values.push({ name : 'Acre', value : 'AC'});
+    } else {
+        values.push({ name : 'Acre', value : 'AC', selected: true });
+    }
+
+    values.push({ name : 'Alagoas', value : 'AL' });
+    values.push({ name : 'Amapá', value : 'AP' });
+    values.push({ name : 'Amazonas', value : 'AM' });
+    values.push({ name : 'Bahia', value : 'BA' });
+    values.push({ name : 'Ceará', value : 'CE' });
+    values.push({ name : 'Distrito Federal', value : 'DF' });
+    values.push({ name : 'Espírito Santo', value : 'ES' });
+    values.push({ name : 'Goiás', value : 'GO' });
+    values.push({ name : 'Maranhão', value : 'MA' });
+    values.push({ name : 'Mato Grosso', value : 'MT' });
+    values.push({ name : 'Minas Gerais', value : 'MG' });
+    values.push({ name : 'Mato Grosso do Sul', value : 'MS' });
+    values.push({ name : 'Minas Gerais', value : 'MG' });
+    values.push({ name : 'Pará', value : 'PA' });
+    values.push({ name : 'Paraíba', value : 'PB' });
+    values.push({ name : 'Paraná', value : 'PR' });
+    values.push({ name : 'Pernambuco', value : 'PE' });
+    values.push({ name : 'Piauí', value : 'PI' });
+    values.push({ name : 'Acre', value : 'AC' });
+    values.push({ name : 'Rio de Janeiro', value : 'RJ' });
+    values.push({ name : 'Rio Grande do Norte', value : 'RN' });
+    values.push({ name : 'Rio Grande do Sul', value : 'RS' });
+    values.push({ name : 'Rondônia', value : 'RO' });
+    values.push({ name : 'Roraima', value : 'RR' });
+    values.push({ name : 'Santa Catarina', value : 'SC' });
+    values.push({ name : 'São Paulo', value : 'SP' });
+    values.push({ name : 'Sergipe', value : 'SE' });
+    values.push({ name : 'Tocantins', value : 'TO' });
+
+    dropDownField.dropdown({ values: values });
 };
 
 var ui_headerRightAction = function(){

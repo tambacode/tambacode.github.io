@@ -10,35 +10,35 @@
                 .field            
                     label Estado
                 .field
-                    .ui.dropdown#drop_state
+                    .ui.dropdown#state
                         .text
                         i.dropdown.icon
                 .field
                     label Cidade
                 .field
-                    .ui.dropdown#drop_city
+                    .ui.dropdown#city
                         .text
                         i.dropdown.icon
                 .field
-                    .ui.radio.checkbox(onclick="ad_InitDropDownWithProducts($('#drop_subCategory'));")
+                    .ui.radio.checkbox(onclick="ad_InitDropDownWithProducts($('#subcategory'));")
                         input(type='radio', name='category', id='produtos', value="produtos", checked="")
-                        label Produto
-                    .ui.radio.checkbox(onclick="ad_InitDropDownWithServices($('#drop_subCategory'));")
+                        label Produtos
+                    .ui.radio.checkbox(onclick="ad_InitDropDownWithServices($('#subcategory'));")
                         input(type='radio', name='category', id='servicos', value="servicos")
-                        label Serviço
+                        label Serviços
                 .field
                     label Sub-Categoria
                 .field
-                    .ui.dropdown#drop_subCategory
+                    .ui.dropdown#subcategory
                         .text
                         i.dropdown.icon
                 .field
                     label Preço
                     .two.fields
                         .field
-                            input(type='text', name='min_price', id='min_price', minlength="1", maxlength="14", data-symbol="R$ " data-thousands="." data-decimal=","  onclick='$(this).maskMoney();', placeholder="Mín.")
+                            input(type='text', name='minprice', id='minprice', minlength="1", maxlength="14", data-symbol="R$ " data-thousands="." data-decimal=","  onclick='$(this).maskMoney();', placeholder="Mín.")
                         .field
-                            input(type='text', name='max_price', id='max_price', minlength="1", maxlength="14", data-symbol="R$ " data-thousands="." data-decimal=","  onclick='$(this).maskMoney();', placeholder="Max.")
+                            input(type='text', name='maxprice', id='maxprice', minlength="1", maxlength="14", data-symbol="R$ " data-thousands="." data-decimal=","  onclick='$(this).maskMoney();', placeholder="Max.")
                 .field
                     button.orange.ui.button(id='btnApplyFilter', onclick="ads_ApplyFilter();") Aplicar Filtro
 script.
@@ -47,25 +47,25 @@ script.
         const fields = ads_GetFilterFields(true);
 
         // Set Values
-        if (fields['term']) { $('#filter_term').val(term); }
+        if (fields['searchTerm']) { $('#filter_term').val(fields['searchTerm']); }
         if (fields['category']) {
-            $("#" + category).prop("checked", true);
+            $("#" + fields['category']).prop("checked", true);
 
             if (fields['category'] == 'servicos') {
-                ad_InitDropDownWithServices($('#drop_subCategory'));
+                ad_InitDropDownWithServices($('#subcategory'), true);
             }
         }
         
-        if (fields['drop_state']) { $('#drop_state').dropdown('set selected', drop_state); }
-        if (fields['drop_city']) { $('#drop_city').dropdown('set selected', drop_city); }
+        if (fields['state']) { $('#state').dropdown('set selected', fields['state']); }
+        if (fields['city']) { $('#city').dropdown('set selected', fields['city']); }
 
-        if (fields['drop_subCategory']) { $('#drop_subCategory').dropdown('set selected', drop_subCategory); }
+        if (fields['subcategory']) { $('#subcategory').dropdown('set selected', fields['subcategory']); }
 
-        if (fields['minPrice']) { $('#min_price').val(minPrice); }
-        if (fields['maxPrice']) { $('#max_price').val(maxPrice); }
+        if (fields['minprice']) { console.log('21'); $('#minprice').val(fields['minprice']); }
+        if (fields['maxprice']) { console.log('22'); $('#maxprice').val(fields['maxprice']); }
     };
 
-    ad_InitDropDownWithProducts($('#drop_subCategory'));
-    ad_InitDropDownWithStates($('#drop_state'))
-    ad_InitDropDownWithStates($('#drop_city'))
+    ad_InitDropDownWithProducts($('#subcategory'), true);
+    ui_InitDropDownWithStates($('#state'), true);
+    ui_InitDropDownWithStates($('#city'), true);
     filterSideBar_InitFields();
