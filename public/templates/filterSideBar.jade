@@ -1,0 +1,71 @@
+.ui.right.sidebar.vertical.menu
+    .ui.padded.grid
+        .ui.wide.column
+            .ui.form
+                .ui.dividing.header Filtro de Busca
+                .field
+                    label Busca
+                .field
+                    input(type='text', name='term', id='filter_term', placeholder="Busca")
+                .field            
+                    label Estado
+                .field
+                    .ui.dropdown#drop_state
+                        .text
+                        i.dropdown.icon
+                .field
+                    label Cidade
+                .field
+                    .ui.dropdown#drop_city
+                        .text
+                        i.dropdown.icon
+                .field
+                    .ui.radio.checkbox(onclick="ad_InitDropDownWithProducts($('#drop_subCategory'));")
+                        input(type='radio', name='category', id='produtos', value="produtos", checked="")
+                        label Produto
+                    .ui.radio.checkbox(onclick="ad_InitDropDownWithServices($('#drop_subCategory'));")
+                        input(type='radio', name='category', id='servicos', value="servicos")
+                        label Serviço
+                .field
+                    label Sub-Categoria
+                .field
+                    .ui.dropdown#drop_subCategory
+                        .text
+                        i.dropdown.icon
+                .field
+                    label Preço
+                    .two.fields
+                        .field
+                            input(type='text', name='min_price', id='min_price', minlength="1", maxlength="14", data-symbol="R$ " data-thousands="." data-decimal=","  onclick='$(this).maskMoney();', placeholder="Mín.")
+                        .field
+                            input(type='text', name='max_price', id='max_price', minlength="1", maxlength="14", data-symbol="R$ " data-thousands="." data-decimal=","  onclick='$(this).maskMoney();', placeholder="Max.")
+                .field
+                    button.orange.ui.button(id='btnApplyFilter', onclick="ads_ApplyFilter();") Aplicar Filtro
+script.
+    const filterSideBar_InitFields = function() {
+        // Get values
+        const fields = ads_GetFilterFields(true);
+
+        // Set Values
+        if (fields['term']) { $('#filter_term').val(term); }
+        if (fields['category']) {
+            $("#" + category).prop("checked", true);
+
+            if (fields['category'] == 'servicos') {
+                ad_InitDropDownWithServices($('#drop_subCategory'));
+            }
+        }
+        
+        if (fields['drop_state']) { $('#drop_state').dropdown('set selected', drop_state); }
+        if (fields['drop_city']) { $('#drop_city').dropdown('set selected', drop_city); }
+
+        if (fields['drop_subCategory']) { $('#drop_subCategory').dropdown('set selected', drop_subCategory); }
+
+        if (fields['minPrice']) { $('#min_price').val(minPrice); }
+        if (fields['maxPrice']) { $('#max_price').val(maxPrice); }
+    };
+
+    ad_InitDropDownWithProducts($('#drop_subCategory'));
+    ad_InitDropDownWithStates($('#drop_state'))
+    ad_InitDropDownWithStates($('#drop_city'))
+    filterSideBar_InitFields();

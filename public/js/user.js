@@ -1,4 +1,4 @@
-const user_getStates = function(){
+const user_InitDropdownWithStates = function(dropdown){
   var states_list = ["AC","AL","AM","AP","BA",
                      "CE","DF","ES","GO","MA",
                      "MG","MS","MT","PA","PB",
@@ -6,7 +6,7 @@ const user_getStates = function(){
                      "RO","RR","RS","SC","SE",
                      "SP","TO"];
   $.each(states_list, function (i, sigla) {
-    $("#state").append(new Option(sigla, sigla));
+    dropdown.append(new Option(sigla, sigla));
   });
 }
 
@@ -87,7 +87,7 @@ const user_previewImage = function(evt){
 
 const user_initComponent = function(){
   $('#state').dropdown();
-  user_getStates();
+  user_InitDropdownWithStates($("#state"));
   $('#user_image').dimmer({ on: 'hover' });
   $('#fileInput').change(user_previewImage);
   $('#cep')

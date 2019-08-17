@@ -87,74 +87,79 @@ var db_InsertAdRegistrationOnUsers = function(key){
     db_set(path, key);
 };
 
+const ad_InitDropDownWithServices = function(dropDownField) {
+    dropDownField.dropdown({
+        values: [
+          {
+            name: 'Cereais',
+            value: 'Cereais',
+            selected: true
+          },
+          {
+            name     : 'Organicos',
+            value    : 'Organicos'                        
+          },
+          {
+            name     : 'Proteina',
+            value    : 'Proteina'                        
+          },
+          {
+            name     : 'Vegetais',
+            value    : 'Vegetais'                        
+          },
+          {
+            name     : 'Frutas',
+            value    : 'Frutas'                        
+          },
+          {
+            name     : 'Laticinios',
+            value    : 'Laticinios'                        
+          },
+          {
+            name     : 'Flores e Plantas',
+            value    : 'Flores e Plantas'                        
+          }
+        ]
+      });
+};
+
+const ad_InitDropDownWithProducts = function(dropDownField) {
+    dropDownField.dropdown({
+        values: [
+          {
+            name: 'Tratorista',
+            value: 'Tratorista',
+            selected : true
+          },
+          {
+            name     : 'Agricultor',
+            value    : 'Agricultor'                        
+          },
+          {
+            name     : 'Manutencao de Maquinario',
+            value    : 'Manutencao de Maquinario'                        
+          },
+          {
+            name     : 'Medico Veterinario',
+            value    : 'Medico Veterinario'                        
+          },
+          {
+            name     : 'Caseiro',
+            value    : 'Caseiro'                        
+          }
+        ]
+      })
+    ;
+};
+
 const ad_GetCategory = function() {
     const products = document.getElementById('products');
     const services = document.getElementById('services');
 
     if (products.checked == true) {
-                $('#subcategory')
-                  .dropdown({
-                    values: [
-                      {
-                        name: 'Cereais',
-                        value: 'Cereais',
-                        selected: true
-                      },
-                      {
-                        name     : 'Organicos',
-                        value    : 'Organicos'                        
-                      },
-                      {
-                        name     : 'Proteina',
-                        value    : 'Proteina'                        
-                      },
-                      {
-                        name     : 'Vegetais',
-                        value    : 'Vegetais'                        
-                      },
-                      {
-                        name     : 'Frutas',
-                        value    : 'Frutas'                        
-                      },
-                      {
-                        name     : 'Laticinios',
-                        value    : 'Laticinios'                        
-                      },
-                      {
-                        name     : 'Flores e Plantas',
-                        value    : 'Flores e Plantas'                        
-                      }
-                    ]
-                  })
-                ;
+        ad_InitDropDownWithServices($('#subcategory'));
     } else if(services.checked == true) {
-            $('#subcategory')
-                  .dropdown({
-                    values: [
-                      {
-                        name: 'Tratorista',
-                        value: 'Tratorista',
-                        selected : true
-                      },
-                      {
-                        name     : 'Agricultor',
-                        value    : 'Agricultor'                        
-                      },
-                      {
-                        name     : 'Manutencao de Maquinario',
-                        value    : 'Manutencao de Maquinario'                        
-                      },
-                      {
-                        name     : 'Medico Veterinario',
-                        value    : 'Medico Veterinario'                        
-                      },
-                      {
-                        name     : 'Caseiro',
-                        value    : 'Caseiro'                        
-                      }
-                    ]
-                  })
-                ;
+        ad_InitDropDownWithProducts($('#subcategory'));                  
     }
 }
 ///////////////////////////////// AD REG /////////////////////////////////
@@ -334,6 +339,37 @@ const ad_List_AddCardToList = function(holder, card) {
     holder.append(card);
 };
 
+const ads_GetFilterFields = function(byUrl) {
+    var fields = {};
+
+    if (!byUrl) {
+        fields['term'] = $('#filter_term').val();
+        fields['category'] = $("input[name='category']:checked").val();
+        fields['drop_state'] = $('#drop_state').dropdown('get value');
+        fields['drop_city'] = $('#drop_city').dropdown('get value');
+        fields['drop_subCategory'] = $('#drop_subCategory').dropdown('get value');
+        fields['minPrice'] = $('#min_price').val();
+        fields['maxPrice'] = $('#max_price').val();
+    } else {
+        fields['term'] = misc_GetUrlParam('searchTerm');
+        fields['category'] = misc_GetUrlParam('category');
+        fields['drop_state'] = misc_GetUrlParam('drop_state');
+        fields['drop_city'] = misc_GetUrlParam('drop_city');
+        fields['drop_subCategory'] = misc_GetUrlParam('drop_subCategory');
+        fields['minPrice'] = misc_GetUrlParam('minPrice');
+        fields['maxPrice'] = misc_GetUrlParam('maxPrice');
+    }
+
+    return fields;
+}
+
+const ads_ApplyFilter = function() {
+    const fields = ads_GetFilterFields(false);
+
+    misc_GoToPage('ad_search.html?searchTerm=' + fields['term'] + '&drop_state=' + fields['drop_state'] + '&drop_city=' + fields['drop_city'] +
+        '&drop_subCategory=' + drop_subCategory + '&category=' + fields['category'] + '&minPrice=' + fields['minPrice'] + '&maxPrice=' + fields['maxPrice']);
+};
+
 const ads_List_ListAdsByTerm = function(term) {
     const firstCall = (lastAdUIDReceived == null);
 
@@ -367,7 +403,7 @@ const ads_List_ListAdsByTerm = function(term) {
     } else {
         console.log("ADD PAGINATION HERE");
     }
-};
+};  
 
 const ads_List_FavoriteAdClick = function(self) {
     const item = $(self);

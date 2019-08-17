@@ -45,9 +45,10 @@
               </div>
             </div>
             <div id="header_right" class="right aligned three wide column">                   
+              <button onclick="ui_openFilterSidebar();" class="ui icon button orange"><i class="icon filter circle large"></i></button>
             </div>
             <script>
-              ui_headerRightAction();
+              //ui_headerRightAction();
               const searchTerm = misc_GetUrlParam('searchTerm');
               $("#adsSearchInput").val(searchTerm);
             </script>
@@ -77,7 +78,7 @@
               <div class="field">
                 <div onclick="ad_GetCategory();" class="ui radio checkbox">
                   <input type="radio" name="category" id="services" value="servicos"/>
-                  <label>Serviços                    </label>
+                  <label>Serviços</label>
                 </div>
               </div>
             </div>

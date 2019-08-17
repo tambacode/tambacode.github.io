@@ -11,9 +11,9 @@
                         i#adsSearchButton.link.search.icon(onclick="ads_SearchAd();")
                     .results
             .right.aligned.three.wide.column#header_right                    
-                //- button.ui.icon.button.orange(onclick="user_OpenProfile();")
-                //-    i.icon.user.circle.large
+                button.ui.icon.button.orange(onclick="ui_openFilterSidebar();")
+                    i.icon.filter.circle.large
             script.
-                ui_headerRightAction();
+                //ui_headerRightAction();
                 const searchTerm = misc_GetUrlParam('searchTerm');
                 $("#adsSearchInput").val(searchTerm);
