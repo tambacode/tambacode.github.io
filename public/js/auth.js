@@ -3,7 +3,7 @@ var auth_Init = function() {
         if (firebaseUser) {
             auth_LogOnUser(firebaseUser);
         } else {
-            auth_LogoffUser();
+            auth_UserLoggedOut();
         }
     });
 }
@@ -75,14 +75,23 @@ var auth_LogOnUser = function(firebaseUser) {
     }
 }
 
-var auth_LogoffUser = function() {
-    if (localStorage.getItem('auth_UserOnline')) {
-        firebase.auth().signOut();
+const auth_LogoffUser = function() {
+    console.log('1');
+    firebase.auth().signOut();
+};
+
+const auth_UserLoggedOut = function() {
+    if (localStorage.getItem('auth_UserOnline') != null) {
+        console.log(1);
         localStorage.removeItem('auth_UserOnline');
         localStorage.removeItem('auth_UserUID');
 
-        misc_GoToPage('index.html');
+        misc_GoToPage('index.html', true);
+    } else {
+        console.log(2);
+        $('#LoginButton').removeClass("hidden");
     }
+    console.log(3);
 };
 
 ///////////////////////////////// PROVIDER DEPENDENT /////////////////////////////////

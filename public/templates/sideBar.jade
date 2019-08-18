@@ -17,3 +17,6 @@
     a.item.hidden#LogoutButton(onClick="auth_LogoffUser();")
         | Sair
         i.sign-out.icon.Large
+    a.item.hidden#LoginButton(onClick="auth_RequireLoggingToAccess('index.html');")
+        | Login
+        i.sign-in.icon.Large

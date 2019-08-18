@@ -27,8 +27,8 @@ const misc_GetUrlParam = function(param) {
 	return url.searchParams.get(param);
 };
 
-const misc_GoToPage = function(url) {
-    if (window.location.pathname.replace('/', '') != url) {
+const misc_GoToPage = function(url, forceChange) {
+    if (window.location.pathname.replace('/', '') != url || forceChange) {
         window.location.href = url; 
     }
 }
