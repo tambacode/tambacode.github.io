@@ -523,3 +523,42 @@ const ad_ErrorFunction = function(error) {
 };
 
 /////////////////////////////////  AD DETAIL /////////////////////////////////
+/////////////////////////////////  AD LIST   /////////////////////////////////
+
+const ad_List_ListAdsByUser = function(term) {
+    const getUser = localStorage.getItem('auth_UserUID');
+    const firstCall = (lastAdUIDReceived == null);
+
+    var onSucess = function(snapshot) {
+        misc_RemoveLoader();
+        
+        const holder = $("#ads");
+        $.each(snapshot.val(), function(uid, obj) {
+            lastAdUIDReceived = uid;
+
+            db_get("ads_images",
+                function(snapshot) {
+                    const imgsRef = snapshot.val();
+                    const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
+                    
+                    ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, false));                                           
+                }, null, null);
+        });
+    };
+
+    const onError = function(snapshot) {
+        if (misc_RemoveLoader()) {
+            $("#ads").append(misc_GetErrorMsg(true));
+        }
+    };
+
+    if (firstCall) {
+        //TODO: Change "title" to "timestamp", when this field is added to database, so we can order the ads list by their creation date.
+        db_getOrderByChildContainsLimitToLast("ad", "user", getUser, 50, onSucess, onError, onError);
+        //db_get("ad", onSucess, onError, onError);
+    } else {
+        console.log("ADD PAGINATION HERE");
+    }
+};
+
+/////////////////////////////////  AD LIST   /////////////////////////////////

@@ -1,0 +1,28 @@
+html
+    head
+        title Shared.Farm - Pesquisa de anúncios
+        
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        meta(http-equiv="X-UA-Compatible" content="ie=edge")
+        link( rel="manifest" crossorigin="use-credentials" href="%PUBLIC_URL%/manifest.json")
+        
+        //- CSS
+        include templates/styles
+        
+        //- Script
+        include templates/scripts
+    body
+        include templates/sideBar
+        .pusher
+            include templates/header
+            include templates/AnunciarAgora
+            #all
+                #filters.ui.padded.grid
+                #ads.ui.grid
+                    include templates/loader                    
+                br
+                br
+            include templates/footer
+        script.
+            ad_List_ListAdsByUser();
