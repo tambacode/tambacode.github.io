@@ -317,12 +317,12 @@ const ads_GetFilterFields = function(byUrl) {
 
     if (!byUrl) {
         fields['searchTerm'] = $('#filter_term').val();
-        fields['category'] = $("input[name='category']:checked").val();
-        fields['state'] = $('#state').dropdown('get value');
-        fields['city'] = $('#city').dropdown('get value');
-        fields['subcategory'] = $('#subcategory').dropdown('get value');
-        fields['minprice'] = $('#minprice').val();
-        fields['maxprice'] = $('#maxprice').val();
+        fields['category'] = $("input[name='filter_category']:checked").val();
+        fields['state'] = $('#filter_state').dropdown('get value');
+        fields['city'] = $('#filter_city').dropdown('get value');
+        fields['subcategory'] = $('#filter_Subcategory').dropdown('get value');
+        fields['minprice'] = $('#filter_minprice').val();
+        fields['maxprice'] = $('#filter_maxprice').val();
     } else {
         fields['searchTerm'] = misc_GetUrlParam('searchTerm');
         fields['category'] = misc_GetUrlParam('category');
@@ -368,7 +368,6 @@ const ads_IsObjectFiltersValid = function(filters, obj) {
         if (price > parseFloat(filters['maxprice'])) { return false; }
     }
 
-    console.log(obj);
     return true;
 };
 
