@@ -151,29 +151,6 @@
         <div class="ui container">                   
           <form id="InsertAdRegistration" onsubmit="db_InsertAdRegistration(); return false;" class="ui form">
             <div class="field">
-              <label>Categoria</label>
-              <div class="inline fields">
-                <div class="field">
-                  <div onclick="ad_GetCategory();" class="ui radio checkbox">
-                    <input type="radio" name="category" id="products" value="produtos" disabled="disabled"/>
-                    <label>Produtos</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div onclick="ad_GetCategory();" class="ui radio checkbox">
-                    <input type="radio" name="category" id="services" value="servicos" disabled="disabled"/>
-                    <label>Serviços</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div onclick="ad_GetCategory();" class="ui radio checkbox">
-                    <input type="radio" name="category" id="events" value="events" disabled="disabled"/>
-                    <label>Eventos</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="field">
               <label>Título</label>
               <input type="text" name="title" id="title" maxlength="50" required="required" placeholder="Título do anúncio"/>
             </div>
@@ -182,9 +159,44 @@
               <textarea type="text" name="description" id="description" maxlength="250" required="required" placeholder="Descrição" class="ui padded sixteen column grid"></textarea>
             </div>
             <div class="field">
-              <label>Subcategoria</label>
-              <div id="subcategory" class="ui fluid selection dropdown">
-                <div class="text"></div><i class="dropdown icon"></i>
+              <label>Categoria</label>
+              <div class="inline fields">
+                <div class="field">
+                  <div onclick="ad_GetCategory();" class="ui radio orange checkbox">
+                    <input type="radio" name="category" id="products" value="produtos" disabled="disabled"/>
+                    <label>Produtos</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <div onclick="ad_GetCategory();" class="ui radio orange checkbox">
+                    <input type="radio" name="category" id="services" value="servicos" disabled="disabled"/>
+                    <label>Serviços</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <div onclick="ad_GetCategory();" class="ui radio orange checkbox">
+                    <input type="radio" name="category" id="events" value="events" disabled="disabled"/>
+                    <label>Eventos</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui grid">
+                <div class="nine wide column">
+                  <div class="field">
+                    <label>Subcategoria</label>
+                    <div id="subcategory" class="ui fluid selection dropdown">
+                      <div class="text"></div><i class="dropdown icon"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="seven wide column">
+                  <div class="field">
+                    <label>Preço R$</label>
+                    <input type="text" name="price" id="price" minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," required="required" onclick="$(this).maskMoney();"/>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="field">
@@ -192,9 +204,9 @@
               <div id="ImagesGrid" class="ui padded centered grid">
               </div>
             </div>
-            <div class="field">
-              <label>Preço R$</label>
-              <input type="text" name="price" id="price" minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," required="required" onclick="$(this).maskMoney();"/>
+            <div class="field hidden events">
+              <label>Data</label>
+              <input type="text" name="datead" id="datead" maxlength="200" placeholder="data do evento"/>
             </div>
             <div class="field hidden events">
               <label>Site</label>
