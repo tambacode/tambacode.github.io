@@ -23,25 +23,29 @@ html
                 .ui.container                    
                     form.ui.form(id='InsertAdRegistration', onsubmit="db_InsertAdRegistration(); return false;")
                         .field
+                            label Categoria
+                            .inline.fields
+                                .field
+                                    .ui.radio.checkbox(onclick='ad_GetCategory();')
+                                        input(type='radio', name='category', id='products', value="produtos" disabled)
+                                        label Produtos
+                                .field
+                                    .ui.radio.checkbox(onclick='ad_GetCategory();')
+                                        input(type='radio', name='category', id='services', value="servicos" disabled)
+                                        label Serviços
+                                .field
+                                    .ui.radio.checkbox(onclick='ad_GetCategory();')
+                                        input(type='radio', name='category', id='events', value="events" disabled)
+                                        label Eventos
+                        .field
                             label Título
                             input(type='text', name='title', id='title', maxlength="50", required="required", placeholder='Título do anúncio')
                         .field
                             label Descrição
                             textarea.ui.padded.sixteen.column.grid(type='text', name='description', id='description', maxlength="250", required="required", placeholder='Descrição')
                         .field
-                        .inline.fields
-                                label Categoria
-                                .field
-                                    .ui.radio.checkbox(onclick='ad_GetCategory();')
-                                        input(type='radio', name='category', id='products', value="produtos", checked="")
-                                        label Produtos
-                                .field
-                                    .ui.radio.checkbox(onclick='ad_GetCategory();')
-                                        input(type='radio', name='category', id='services', value="servicos")
-                                        label Serviços
-                        label Subcategoria
-                        .field
-                            .ui.dropdown#subcategory
+                            label Subcategoria
+                            .ui.fluid.selection.dropdown#subcategory
                               .text
                               i.dropdown.icon
                         .field
@@ -66,12 +70,29 @@ html
                         .field
                             label Preço R$
                             input(type='text', name='price', id='price', minlength="1", maxlength="14", data-symbol="R$ " data-thousands="." data-decimal="," required="required", onclick='$(this).maskMoney();')
+                        .field.hidden.events
+                            label Site
+                            input(type='text', name='sitead', id='sitead', maxlength="200", placeholder='url de divulgação do evento')
+                        .field.hidden.events
+                            label Url
+                            input(type='text', name='urlad', id='urlad', maxlength="200", placeholder='http://www.xyz.com/video')
                         .field
                             label Localização
                             input(type='text', name='locationad', id='locationad', maxlength="100", placeholder='Localização')
                         .field
                             label CEP
                             input(type='text', name='cep', id='cep', minlength="8", maxlength="8", placeholder='00000-000', onkeypress="$(this).mask('00000-000');")
+                        .field.hidden.events
+                            .ui.grid
+                                .six.wide.column
+                                    .field.hidden.events
+                                        label UF
+                                        select.ui.compact.dropdown#state
+                                            option(value="") ...
+                                .ten.wide.column
+                                    .field.hidden.events
+                                        label Localidade
+                                        input#city(input type="text" name="city" placeholder="São Paulo")
                         .field
                             label Telefone
                             .inline.fields
@@ -88,10 +109,39 @@ html
                             button.orange.ui.button(id='InsertAdRegistrationButton') Cadastrar
                         .field
                             button.orange.ui.button.hidden(onclick='ad_update();', id='updateButton') Editar
-            
+                .ui.modal(id='ad_type_modal')
+                    .vertical-center
+                        .ui.padded.sixteen.column.centered.grid
+                            .wide.column.row
+                                .ui.orange.card.login
+                                    .content
+                                        .ui.grid
+                                            .orange.column.row
+                                                .column
+                                                .left.aligned.ten.wide.column
+                                                    .ui.white.header Tipo de anúncio
+                                                //.right.aligned.four.wide.column
+                                                    .ui.icon
+                                                        i.icon.user.circle.large
+                                            .ui.padded.column.row.grid
+                                                .sixteen.wide.column.centered
+                                                    button.big.ui.button(value="products" onClick="ad_selectedType(this.value);")
+                                                        i.cubes.icon
+                                                        | Produtos
+                                                .sixteen.wide.column
+                                                    button.big.ui.button(value="services" onClick="ad_selectedType(this.value);")
+                                                        i.cogs.icon
+                                                        | Serviços
+                                                .sixteen.wide.column.centered
+                                                    button.big.ui.button(value="events" onClick="ad_selectedType(this.value);")
+                                                        i.calendar.outline.icon
+                                                        | Eventos
             include templates/footer
           
         script.
             ad_Register_AddNewImage();
             ad_GetCategory();
             ad_fillfieldforEdit();
+            $('.ui.modal')
+                .modal('setting', 'closable', false)
+                .modal('show');

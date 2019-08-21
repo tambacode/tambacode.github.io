@@ -1,6 +1,18 @@
 /* This file is dedicate to store all logic part about ad_registration interface */
 
 ///////////////////////////////// AD REG /////////////////////////////////
+const ad_selectedType = function(id){
+    $('#' + id)
+        .prop('checked', 'true')
+        .prop('disabled', false);
+    if (id === 'events') { 
+        $('.field.events').removeClass('hidden');
+    }
+    ad_GetCategory();
+    $('.ui.modal').modal('hide');
+}
+
+
 const db_InsertAdRegistration = function(flagUpdate, adUID) {
     // Test if there is any image being uploaded
     if (ad_UploadingImage > 0) {
@@ -125,14 +137,32 @@ const ad_InitDropDownWithProducts = function(dropDownField, adAny) {
     dropDownField.dropdown({ values: values });
 };
 
+const ad_InitDropDownWithEvents = function(dropDownField, adAny) {
+    var values = [];
+
+    if (adAny) {
+        values.push({ name: 'Selecione', value: '', selected : true });
+        values.push({ name: 'Colaborativo', value: 'Colaborativo'});
+    } else {
+        values.push({ name: 'Colaborativo', value: 'Colaborativo', selected: true });
+    }
+
+    values.push({ name : 'Não-colaborativo', value : 'Não-colaborativo' });
+    
+    dropDownField.dropdown({ values: values });
+};
+
 const ad_GetCategory = function() {
     const products = document.getElementById('products');
     const services = document.getElementById('services');
+    const events = document.getElementById('events');
 
-    if (products.checked == true) {
-        ad_InitDropDownWithServices($('#subcategory'));
-    } else if(services.checked == true) {
-        ad_InitDropDownWithProducts($('#subcategory'));                  
+    if (products.checked === true) {
+        ad_InitDropDownWithProducts($('#subcategory'));
+    } else if(services.checked === true) {
+        ad_InitDropDownWithServices($('#subcategory'));                  
+    } else {
+        ad_InitDropDownWithEvents($('#subcategory'));
     }
 }
 ///////////////////////////////// AD REG /////////////////////////////////

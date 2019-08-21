@@ -151,6 +151,29 @@
         <div class="ui container">                   
           <form id="InsertAdRegistration" onsubmit="db_InsertAdRegistration(); return false;" class="ui form">
             <div class="field">
+              <label>Categoria</label>
+              <div class="inline fields">
+                <div class="field">
+                  <div onclick="ad_GetCategory();" class="ui radio checkbox">
+                    <input type="radio" name="category" id="products" value="produtos" disabled="disabled"/>
+                    <label>Produtos</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <div onclick="ad_GetCategory();" class="ui radio checkbox">
+                    <input type="radio" name="category" id="services" value="servicos" disabled="disabled"/>
+                    <label>Serviços</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <div onclick="ad_GetCategory();" class="ui radio checkbox">
+                    <input type="radio" name="category" id="events" value="events" disabled="disabled"/>
+                    <label>Eventos</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
               <label>Título</label>
               <input type="text" name="title" id="title" maxlength="50" required="required" placeholder="Título do anúncio"/>
             </div>
@@ -158,25 +181,9 @@
               <label>Descrição</label>
               <textarea type="text" name="description" id="description" maxlength="250" required="required" placeholder="Descrição" class="ui padded sixteen column grid"></textarea>
             </div>
-            <div class="field"></div>
-            <div class="inline fields">
-              <label>Categoria</label>
-              <div class="field">
-                <div onclick="ad_GetCategory();" class="ui radio checkbox">
-                  <input type="radio" name="category" id="products" value="produtos" checked=""/>
-                  <label>Produtos</label>
-                </div>
-              </div>
-              <div class="field">
-                <div onclick="ad_GetCategory();" class="ui radio checkbox">
-                  <input type="radio" name="category" id="services" value="servicos"/>
-                  <label>Serviços</label>
-                </div>
-              </div>
-            </div>
-            <label>Subcategoria</label>
             <div class="field">
-              <div id="subcategory" class="ui dropdown">
+              <label>Subcategoria</label>
+              <div id="subcategory" class="ui fluid selection dropdown">
                 <div class="text"></div><i class="dropdown icon"></i>
               </div>
             </div>
@@ -189,6 +196,14 @@
               <label>Preço R$</label>
               <input type="text" name="price" id="price" minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," required="required" onclick="$(this).maskMoney();"/>
             </div>
+            <div class="field hidden events">
+              <label>Site</label>
+              <input type="text" name="sitead" id="sitead" maxlength="200" placeholder="url de divulgação do evento"/>
+            </div>
+            <div class="field hidden events">
+              <label>Url</label>
+              <input type="text" name="urlad" id="urlad" maxlength="200" placeholder="http://www.xyz.com/video"/>
+            </div>
             <div class="field">
               <label>Localização</label>
               <input type="text" name="locationad" id="locationad" maxlength="100" placeholder="Localização"/>
@@ -196,6 +211,24 @@
             <div class="field">
               <label>CEP</label>
               <input type="text" name="cep" id="cep" minlength="8" maxlength="8" placeholder="00000-000" onkeypress="$(this).mask('00000-000');"/>
+            </div>
+            <div class="field hidden events">
+              <div class="ui grid">
+                <div class="six wide column">
+                  <div class="field hidden events">
+                    <label>UF</label>
+                    <select id="state" class="ui compact dropdown">
+                      <option value="">...</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="ten wide column">
+                  <div class="field hidden events">
+                    <label>Localidade</label>
+                    <input id="city" input="input" type="text" name="city" placeholder="São Paulo"/>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="field">
               <label>Telefone</label>
@@ -225,12 +258,50 @@
             </div>
           </form>
         </div>
+        <div id="ad_type_modal" class="ui modal">
+          <div class="vertical-center">
+            <div class="ui padded sixteen column centered grid">
+              <div class="wide column row">
+                <div class="ui orange card login">
+                  <div class="content">
+                    <div class="ui grid">
+                      <div class="orange column row">
+                        <div class="column"></div>
+                        <div class="left aligned ten wide column">
+                          <div class="ui white header">Tipo de anúncio</div>
+                        </div>
+                        <!--.right.aligned.four.wide.column
+                        .ui.icon
+                            i.icon.user.circle.large
+                        -->
+                      </div>
+                      <div class="ui padded column row grid">
+                        <div class="sixteen wide column centered">
+                          <button value="products" onClick="ad_selectedType(this.value);" class="big ui button"><i class="cubes icon"></i>Produtos</button>
+                        </div>
+                        <div class="sixteen wide column">
+                          <button value="services" onClick="ad_selectedType(this.value);" class="big ui button"><i class="cogs icon"></i>Serviços</button>
+                        </div>
+                        <div class="sixteen wide column centered">
+                          <button value="events" onClick="ad_selectedType(this.value);" class="big ui button"><i class="calendar outline icon"></i>Eventos</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <script>
       ad_Register_AddNewImage();
       ad_GetCategory();
       ad_fillfieldforEdit();
+      $('.ui.modal')
+          .modal('setting', 'closable', false)
+          .modal('show');
     </script>
   </body>
 </html>
