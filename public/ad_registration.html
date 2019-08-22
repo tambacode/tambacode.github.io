@@ -267,10 +267,15 @@
             <div class="field">
               <button id="InsertAdRegistrationButton" class="orange ui button">Cadastrar</button>
             </div>
-            <div class="field">
-              <button onclick="ad_update();" id="updateButton" class="orange ui button hidden">Editar</button>
-            </div>
           </form>
+        </div>
+      </div>
+      <div class="ui container">
+        <div class="ten wide column">   
+          <div class="inline fields">
+            <button onclick="ad_update();" id="updateButton" class="orange ui button">Editar</button>
+            <button onclick="ad_delete();" id="deleteButton" class="orange ui button">Excluir</button>
+          </div>
         </div>
         <div id="ad_type_modal" class="ui modal">
           <div class="vertical-center">

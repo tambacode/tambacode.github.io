@@ -115,8 +115,11 @@ html
                                         input#cityad(input type="text" name="cityad" placeholder="São Paulo")
                         .field
                             button.orange.ui.button(id='InsertAdRegistrationButton') Cadastrar
-                        .field
-                            button.orange.ui.button.hidden(onclick='ad_update();' id='updateButton') Editar
+            .ui.container
+                .ten.wide.column    
+                    .inline.fields
+                        button.orange.ui.button.hidden(onclick='ad_update();' id='updateButton') Editar
+                        button.orange.ui.button.hidden(onclick='ad_delete();' id='deleteButton') Excluir
                 .ui.modal(id='ad_type_modal')
                     .vertical-center
                         .ui.padded.sixteen.column.centered.grid
