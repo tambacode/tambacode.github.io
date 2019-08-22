@@ -64,7 +64,12 @@
 				"location": "Localizacao ou ponto de referencia",
         		"cep": "cep",
         		"tel": "Telefone do anunciante",
-        		"tel_visible": "1 pra visivel e 0 p invisivel", 
+        		"tel_visible": "1 pra visivel e 0 p invisivel",
+        		"state": "estado",
+        		"city": "cidade",
+        		"event_date" : "data do evento",
+        		"event_site" : "site do evento",
+        		"event_url" : "url do video do evento",
         		"timestamp": "1563646315703"
 			}
 		},

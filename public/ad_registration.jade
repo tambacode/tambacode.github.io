@@ -21,27 +21,27 @@ html
             #all
                 br                
                 .ui.container                    
-                    form.ui.form(id='InsertAdRegistration', onsubmit="db_InsertAdRegistration(); return false;")
-                        .field
+                    form.ui.form(id='InsertAdRegistration' onsubmit="db_InsertAdRegistration(); return false;")
+                        .field.required
                             label Título
-                            input(type='text', name='title', id='title', maxlength="50", required="required", placeholder='Título do anúncio')
-                        .field
+                            input(type='text' name='title' id='title' maxlength="50" placeholder='Título do anúncio' required="required")
+                        .field.required
                             label Descrição
-                            textarea.ui.padded.sixteen.column.grid(type='text', name='description', id='description', maxlength="250", required="required", placeholder='Descrição')
+                            textarea.ui.padded.sixteen.column.grid(type='text' name='description' id='description' maxlength="250" placeholder='Descrição do anúncio' required="required")
                         .field
                             label Categoria
                             .inline.fields
                                 .field
-                                    .ui.radio.orange.checkbox(onclick='ad_GetCategory();')
-                                        input(type='radio', name='category', id='products', value="produtos" disabled)
+                                    .ui.radio.orange.checkbox
+                                        input(type='radio' name='category' id='products' value="produtos" disabled)
                                         label Produtos
                                 .field
-                                    .ui.radio.orange.checkbox(onclick='ad_GetCategory();')
-                                        input(type='radio', name='category', id='services', value="servicos" disabled)
+                                    .ui.radio.orange.checkbox
+                                        input(type='radio' name='category' id='services' value="servicos" disabled)
                                         label Serviços
                                 .field
-                                    .ui.radio.orange.checkbox(onclick='ad_GetCategory();')
-                                        input(type='radio', name='category', id='events', value="events" disabled)
+                                    .ui.radio.orange.checkbox
+                                        input(type='radio' name='category' id='events' value="events" disabled)
                                         label Eventos
                         .field
                             .ui.grid
@@ -52,9 +52,9 @@ html
                                             .text
                                             i.dropdown.icon
                                 .seven.wide.column
-                                    .field
+                                    .field.required
                                         label Preço R$
-                                        input(type='text', name='price', id='price', minlength="1", maxlength="14", data-symbol="R$ " data-thousands="." data-decimal="," required="required", onclick='$(this).maskMoney();')
+                                        input(type='text' name='price' id='price' minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," required="required" onclick='$(this).maskMoney();')
                         .field
                             label Imagem
                             .ui.padded.centered.grid#ImagesGrid
@@ -75,47 +75,48 @@ html
                             //-progress#uploader(value="0" max="100") 0%   
                             //-img#imgpreview(style="width: 500px")                                                  
                         .field.hidden.events
-                            label Data
-                            input(type='text', name='datead', id='datead', maxlength="200", placeholder='data do evento')
+                            label Data do evento
+                            input(type='text' name='datead' id='datead' maxlength="200" placeholder='data do evento')
                         .field.hidden.events
-                            label Site
-                            input(type='text', name='sitead', id='sitead', maxlength="200", placeholder='url de divulgação do evento')
+                            label Site do evento
+                            input(type='text' name='sitead' id='sitead' maxlength="200" placeholder='Site de divulgação do evento')
                         .field.hidden.events
-                            label Url
-                            input(type='text', name='urlad', id='urlad', maxlength="200", placeholder='http://www.xyz.com/video')
+                            label Url do evento
+                            input(type='text' name='urlad' id='urlad' maxlength="200" placeholder='http://www.xyz.com/video')
                         .field
-                            label Localização
-                            input(type='text', name='locationad', id='locationad', maxlength="100", placeholder='Localização')
-                        .field
-                            label CEP
-                            input(type='text', name='cep', id='cep', minlength="8", maxlength="8", placeholder='00000-000', onkeypress="$(this).mask('00000-000');")
-                        .field.hidden.events
                             .ui.grid
                                 .six.wide.column
-                                    .field.hidden.events
-                                        label UF
-                                        select.ui.compact.dropdown#state
-                                            option(value="") ...
+                                    .field
+                                        label CEP
+                                        input(type='text' name='cep' id='cep' minlength="8" maxlength="8" placeholder='00000-000' onkeypress="$(this).mask('00000-000');")
                                 .ten.wide.column
-                                    .field.hidden.events
-                                        label Localidade
-                                        input#city(input type="text" name="city" placeholder="São Paulo")
-                        .field
-                            label Telefone
-                            .inline.fields
-                                    .ui.equal.width.center.grid
-                                        .column
+                                    .field
+                                        label Telefone
+                                        .inline.fields
                                             .field
-                                                input(type='text', name='tel', id='tel', minlength="11", maxlength="11", placeholder='(00) 00000-0000', onkeypress="$(this).mask('(00) 00000-0000');")
-                                        .column
+                                                input(type='text' name='tel' id='tel' minlength="11" maxlength="11" placeholder='(00) 00000-0000' onkeypress="$(this).mask('(00) 00000-0000');")
                                             .field(style="padding-top: 10px;")
                                                 .ui.checkbox
-                                                    input(type='checkbox', id="tel_visible", name='tel_visible', checked="")
+                                                    input(type='checkbox' id="tel_visible" name='tel_visible' checked="")
                                                     label Visível no anúncio?
+                        .field
+                            label Localização
+                            input(type='text' name='locationad' id='locationad' maxlength="100" placeholder='Localização')
+                        .field
+                            .ui.grid
+                                .six.wide.column
+                                    .field
+                                        label UF
+                                        select.ui.compact.dropdown#statead
+                                            option(value="") ...
+                                .ten.wide.column
+                                    .field
+                                        label Localidade
+                                        input#cityad(input type="text" name="cityad" placeholder="São Paulo")
                         .field
                             button.orange.ui.button(id='InsertAdRegistrationButton') Cadastrar
                         .field
-                            button.orange.ui.button.hidden(onclick='ad_update();', id='updateButton') Editar
+                            button.orange.ui.button.hidden(onclick='ad_update();' id='updateButton') Editar
                 .ui.modal(id='ad_type_modal')
                     .vertical-center
                         .ui.padded.sixteen.column.centered.grid

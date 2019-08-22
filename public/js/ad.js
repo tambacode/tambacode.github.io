@@ -42,6 +42,8 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
         var category = "produtos";
     } else if(services.checked == true) {
         var category = "servicos";
+    } else {
+        var category = "eventos";
     }
     const subcategory = document.getElementById('subcategory').innerText;
 
@@ -49,6 +51,8 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
     var location = document.getElementById('locationad').value;
     var cep = document.getElementById('cep').value;
 	var tel = document.getElementById('tel').value;
+    var state = document.getElementById('statead').value;
+    var city = document.getElementById('cityad').value;
     var tel_visible = document.getElementById('tel_visible');
 
     if(tel_visible.checked == true){
@@ -69,9 +73,21 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
         cep: cep,
         tel: tel,
         tel_visible: tel_visible_info,
+        state: state,
+        city: city,
         images: "",
         timestamp: Date.now()             
     };
+
+    if (category === "eventos") {
+        var event_date = document.getElementById('datead').value;
+        var event_site = document.getElementById('sitead').value;
+        var event_url = document.getElementById('urlad').value;
+
+        dataToInsert.event_date = event_date;
+        dataToInsert.event_site = event_site;
+        dataToInsert.event_url = event_url;
+    }
 
     if(!flagUpdate){
         ad_Register_SaveImagePathToDB(key, ad_CurrentlyAddedImages);

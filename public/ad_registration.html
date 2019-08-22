@@ -150,31 +150,31 @@
       <div id="all"><br/>
         <div class="ui container">                   
           <form id="InsertAdRegistration" onsubmit="db_InsertAdRegistration(); return false;" class="ui form">
-            <div class="field">
+            <div class="field required">
               <label>Título</label>
-              <input type="text" name="title" id="title" maxlength="50" required="required" placeholder="Título do anúncio"/>
+              <input type="text" name="title" id="title" maxlength="50" placeholder="Título do anúncio" required="required"/>
             </div>
-            <div class="field">
+            <div class="field required">
               <label>Descrição</label>
-              <textarea type="text" name="description" id="description" maxlength="250" required="required" placeholder="Descrição" class="ui padded sixteen column grid"></textarea>
+              <textarea type="text" name="description" id="description" maxlength="250" placeholder="Descrição do anúncio" required="required" class="ui padded sixteen column grid"></textarea>
             </div>
             <div class="field">
               <label>Categoria</label>
               <div class="inline fields">
                 <div class="field">
-                  <div onclick="ad_GetCategory();" class="ui radio orange checkbox">
+                  <div class="ui radio orange checkbox">
                     <input type="radio" name="category" id="products" value="produtos" disabled="disabled"/>
                     <label>Produtos</label>
                   </div>
                 </div>
                 <div class="field">
-                  <div onclick="ad_GetCategory();" class="ui radio orange checkbox">
+                  <div class="ui radio orange checkbox">
                     <input type="radio" name="category" id="services" value="servicos" disabled="disabled"/>
                     <label>Serviços</label>
                   </div>
                 </div>
                 <div class="field">
-                  <div onclick="ad_GetCategory();" class="ui radio orange checkbox">
+                  <div class="ui radio orange checkbox">
                     <input type="radio" name="category" id="events" value="events" disabled="disabled"/>
                     <label>Eventos</label>
                   </div>
@@ -192,7 +192,7 @@
                   </div>
                 </div>
                 <div class="seven wide column">
-                  <div class="field">
+                  <div class="field required">
                     <label>Preço R$</label>
                     <input type="text" name="price" id="price" minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," required="required" onclick="$(this).maskMoney();"/>
                   </div>
@@ -205,59 +205,61 @@
               </div>
             </div>
             <div class="field hidden events">
-              <label>Data</label>
+              <label>Data do evento</label>
               <input type="text" name="datead" id="datead" maxlength="200" placeholder="data do evento"/>
             </div>
             <div class="field hidden events">
-              <label>Site</label>
-              <input type="text" name="sitead" id="sitead" maxlength="200" placeholder="url de divulgação do evento"/>
+              <label>Site do evento</label>
+              <input type="text" name="sitead" id="sitead" maxlength="200" placeholder="Site de divulgação do evento"/>
             </div>
             <div class="field hidden events">
-              <label>Url</label>
+              <label>Url do evento</label>
               <input type="text" name="urlad" id="urlad" maxlength="200" placeholder="http://www.xyz.com/video"/>
+            </div>
+            <div class="field">
+              <div class="ui grid">
+                <div class="six wide column">
+                  <div class="field">
+                    <label>CEP</label>
+                    <input type="text" name="cep" id="cep" minlength="8" maxlength="8" placeholder="00000-000" onkeypress="$(this).mask('00000-000');"/>
+                  </div>
+                </div>
+                <div class="ten wide column">
+                  <div class="field">
+                    <label>Telefone</label>
+                    <div class="inline fields">
+                      <div class="field">
+                        <input type="text" name="tel" id="tel" minlength="11" maxlength="11" placeholder="(00) 00000-0000" onkeypress="$(this).mask('(00) 00000-0000');"/>
+                      </div>
+                      <div style="padding-top: 10px;" class="field">
+                        <div class="ui checkbox">
+                          <input type="checkbox" id="tel_visible" name="tel_visible" checked=""/>
+                          <label>Visível no anúncio?</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="field">
               <label>Localização</label>
               <input type="text" name="locationad" id="locationad" maxlength="100" placeholder="Localização"/>
             </div>
             <div class="field">
-              <label>CEP</label>
-              <input type="text" name="cep" id="cep" minlength="8" maxlength="8" placeholder="00000-000" onkeypress="$(this).mask('00000-000');"/>
-            </div>
-            <div class="field hidden events">
               <div class="ui grid">
                 <div class="six wide column">
-                  <div class="field hidden events">
+                  <div class="field">
                     <label>UF</label>
-                    <select id="state" class="ui compact dropdown">
+                    <select id="statead" class="ui compact dropdown">
                       <option value="">...</option>
                     </select>
                   </div>
                 </div>
                 <div class="ten wide column">
-                  <div class="field hidden events">
+                  <div class="field">
                     <label>Localidade</label>
-                    <input id="city" input="input" type="text" name="city" placeholder="São Paulo"/>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="field">
-              <label>Telefone</label>
-              <div class="inline fields">
-                <div class="ui equal width center grid">
-                  <div class="column">
-                    <div class="field">
-                      <input type="text" name="tel" id="tel" minlength="11" maxlength="11" placeholder="(00) 00000-0000" onkeypress="$(this).mask('(00) 00000-0000');"/>
-                    </div>
-                  </div>
-                  <div class="column">
-                    <div style="padding-top: 10px;" class="field">
-                      <div class="ui checkbox">
-                        <input type="checkbox" id="tel_visible" name="tel_visible" checked=""/>
-                        <label>Visível no anúncio?</label>
-                      </div>
-                    </div>
+                    <input id="cityad" input="input" type="text" name="cityad" placeholder="São Paulo"/>
                   </div>
                 </div>
               </div>
