@@ -175,7 +175,7 @@
                 </div>
                 <div class="field">
                   <div class="ui radio orange checkbox">
-                    <input type="radio" name="category" id="events" value="events" disabled="disabled"/>
+                    <input type="radio" name="category" id="events" value="eventos" disabled="disabled"/>
                     <label>Eventos</label>
                   </div>
                 </div>
@@ -206,7 +206,7 @@
             </div>
             <div class="field hidden events">
               <label>Data do evento</label>
-              <input type="text" name="datead" id="datead" maxlength="200" placeholder="data do evento"/>
+              <input type="date" name="datead" id="datead"/>
             </div>
             <div class="field hidden events">
               <label>Site do evento</label>
@@ -312,10 +312,9 @@
     <script>
       ad_Register_AddNewImage();
       ad_GetCategory();
+      ui_InitDropDownWithStates($("#statead"));
+      ad_checkPopupType();
       ad_fillfieldforEdit();
-      $('.ui.modal')
-          .modal('setting', 'closable', false)
-          .modal('show');
     </script>
   </body>
 </html>

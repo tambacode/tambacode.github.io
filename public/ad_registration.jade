@@ -41,7 +41,7 @@ html
                                         label Serviços
                                 .field
                                     .ui.radio.orange.checkbox
-                                        input(type='radio' name='category' id='events' value="events" disabled)
+                                        input(type='radio' name='category' id='events' value="eventos" disabled)
                                         label Eventos
                         .field
                             .ui.grid
@@ -76,7 +76,7 @@ html
                             //-img#imgpreview(style="width: 500px")                                                  
                         .field.hidden.events
                             label Data do evento
-                            input(type='text' name='datead' id='datead' maxlength="200" placeholder='data do evento')
+                            input(type='date' name='datead' id='datead')
                         .field.hidden.events
                             label Site do evento
                             input(type='text' name='sitead' id='sitead' maxlength="200" placeholder='Site de divulgação do evento')
@@ -149,7 +149,6 @@ html
         script.
             ad_Register_AddNewImage();
             ad_GetCategory();
+            ui_InitDropDownWithStates($("#statead"));
+            ad_checkPopupType();
             ad_fillfieldforEdit();
-            $('.ui.modal')
-                .modal('setting', 'closable', false)
-                .modal('show');

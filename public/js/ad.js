@@ -1,6 +1,21 @@
 /* This file is dedicate to store all logic part about ad_registration interface */
 
 ///////////////////////////////// AD REG /////////////////////////////////
+const ad_checkPopupType = function(){
+    const edit = misc_GetUrlParam('isitforEdit');
+    if (!edit){
+        $('.ui.modal')
+            .modal('setting', 'closable', false)
+            .modal('show');
+        $(function(){
+            $('[type="date"]').prop('min', function(){
+                return new Date().toJSON().split('T')[0];
+            });
+        });
+    }
+}
+
+
 const ad_selectedType = function(id){
     $('#' + id)
         .prop('checked', 'true')
@@ -517,20 +532,34 @@ const ad_GetAllValues = function(){
 
 const ad_ValuesIntoDetail = function(val, imgURL) {
     const edit = misc_GetUrlParam('isitforEdit');
+    var id = "";
     if (edit){
         title.value = val.title;
         description.value = val.description;
-        if(val.category = 'Produtos'){
+        if(val.category === 'produtos'){
             products.checked = true;
-        }else{
+            id = "products";
+        }else if (val.category === 'serviços'){
             services.checked = true;
+            id = "services";
+        } else {
+            events.checked = true;
+            id = "events";
         }
-        ad_GetCategory();
+        ad_selectedType(id);
+        //ad_GetCategory();
         $('#subcategory').dropdown('set selected', val.subcategory);
         price.value = val.price;
         locationad.value = val.location;
         cep.value = val.cep;
         tel.value = val.tel;
+        cityad.value = val.city;
+        $('#statead').dropdown('set selected', val.city); 
+        if (val.category === "eventos"){
+            datead.value = val.event_date;
+            sitead.value = val.event_site;
+            urlad.value = val.event_url;
+        }
     }else{
         image.src = imgURL;
         title.innerText = val.title;
