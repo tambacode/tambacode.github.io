@@ -15,6 +15,7 @@
     "url": "https://github.com/Semantic-Org/Semantic-UI/issues"
   },
   "dependencies": {
+    "@glidejs/glide": "^3.3.0",
     "jquery": "x.*"
   }
 }
