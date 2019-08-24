@@ -1,5 +1,17 @@
 /* This file is dedicate to store all logic part about ad_registration interface */
 
+const ad_initComponent = function(){
+    $('form.ad_register')
+        .form({
+        onSuccess: function(event){
+            event.preventDefault();
+            db_InsertAdRegistration();
+            return false;
+        }
+    });
+}
+
+
 ///////////////////////////////// AD REG /////////////////////////////////
 const ad_checkPopupType = function(){
     const edit = misc_GetUrlParam('isitforEdit');
@@ -30,14 +42,15 @@ const ad_selectedType = function(id){
 
 const db_InsertAdRegistration = function(flagUpdate, adUID) {
     // Test if there is any image being uploaded
+
     if (ad_UploadingImage > 0) {
         misc_DisplayErrorMessage('Imagem carregando', 'Favor aguardar todas as imagens finalizarem o upload');
-        return
+        return;
     }
 
     if (ad_CurrentlyAddedImages.length == 0) {
-        misc_DisplayErrorMessage('Nenhuma imagem', 'Favor adicionar ao menos uma imagem para efetuar o cadastro do anúncio.');
-        return
+        misc_DisplayErrorMessage('Nenhuma imagem', 'Favor adicionar ao menos uma imagem para efetuar o cadastro do anÃºncio.');
+        return;
     }
 
     if(!flagUpdate){
@@ -66,8 +79,8 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
     var location = document.getElementById('locationad').value;
     var cep = document.getElementById('cep').value;
 	var tel = document.getElementById('tel').value;
-    var state = document.getElementById('statead').value;
-    var city = document.getElementById('cityad').value;
+    var state = document.getElementById('statead').innerText;
+    var city = document.getElementById('cityad').innerText;
     var tel_visible = document.getElementById('tel_visible');
 
     if(tel_visible.checked == true){
@@ -178,7 +191,7 @@ const ad_InitDropDownWithEvents = function(dropDownField, adAny) {
         values.push({ name: 'Colaborativo', value: 'Colaborativo', selected: true });
     }
 
-    values.push({ name : 'Não-colaborativo', value : 'Não-colaborativo' });
+    values.push({ name : 'Nao-colaborativo', value : 'Nao-colaborativo' });
     
     dropDownField.dropdown({ values: values });
 };
@@ -539,7 +552,7 @@ const ad_ValuesIntoDetail = function(val, imgURL) {
         if(val.category === 'produtos'){
             products.checked = true;
             id = "products";
-        }else if (val.category === 'serviços'){
+        }else if (val.category === 'serviÃ§os'){
             services.checked = true;
             id = "services";
         } else {
@@ -553,8 +566,10 @@ const ad_ValuesIntoDetail = function(val, imgURL) {
         locationad.value = val.location;
         cep.value = val.cep;
         tel.value = val.tel;
-        cityad.value = val.city;
-        $('#statead').dropdown('set selected', val.city); 
+        $('#statead').dropdown('set selected', val.state);
+        setTimeout( function(){
+            $('#cityad').dropdown('set selected', val.city);
+        }, 2000);
         if (val.category === "eventos"){
             datead.value = val.event_date;
             sitead.value = val.event_site;
@@ -594,7 +609,7 @@ const ad_ValuesIntoDetail = function(val, imgURL) {
 };
 
 const ad_ErrorFunction = function(error) {
-    misc_DisplayErrorMessage('Erro ao exibir anúncio', 'Favor tentar mais tarde');
+    misc_DisplayErrorMessage('Erro ao exibir anÃºncio', 'Favor tentar mais tarde');
 };
 
 /////////////////////////////////  AD DETAIL /////////////////////////////////

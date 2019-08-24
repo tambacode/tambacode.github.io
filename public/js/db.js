@@ -153,6 +153,11 @@ var db_getUserToEdit = function() {
         $.each(snapshot.val(), function(field, value ) {
             if (field === "state")
                 $('#' + field).dropdown('set selected', value);
+            if (field === "city"){
+                setTimeout(function(){
+                    $('#' + field).dropdown('set selected', value);
+                }, 2000);
+            }
             else if (field === "profile_picture_link" ) {
                 if (value !== undefined) {
                     misc_waitImageLoadReady($('#imageuploaded'), value, function(){
@@ -242,8 +247,8 @@ var db_updateUserInfo = function() {
     var district = document.getElementById('district').value;
 
     var complement = document.getElementById('complement').value;
-    var city = document.getElementById('city').value;
-    var state = document.getElementById('state').value;
+    var city = document.getElementById('city').innerText;
+    var state = document.getElementById('state').innerText;
     
     var dataToInsert = {
         name: name,

@@ -1,15 +1,3 @@
-const user_InitDropdownWithStates = function(dropdown){
-  var states_list = ["AC","AL","AM","AP","BA",
-                     "CE","DF","ES","GO","MA",
-                     "MG","MS","MT","PA","PB",
-                     "PE","PI","PR","RJ","RN",
-                     "RO","RR","RS","SC","SE",
-                     "SP","TO"];
-  $.each(states_list, function (i, sigla) {
-    dropdown.append(new Option(sigla, sigla));
-  });
-}
-
 //Search in webservice viacep.com.br
 const user_cepViacep = function(cep){
   var urlcep = "https://viacep.com.br/ws/"+ cep +"/json/";
@@ -58,15 +46,19 @@ const user_searchCep = function(object){
         ceperror = 0;
         $("#publicplace").val(data.logradouro);
         $("#district").val(data.bairro);
-        $("#city").val(data.cidade);
         $("#state").dropdown('set selected', data.uf);
+        setTimeout( function(){
+          $("#city").dropdown('set selected', data.cidade);
+        }, 2000);
     });
     if(ceperror){
       user_cepViacep(cep).done(data => {
         $("#publicplace").val(data.logradouro);
         $("#district").val(data.bairro);
-        $("#city").val(data.localidade);
         $("#state").dropdown('set selected', data.uf);
+        setTimeout( function(){
+            $("#city").dropdown('set selected', data.localidade);
+        }, 2000);
       });
     }
   } else user_addressFieldsClear();
@@ -86,8 +78,8 @@ const user_previewImage = function(evt){
 }
 
 const user_initComponent = function(){
-  $('#state').dropdown();
-  user_InitDropdownWithStates($("#state"));
+  //$('#state').dropdown();
+  misc_InitDropdownWithStates($("#state"), $("#city"));
   $('#user_image').dimmer({ on: 'hover' });
   $('#fileInput').change(user_previewImage);
   $('#cep')

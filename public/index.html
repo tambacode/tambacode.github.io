@@ -45,16 +45,18 @@
               <label>Estado</label>
             </div>
             <div class="field">
-              <div id="filter_state" class="ui dropdown">
-                <div class="text"></div><i class="dropdown icon"></i>
+              <div id="filter_state" class="ui search compact selection dropdown">
+                <input type="hidden" name="state"/><i class="dropdown icon"></i>
+                <div class="default text">Estado</div>
               </div>
             </div>
             <div class="field">
               <label>Cidade</label>
             </div>
             <div class="field">
-              <div id="filter_city" class="ui dropdown">
-                <div class="text"></div><i class="dropdown icon"></i>
+              <div id="filter_city" class="ui search compact selection dropdown">
+                <input type="hidden" name="city"/><i class="dropdown icon"></i>
+                <div class="default text">Cidade</div>
               </div>
             </div>
             <div class="field">
@@ -118,8 +120,7 @@
       };
       
       ad_InitDropDownWithProducts($('#filter_Subcategory'), true);
-      ui_InitDropDownWithStates($('#filter_state'), true);
-      ui_InitDropDownWithStates($('#filter_city'), true);
+      misc_InitDropdownWithStates($('#filter_state'), $('#filter_city'));
       filterSideBar_InitFields();
     </script>
     <div class="pusher">

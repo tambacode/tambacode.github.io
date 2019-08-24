@@ -21,7 +21,7 @@ html
             #all
                 br                
                 .ui.container                    
-                    form.ui.form(id='InsertAdRegistration' onsubmit="db_InsertAdRegistration(); return false;")
+                    form.ui.form.ad_register#InsertAdRegistration
                         .field.required
                             label Título
                             input(type='text' name='title' id='title' maxlength="50" placeholder='Título do anúncio' required="required")
@@ -107,19 +107,37 @@ html
                                 .six.wide.column
                                     .field
                                         label UF
-                                        select.ui.compact.dropdown#statead
-                                            option(value="") ...
+                                        .ui.compact.search.selection.dropdown#statead
+                                            input(type="hidden" name="state")
+                                            i.dropdown.icon
+                                            .default.text Estado
                                 .ten.wide.column
                                     .field
-                                        label Localidade
-                                        input#cityad(input type="text" name="cityad" placeholder="São Paulo")
-                        .field
+                                        label Cidade
+                                        .ui.compact.search.selection.dropdown#cityad
+                                            input(type="hidden" name="city")
+                                            i.dropdown.icon
+                                            .default.text Cidade
+                        //-.field
                             button.orange.ui.button(id='InsertAdRegistrationButton') Cadastrar
-            .ui.container
-                .ten.wide.column    
-                    .inline.fields
-                        button.orange.ui.button.hidden(onclick='ad_update();' id='updateButton') Editar
-                        button.orange.ui.button.hidden(onclick='ad_delete();' id='deleteButton') Excluir
+                            button.orange.ui.button.hidden(onclick='ad_update();' id='updateButton') Editar
+                                .ui.container
+                                    .ten.wide.column    
+                                        .inline.fields
+                        
+                                button.orange.ui.button.hidden(onclick='ad_delete();' id='deleteButton') Excluir
+                        
+                        .field
+                            .ui.padded.column.row.grid
+                                .two.wide.column
+                                .ten.wide.column.centered
+                                    .ui.fluid.orange.submit.button#InsertAdRegistrationButton
+                                        i.save.icon
+                                        |Cadastrar
+                                    .ui.fluid.orange.submit.button.hidden#updateButton(onclick='ad_update();')
+                                        i.save.icon
+                                        |Salvar
+                                .two.wide.column
                 .ui.modal(id='ad_type_modal')
                     .vertical-center
                         .ui.padded.sixteen.column.centered.grid
@@ -150,8 +168,9 @@ html
             include templates/footer
           
         script.
+            ad_initComponent();
             ad_Register_AddNewImage();
             ad_GetCategory();
-            ui_InitDropDownWithStates($("#statead"));
+            misc_InitDropdownWithStates($("#statead"), $("#cityad"));
             ad_checkPopupType();
             ad_fillfieldforEdit();

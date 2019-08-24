@@ -192,3 +192,82 @@ const misc_GetStringWithMaxCharacthers = function(string, maxChars) {
 
     return string.substring(0, maxChars) + "...";
 }
+
+/*
+Usage of States & City functions
+1. On loading of page, ini your State Dropdown with function misc_InitDropdownWithStates(statedropdown, citydropdown)
+2. When changing state dropdown a onChange function will be triggered to fill citydropdown
+3. In case of programatically change state dropdown value
+3.1 set waitTimeout (function(), delay) to wait 2secs in order to all cities to be loaded in city dropdown
+3.2 set in function callback value of city dropdown
+*/
+const misc_ListWithStates = [
+    {"id":12,"sigla":"AC","nome":"Acre"},
+    {"id":27,"sigla":"AL","nome":"Alagoas"},
+    {"id":13,"sigla":"AM","nome":"Amazonas"},
+    {"id":16,"sigla":"AP","nome":"Amapá"},
+    {"id":29,"sigla":"BA","nome":"Bahia"},
+    {"id":23,"sigla":"CE","nome":"Ceará"},
+    {"id":53,"sigla":"DF","nome":"Distrito Federal"},
+    {"id":32,"sigla":"ES","nome":"Espírito Santo"},
+    {"id":52,"sigla":"GO","nome":"Goiás"},
+    {"id":21,"sigla":"MA","nome":"Maranhão"},
+    {"id":50,"sigla":"MS","nome":"Mato Grosso do Sul"},
+    {"id":51,"sigla":"MT","nome":"Mato Grosso"},
+    {"id":31,"sigla":"MG","nome":"Minas Gerais"},
+    {"id":15,"sigla":"PA","nome":"Pará"},
+    {"id":25,"sigla":"PB","nome":"Paraíba"},
+    {"id":41,"sigla":"PR","nome":"Paraná"},
+    {"id":26,"sigla":"PE","nome":"Pernambuco"},
+    {"id":22,"sigla":"PI","nome":"Piauí"},
+    {"id":11,"sigla":"RO","nome":"Rondônia"},
+    {"id":33,"sigla":"RJ","nome":"Rio de Janeiro"},
+    {"id":24,"sigla":"RN","nome":"Rio Grande do Norte"},
+    {"id":43,"sigla":"RS","nome":"Rio Grande do Sul"},
+    {"id":14,"sigla":"RR","nome":"Roraima"},
+    {"id":42,"sigla":"SC","nome":"Santa Catarina"},
+    {"id":35,"sigla":"SP","nome":"São Paulo"},
+    {"id":28,"sigla":"SE","nome":"Sergipe"},
+    {"id":17,"sigla":"TO","nome":"Tocantins"}
+];
+
+const misc_GetStateIdFromSigla = function(uf){
+    var stateId = "";
+    $.each(misc_ListWithStates, function(id, state){
+        (state.sigla === uf) ? (stateId = state.id) : "";
+    });
+    return stateId;
+}
+
+const misc_InitDropdownWithStates = function(dropdownState, dropdownCity){
+    var values = [];
+    
+    //values.push({ name: 'Selecione', value: '', selected : true });
+
+    $.each(misc_ListWithStates, function (id, state) {
+        values.push({ name: state.nome, value: state.sigla});
+    });
+    dropdownState.dropdown({ values: values });
+    dropdownState.dropdown({
+        onChange: function (value, text, $selectedItem) {
+            dropdownCity.addClass('loading disabled');
+            misc_InitDropdownCityFromStateSelection(value, dropdownCity).then(function(){
+                dropdownCity.removeClass('loading disabled');
+            });
+        }
+    });
+}
+
+const misc_InitDropdownCityFromStateSelection = async function (sigla, dropdownCity){
+    var values = [];
+    var stateId = misc_GetStateIdFromSigla(sigla);
+    const urlCityIbge = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados/' + stateId + '/municipios';
+
+    values.push({ name: 'Selecione', value: '', selected : true });
+
+    var listWithCities = await $.getJSON(urlCityIbge);
+    $.each(listWithCities, function (id, city) {
+        values.push({ name: city.nome, value: city.nome});
+    });
+    dropdownCity.dropdown({ values: values });
+}

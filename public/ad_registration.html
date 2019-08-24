@@ -44,16 +44,18 @@
               <label>Estado</label>
             </div>
             <div class="field">
-              <div id="filter_state" class="ui dropdown">
-                <div class="text"></div><i class="dropdown icon"></i>
+              <div id="filter_state" class="ui search compact selection dropdown">
+                <input type="hidden" name="state"/><i class="dropdown icon"></i>
+                <div class="default text">Estado</div>
               </div>
             </div>
             <div class="field">
               <label>Cidade</label>
             </div>
             <div class="field">
-              <div id="filter_city" class="ui dropdown">
-                <div class="text"></div><i class="dropdown icon"></i>
+              <div id="filter_city" class="ui search compact selection dropdown">
+                <input type="hidden" name="city"/><i class="dropdown icon"></i>
+                <div class="default text">Estado</div>
               </div>
             </div>
             <div class="field">
@@ -117,8 +119,7 @@
       };
       
       ad_InitDropDownWithProducts($('#filter_Subcategory'), true);
-      ui_InitDropDownWithStates($('#filter_state'), true);
-      ui_InitDropDownWithStates($('#filter_city'), true);
+      misc_InitDropdownWithStates($('#filter_state'), $('#filter_city'));
       filterSideBar_InitFields();
     </script>
     <div class="pusher">
@@ -149,7 +150,7 @@
       </div>
       <div id="all"><br/>
         <div class="ui container">                   
-          <form id="InsertAdRegistration" onsubmit="db_InsertAdRegistration(); return false;" class="ui form">
+          <form id="InsertAdRegistration" class="ui form ad_register">
             <div class="field required">
               <label>Título</label>
               <input type="text" name="title" id="title" maxlength="50" placeholder="Título do anúncio" required="required"/>
@@ -251,31 +252,34 @@
                 <div class="six wide column">
                   <div class="field">
                     <label>UF</label>
-                    <select id="statead" class="ui compact dropdown">
-                      <option value="">...</option>
-                    </select>
+                    <div id="statead" class="ui compact search selection dropdown">
+                      <input type="hidden" name="state"/><i class="dropdown icon"></i>
+                      <div class="default text">Estado</div>
+                    </div>
                   </div>
                 </div>
                 <div class="ten wide column">
                   <div class="field">
-                    <label>Localidade</label>
-                    <input id="cityad" input="input" type="text" name="cityad" placeholder="São Paulo"/>
+                    <label>Cidade</label>
+                    <div id="cityad" class="ui compact search selection dropdown">
+                      <input type="hidden" name="city"/><i class="dropdown icon"></i>
+                      <div class="default text">Cidade</div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="field">
-              <button id="InsertAdRegistrationButton" class="orange ui button">Cadastrar</button>
+              <div class="ui padded column row grid">
+                <div class="two wide column"></div>
+                <div class="ten wide column centered">
+                  <div id="InsertAdRegistrationButton" class="ui fluid orange submit button"><i class="save icon"></i>Cadastrar</div>
+                  <div id="updateButton" onclick="ad_update();" class="ui fluid orange submit button hidden"><i class="save icon"></i>Salvar</div>
+                </div>
+                <div class="two wide column"></div>
+              </div>
             </div>
           </form>
-        </div>
-      </div>
-      <div class="ui container">
-        <div class="ten wide column">   
-          <div class="inline fields">
-            <button onclick="ad_update();" id="updateButton" class="orange ui button">Editar</button>
-            <button onclick="ad_delete();" id="deleteButton" class="orange ui button">Excluir</button>
-          </div>
         </div>
         <div id="ad_type_modal" class="ui modal">
           <div class="vertical-center">
@@ -315,9 +319,10 @@
       </div>
     </div>
     <script>
+      ad_initComponent();
       ad_Register_AddNewImage();
       ad_GetCategory();
-      ui_InitDropDownWithStates($("#statead"));
+      misc_InitDropdownWithStates($("#statead"), $("#cityad"));
       ad_checkPopupType();
       ad_fillfieldforEdit();
     </script>
