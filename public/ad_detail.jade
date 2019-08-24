@@ -22,7 +22,8 @@ html
         .pusher
             include templates/header
             #all
-                .ui.container
+                include templates/loader
+                .ui.container(style="display:none")
                     .ui.fluid.centered.small.image
                         img#image(src="")
                     h1.ui.header

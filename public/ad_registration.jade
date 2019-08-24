@@ -20,7 +20,8 @@ html
             include templates/header
             #all
                 br                
-                .ui.container                    
+                include templates/loader
+                .ui.container(style="display:none")                    
                     form.ui.form.ad_register#InsertAdRegistration
                         .field.required
                             label Título
@@ -128,16 +129,22 @@ html
                                 button.orange.ui.button.hidden(onclick='ad_delete();' id='deleteButton') Excluir
                         
                         .field
-                            .ui.padded.column.row.grid
-                                .two.wide.column
+                            .ui.padded.column.row.grid#ad_add
+                                .two.wide.column.centered
                                 .ten.wide.column.centered
-                                    .ui.fluid.orange.submit.button#InsertAdRegistrationButton
+                                    .ui.fluid.orange.submit.button#InsertAdRegistrationButton(onclick='db_InsertAdRegistration();')
                                         i.save.icon
                                         |Cadastrar
-                                    .ui.fluid.orange.submit.button.hidden#updateButton(onclick='ad_update();')
-                                        i.save.icon
+                                .two.wide.column.centered
+                            .ui.padded.column.row.grid.hidden#ad_edit
+                                .eight.wide.column.centered
+                                    .ui.fluid.orange.submit.button#updateButton(onclick='ad_update();')
+                                        i.save.outline.icon
                                         |Salvar
-                                .two.wide.column
+                                .eight.wide.column
+                                    .ui.fluid.orange.submit.button#deleteButton(onclick='ad_delete();')
+                                        i.trash.alternate.icon
+                                        |Excluir
                 .ui.modal(id='ad_type_modal')
                     .vertical-center
                         .ui.padded.sixteen.column.centered.grid

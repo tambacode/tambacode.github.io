@@ -5,10 +5,13 @@ const ad_initComponent = function(){
         .form({
         onSuccess: function(event){
             event.preventDefault();
-            db_InsertAdRegistration();
-            return false;
         }
     });
+}
+
+const ad_showFields = function(){
+    misc_RemoveLoader();
+    $(".ui.container").show();
 }
 
 
@@ -306,10 +309,10 @@ const ad_fillfieldforEdit = function(){
 
     //Get all fields
     if (adUID){
-        ad_Register_SetImageLoading('#all');
+        //ad_Register_SetImageLoading('#all');
 
-        $('#InsertAdRegistrationButton').addClass('hidden');
-        $('#updateButton').removeClass('hidden');
+        $('#ad_add').addClass('hidden');
+        $('#ad_edit').removeClass('hidden');
         ad_GetAllValues();
         //Get images
         var adPath = 'ads_images/' + adUID;
@@ -339,11 +342,13 @@ const ad_fillfieldforEdit = function(){
                 ad_QtdRegisterImages = ad_QtdRegisterImages + 1;
                 
             });
-                $('#divloader').remove();
+            ad_showFields();
+            //$('#divloader').remove();
         };
         db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
+    } else {
+        ad_showFields();    
     }
-    
 }
 
 const ad_update = function(){
@@ -575,7 +580,7 @@ const ad_ValuesIntoDetail = function(val, imgURL) {
             sitead.value = val.event_site;
             urlad.value = val.event_url;
         }
-    }else{
+    } else {
         image.src = imgURL;
         title.innerText = val.title;
         address.innerText = val.location;
@@ -594,6 +599,7 @@ const ad_ValuesIntoDetail = function(val, imgURL) {
                 //$("#district").text(valUser.district + ", " + valUser.city);
                 $("#email").text(valUser.email);
                 $("#phone").text(valUser.phone);
+                ad_showFields();
             }
             , null
             , null
