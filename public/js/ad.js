@@ -157,8 +157,8 @@ const ad_InitDropDownWithServices = function(dropDownField, adAny) {
     }
 
     values.push({ name : 'Agricultor', value : 'Agricultor' });
-    values.push({ name : 'Manutencao de Maquinario', value : 'Manutencao de Maquinario' });
-    values.push({ name : 'Medico Veterinario', value : 'Medico Veterinario' });
+    values.push({ name : 'Manutenção de Maquinário', value : 'Manutenção de Maquinário' });
+    values.push({ name : 'Médico Veterinário', value : 'Médico Veterinário' });
     values.push({ name : 'Caseiro', value : 'Caseiro' });
 
     dropDownField.dropdown({ values: values });
@@ -174,11 +174,11 @@ const ad_InitDropDownWithProducts = function(dropDownField, adAny) {
         values.push({ name: 'Cereais', value: 'Cereais', selected: true });
     }
 
-    values.push({ name : 'Organicos', value : 'Organicos' });
-    values.push({ name : 'Proteina', value : 'Proteina' });
+    values.push({ name : 'Orgânicos', value : 'Orgânicos' });
+    values.push({ name : 'Proteína', value : 'Proteína' });
     values.push({ name : 'Vegetais', value : 'Vegetais' });
     values.push({ name : 'Frutas', value : 'Frutas' });
-    values.push({ name : 'Laticinios', value : 'Laticinios' });
+    values.push({ name : 'Laticínios', value : 'Laticínios' });
     values.push({ name : 'Flores e Plantas', value : 'Flores e Plantas' });
     
     dropDownField.dropdown({ values: values });
@@ -194,7 +194,7 @@ const ad_InitDropDownWithEvents = function(dropDownField, adAny) {
         values.push({ name: 'Colaborativo', value: 'Colaborativo', selected: true });
     }
 
-    values.push({ name : 'Nao-colaborativo', value : 'Nao-colaborativo' });
+    values.push({ name : 'Não-colaborativo', value : 'Não-colaborativo' });
     
     dropDownField.dropdown({ values: values });
 };
