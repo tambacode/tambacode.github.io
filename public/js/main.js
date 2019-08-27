@@ -31,7 +31,7 @@ const misc_GoToPage = function(url, forceChange) {
     if (window.location.pathname.replace('/', '') != url || forceChange) {
         window.location.href = url; 
     }
-}
+};
 
 const misc_LowerCase = function(string) {
     return string.toLowerCase();
@@ -46,7 +46,7 @@ const misc_RemoveLoader = function() {
     }
 
     return false;
-}
+};
 
 const misc_waitImageLoadReady = function(objHandler, url, callback){
     $(objHandler)
@@ -57,7 +57,7 @@ const misc_waitImageLoadReady = function(objHandler, url, callback){
                 $(this).load();
             }
         });
-}
+};
 
 const misc_RemoveErrorNullMsg = function() {
     var errorMSG = $('#errorMsg');
@@ -71,15 +71,15 @@ const misc_RemoveErrorNullMsg = function() {
     if (nullValueMSG) {
         nullValueMSG.remove();
     }
-}
+};
 
 const misc_GetErrorMsg = function(withRow) {
     return misc_GetNullValueOrder(withRow, 'errorMsg', 'Erro ao executar a pesquisa');
-}
+};
 
 const misc_GetNullValueMsg = function(withRow) {
     return misc_GetNullValueOrder(withRow, 'nullValueMsg', 'Nenhum valor encontrado');
-}
+};
 
 const misc_GetNullValueOrder = function(withRow, id, message) {
     var str = '';
@@ -96,7 +96,24 @@ const misc_GetNullValueOrder = function(withRow, id, message) {
     }
 
     return str;
-}
+};
+
+//// FLOAT NUMBER ////
+const misc_ReplaceAll = function(str, find, replace) {
+    return str.replace(new RegExp(misc_EscapeRegExp(find), 'g'), replace);
+};
+
+const misc_EscapeRegExp = function(str) {
+    return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+};
+
+const misc_GetFloatNumber = function(numberAsString) {
+    var value = misc_ReplaceAll(numberAsString, '.', '');
+    value = value.replace(',', '.');
+
+    return parseFloat(value);
+};
+//// FLOAT NUMBER ////
 
 const misc_GetHourMin = function(timestamp) {
     const date = new Date(parseInt(timestamp));
@@ -113,7 +130,7 @@ const misc_GetHourMin = function(timestamp) {
     }
 
     return h + ":" + m;
-}
+};
 
 const misc_GetDate = function(date, includeDate, includeTime) {
     var msg = '';
@@ -127,7 +144,7 @@ const misc_GetDate = function(date, includeDate, includeTime) {
     return msg;
 
     return '';
-}
+};
 
 const misc_GetDescriptiveMonth = function(month) {
     switch(month) {
@@ -156,7 +173,7 @@ const misc_GetDescriptiveMonth = function(month) {
         case 11:
             return 'Dezembro'
     }
-}
+};
 
 const misc_DisplayErrorMessage = function(title, text) {
     $.uiAlert({
@@ -183,7 +200,7 @@ const misc_DisplaySuccessMessage = function(title, text) {
 const misc_GetPrice = function(value) {
     var val = "R$" + value;
     return val;
-}
+};
 
 const misc_GetStringWithMaxCharacthers = function(string, maxChars) {
     if (string.length <= maxChars) {
@@ -191,11 +208,11 @@ const misc_GetStringWithMaxCharacthers = function(string, maxChars) {
     }
 
     return string.substring(0, maxChars) + "...";
-}
+};
 
 /*
 Usage of States & City functions
-1. On loading of page, ini your State Dropdown with function misc_InitDropdownWithStates(statedropdown, citydropdown)
+1. On loading of page, init your State Dropdown with function misc_InitDropdownWithStates(statedropdown, citydropdown)
 2. When changing state dropdown a onChange function will be triggered to fill citydropdown
 3. In case of programatically change state dropdown value
 3.1 set waitTimeout (function(), delay) to wait 2secs in order to all cities to be loaded in city dropdown
@@ -237,7 +254,7 @@ const misc_GetStateIdFromSigla = function(uf){
         (state.sigla === uf) ? (stateId = state.id) : "";
     });
     return stateId;
-}
+};
 
 const misc_InitDropdownWithStates = function(dropdownState, dropdownCity){
     var values = [];
@@ -256,7 +273,7 @@ const misc_InitDropdownWithStates = function(dropdownState, dropdownCity){
             });
         }
     });
-}
+};
 
 const misc_InitDropdownCityFromStateSelection = async function (sigla, dropdownCity){
     var values = [];
@@ -270,4 +287,4 @@ const misc_InitDropdownCityFromStateSelection = async function (sigla, dropdownC
         values.push({ name: city.nome, value: city.nome});
     });
     dropdownCity.dropdown({ values: values });
-}
+};

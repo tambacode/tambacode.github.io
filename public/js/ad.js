@@ -438,13 +438,14 @@ const ads_IsObjectFiltersValid = function(filters, obj) {
         if (filters['subcategory'] != obj['subcategory']) { return false; }
     }
 
-    const price = parseFloat(obj['price']);
+    const price = misc_GetFloatNumber(obj['price']);
+    
     if (filters['minprice']) {
-        if (price < parseFloat(filters['minprice'])) { return false; }
+        if (price < misc_GetFloatNumber(filters['minprice'])) { return false; }
     }
 
     if (filters['maxprice']) {
-        if (price > parseFloat(filters['maxprice'])) { return false; }
+        if (price > misc_GetFloatNumber(filters['maxprice'])) { return false; }
     }
 
     return true;
