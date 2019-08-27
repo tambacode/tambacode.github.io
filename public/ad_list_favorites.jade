@@ -1,6 +1,6 @@
 html
     head
-        title Shared.Farm - Meus Anúncios
+        title Shared.Farm - Meus Favoritos
         
         meta(charset='utf-8')
         meta(name='viewport', content='width=device-width, initial-scale=1')
@@ -19,10 +19,10 @@ html
             include templates/AnunciarAgora
             #all
                 #filters.ui.padded.grid
-                #ads.ui.grid
+                #adlistfav.ui.grid
                     include templates/loader                    
                 br
                 br
             include templates/footer
         script.
-            ad_List_ListAdsByUser("mylist");
+            ad_List_ListAdsByUser("myfavs");

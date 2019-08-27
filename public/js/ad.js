@@ -650,7 +650,12 @@ const ad_List_ListAdsByUser = function(term) {
 
     if (firstCall) {
         //TODO: Change "title" to "timestamp", when this field is added to database, so we can order the ads list by their creation date.
-        db_getOrderByChildContainsLimitToLast("ad", "user", getUser, 50, onSucess, onError, onError);
+        if(term == "mylist"){
+            db_getOrderByChildContainsLimitToLast("ad", "user", getUser, 50, onSucess, onError, onError);
+        }else if(term == "myfavs"){
+            db_getOrderByChildContainsLimitToLast("ad", "favorite", 1, 50, onSucess, $("#adlistfav").append("<div> Pagina em desenvolvimento </div>"), misc_RemoveLoader());
+        }     
+        
         //db_get("ad", onSucess, onError, onError);
     } else {
         console.log("ADD PAGINATION HERE");
