@@ -536,6 +536,7 @@ const ads_List_UnfavoriteAd = function(uid) {
 const ad_GetAllValues = function(){
     const adUID = misc_GetUrlParam('uid');
     const edit = misc_GetUrlParam('isitforEdit');
+    const user = localStorage.getItem('auth_UserUID');
     var adPath = 'ad/' + adUID;
 
     var onSucess = function(snapshot) {
@@ -550,12 +551,16 @@ const ad_GetAllValues = function(){
             , null
             , null
         );
-
+        if(val.user == user) {
+            document.getElementById("SendMessage").style.visibility = "hidden";
+        }
     };
 
     db_get('ad/' + adUID, onSucess, ad_ErrorFunction, ad_ErrorFunction);
+    
+
+
     if(!edit){
-        document.getElementById("SendMessage").style.visibility = "hidden";
         document.getElementById("EditAd").style.visibility = "hidden";
     }
     

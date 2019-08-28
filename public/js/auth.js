@@ -16,6 +16,18 @@ var auth_RequireLoggingToAccess = function(url) {
     }
 };
 
+var auth_RequireLoggingToAccessFunction = function(fun_metod, url) {
+    const adUID = misc_GetUrlParam('uid');
+
+    if (localStorage.getItem('auth_UserOnline')) {
+        fun_metod;
+    } else if(url == 'ad_detail.html'){
+        misc_GoToPage('login.html?redirectUrl=' + url + '?uid=' + adUID);
+    }else {
+        misc_GoToPage('login.html?redirectUrl=' + url);
+    }
+};
+
 var auth_RequestLogin = function(provider, providerName) {
     firebase.auth().useDeviceLanguage();
     

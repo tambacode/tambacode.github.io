@@ -50,7 +50,7 @@ html
                         .sub.header
                             i.map.marker.alternate.icon
                             .content#district
-                    .button.fluid.ui.orange.button(id='SendMessage' onclick="message_StartChatWithProductOwner();")
+                    .button.fluid.ui.orange.button(id='SendMessage' onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner(), 'ad_detail.html');")
                         | Enviar Mensagem
                     button.fluid.ui.orange.button(id='EditAd' onclick="ad_RedirectForEditAd();")
                         | Editar Anúncio
