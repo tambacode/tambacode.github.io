@@ -5,7 +5,7 @@ fb.firebaseConfig = {
     authDomain: "shared-farm-dev.firebaseapp.com",
     databaseURL: "https://shared-farm-dev.firebaseio.com",
     projectId: "shared-farm-dev",
-    storageBucket: "",
+    storageBucket: "shared-farm-dev.appspot.com",
     messagingSenderId: "619465723035",
     appId: "1:619465723035:web:4dac067dc0eb3abf"
   };
@@ -14,7 +14,7 @@ firebase.initializeApp(fb.firebaseConfig);
 
 ////////////////// USER //////////////////
 user_OpenProfile = function() {
-	auth_RequireLoggingToAccess('ad_user.html');
+	auth_RequireLoggingToAccess('user_info.html');
 };
 ////////////////// USER //////////////////
 
@@ -24,11 +24,20 @@ misc_GetUrlParam = function(param) {
 };
 
 misc_GoToPage = function(url) {
-	window.location.href = url;	
+    if (window.location.pathname.replace('/', '') != url) {
+        window.location.href = url; 
+    }
 }
 
 misc_RemoveLoader = function() {
-    $('#loader').remove();
+    var loader = $('#loader');
+
+    if (loader != null) {
+        loader.remove();
+        return true;
+    }
+
+    return false;
 }
 
 misc_RemoveErrorNullMsg = function() {
@@ -140,3 +149,27 @@ const misc_DisplayErrorMessage = function(title, text) {
         time: 2
     });
 };
+
+const misc_DisplaySuccessMessage = function(title, text) {
+    $.uiAlert({
+        textHead: title,
+        text: text,
+        bgcolor: '#8FE15F',
+        textcolor: '#fff',
+        position: 'top-center',
+        time: 2
+    });
+};
+
+const misc_GetPrice = function(value) {
+    var val = "R$" + value;
+    return val;
+}
+
+const misc_GetStringWithMaxCharacthers = function(string, maxChars) {
+    if (string.length <= maxChars) {
+        return string;
+    }
+
+    return string.substring(0, maxChars) + "...";
+}

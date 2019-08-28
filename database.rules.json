@@ -8,7 +8,8 @@
     },
     "ad": {
       ".read": true,
-      ".write": true
+      ".write": true,
+      ".indexOn": "title"
     },
     "messages": {
       ".read": true,
@@ -17,6 +18,10 @@
     "messages_last_info": {
       ".read": true,
       ".write": true
+    },
+    "ads_images": {
+      ".read": true,
+      ".write": true,
     }
   }
 }

@@ -1,7 +1,16 @@
 .ui.sidebar.vertical.menu
-    a(href="index.html").item
+    a.item(href="index.html")
         | Home
-    a(onClick="messages_GoTo();").item
+        i.home.icon.Large
+    a.item(onclick="auth_RequireLoggingToAccess('ads_MyAds.html');")
+        | Meus Anúncios
+        i.shopping.bag.icon.Large
+    a.item(onclick="auth_RequireLoggingToAccess('ads_MyFavorites.html');")
+        | Favoritos
+        i.heart.icon.Large
+    a.item(onClick="messages_GoTo();")
         | Mensagens
-    a(onClick="auth_LogoffUser();").item
+        i.comment.icon.Large
+    a.item.hidden#LogoutButton(onClick="auth_LogoffUser();")
         | Sair
+        i.user.circle.icon.Large

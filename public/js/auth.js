@@ -69,12 +69,13 @@ var auth_LogOnUser = function(firebaseUser) {
     redirectUrl = misc_GetUrlParam('redirectUrl');
     if (redirectUrl) {
         auth_RequireLoggingToAccess(redirectUrl);
+    } else {
+        $('#LogoutButton').removeClass("hidden");
     }
 }
 
 var auth_LogoffUser = function() {
-    if (localStorage.getItem('auth_UserOnline'))
-    {
+    if (localStorage.getItem('auth_UserOnline')) {
         firebase.auth().signOut();
         localStorage.removeItem('auth_UserOnline');
         localStorage.removeItem('auth_UserUID');

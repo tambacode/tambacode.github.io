@@ -5,9 +5,17 @@
 		"users": {
 			"uid_1": {
 				"name": "Test name",
-				"address": "Lorem ipsum dolor sit amet.",
+				"email" : "abc@domain.com",
+				"phone_ddd" :"XXX",
+				"phone_number" : "YYYYY-ZZZZ",
+				"cep" : "XXXXX-ZZZ",
+				"publicplace" : "Rua x",
+				"house_number" : "11",
+				"district" : "Bairro X",
+				"complement" : "Quadra tal, edifico tal",
+				"city" : "Amazonas",
+				"state" : "AM",
 				"profile_picture_link": "url link containing the source image to the profile image",
-				"phone_number": "(99) 99999-9999",
 				"push_notification_key" : "notification_key",
 				"ads_id": {
 					"uid_1": "uid_1",
@@ -43,6 +51,27 @@
 						"content": "Content message example"
 					}
 				}
+			}
+		},
+		"ad": {
+			"uid_1": {
+				"users_uid": "users_uid",
+				"title": "Titulo do produto",
+				"description": "Descricao do produto ou serviço",
+				"category": "Categoria do produto ou serviço, ",
+				"subcategory": "Sub-categoria do produto ou serviço",
+				"price": "preço do porduto ou serviço anunciado",
+				"location": "Localizacao ou ponto de referencia",
+        		"cep": "cep",
+        		"tel": "Telefone do anunciante",
+        		"tel_visible": "1 pra visivel e 0 p invisivel", 
+        		"timestamp": "1563646315703"
+			}
+		},
+		"ad_images": {
+			"ad_uid_-LlP6HtKyfEVRBdFaAb6": {
+				"-LlP6HtKyfEVRBdFaAb6": "https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/ads_images%2F-LlP6CYEiOz13fDD8i7-?alt=media&token=972aec08-30f1-4709-9e1a-48c7bf5a9a19",
+				"-LlP9c0v0KHMqDkaLi5n": "https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/ads_images%2F-LlP6DZn1E7KlpyR0rA1?alt=media&token=89f70e80-3777-4a27-8637-4a45aad5deaa",
 			}
 		}
 	}

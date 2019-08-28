@@ -1,5 +1,7 @@
 ﻿var db = firebase.database();
+var db_storage = firebase.storage()
 var rootRef = db.ref();
+var rootStorageRef = db_storage.ref();
 
 //  Use to get a new key when inserting a new data on DB
 //  path (string): 'SharedFarm/Users'
@@ -22,8 +24,15 @@ var db_set = function(path, postData) {
     db.ref(path).set(postData);
 };
 
-var db_update = function(path, postData) {
-    db.ref(path).update(postData);
+//https://firebase.google.com/docs/database/web/read-and-write
+var db_update = function(path, postData, callback) {
+    db.ref(path).update(postData,
+        function (error){
+            if (error === null)
+                callback;
+            else
+                misc_DisplayErrorMessage("Cadastro","Cadastro não foi realizado");// Data saved successfully!
+        });
 };
 
 var db_get = function(path, onSucess, onNullValue, onError) {
@@ -42,6 +51,37 @@ var db_get = function(path, onSucess, onNullValue, onError) {
 
 var db_getOrderByChild = function(path, orderByChild, onSucess, onNullValue, onError) {
     db.ref(path).orderByChild(orderByChild).once('value')
+        .then(function(snapshot) {
+            if (snapshot.val() == null)
+            {
+                onNullValue(snapshot);
+            } else {
+                onSucess(snapshot);
+            }
+        }).catch(function(error) {
+            onError(error);
+        });
+};
+
+var db_getOrderByChildLimitToLast = function(path, orderByChild, limitToLast, onSucess, onNullValue, onError) {
+    db.ref(path).orderByChild(orderByChild).limitToLast(limitToLast).once('value')
+        .then(function(snapshot) {
+            if (snapshot.val() == null)
+            {
+                onNullValue(snapshot);
+            } else {
+                onSucess(snapshot);
+            }
+        }).catch(function(error) {
+            onError(error);
+        });
+};
+
+var db_getOrderByChildContainsLimitToLast = function(path, orderByChild, containsString, limitToLast, onSucess, onNullValue, onError) {
+    //.endAt(endAt + "\uf8ff")
+    db.ref(path).orderByChild(orderByChild)
+                .startAt(containsString)
+                .limitToLast(limitToLast).once('value')
         .then(function(snapshot) {
             if (snapshot.val() == null)
             {
@@ -94,6 +134,7 @@ var db_getInnerJoin = function(table1, pathInTableOne, table2, onSucess, onNullV
 var db_InsertUserOnLogin = function(path, name, providerName, providerToken) {
     var dataToInsert = {
         name: name,
+        profile_picture_link: 'https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/users_images%2Fimage.png?alt=media&token=eeddedea-0ead-4ced-8741-651f58bcd9ff',
         tokens : {}
     };
 
@@ -102,14 +143,56 @@ var db_InsertUserOnLogin = function(path, name, providerName, providerToken) {
     db_set(path, dataToInsert);
 };
 
+var db_getUserToEdit = function() {
+    var path = '/users/' + localStorage.getItem('auth_UserUID');
+
+    var onSuccess = function(snapshot) {
+        $.each(snapshot.val(), function(field, value ) {
+            if (field === "state")
+                $('#' + field).dropdown('set selected', value);
+            else if (field === "profile_picture_link" ) {
+                if (value !== undefined) {
+                    $('#imageuploaded')
+                        .attr('src', value);
+                    $('#imagebackgrounded')
+                        .attr('style','background-image: url("' + value +'"); background-size: auto, cover;');
+                }
+            }
+            else
+                $('#' + field).val(value);
+        });
+        misc_RemoveLoader();
+        user_showFields();
+    };
+
+    var onNullValue = function(snapshot) {
+    };
+
+    var onError = function(snapshot) {
+    };
+
+    db_get(path, onSuccess, onNullValue, onError);
+};
+
 var db_getUserInfo = function() {
     var path = '/users/' + localStorage.getItem('auth_UserUID');
 
     var onSuccess = function(snapshot) {
+        $("#name").text(snapshot.val().name);
+        $("#email").text(snapshot.val().email);
+        if (snapshot.val().phone_ddd !== undefined && snapshot.val().phone_number !== undefined)
+            $("#phone_with_ddd").text("(" + snapshot.val().phone_ddd + ") " + snapshot.val().phone_number);
+        if (snapshot.val().city !== undefined && snapshot.val().state !== undefined)
+            $("#city_state").text(snapshot.val().city + " - " + snapshot.val().state);
         
-        $.each(snapshot.val(), function(field, value ) {
-            document.getElementById(field).value = value;
-        });
+        if (snapshot.val().profile_picture_link !== undefined) {
+            $('#imageuploaded')
+                .attr('src', snapshot.val().profile_picture_link);
+            $('#imagebackgrounded')
+                .attr('style','background-image: url("' + snapshot.val().profile_picture_link +'"); background-size: auto, cover;');
+        }
+        misc_RemoveLoader();
+        user_showFields();
     };
 
     var onNullValue = function(snapshot) {
@@ -127,35 +210,90 @@ var db_updateUserInfo = function() {
     //Form fields
     var name = document.getElementById('name').value;
     var email = document.getElementById('email').value;
-    var phone = document.getElementById('phone').value;
+    var phone_ddd = document.getElementById('phone_ddd').value;
+    var phone_number = document.getElementById('phone_number').value;
     var cep = document.getElementById('cep').value;
 
     var publicplace = document.getElementById('publicplace').value;
-    var number = document.getElementById('number').value;
+    var house_number = document.getElementById('house_number').value;
     var district = document.getElementById('district').value;
 
     var complement = document.getElementById('complement').value;
     var city = document.getElementById('city').value;
     var state = document.getElementById('state').value;
-
-    var terms = "true";
     
     var dataToInsert = {
         name: name,
         email: email,
-        phone: phone,
+        phone_ddd: phone_ddd,
+        phone_number: phone_number,
         cep: cep,
         publicplace: publicplace,
-        number: number,
+        house_number: house_number,
         district: district,
         complement: complement,
         city: city,
-        state: state,
-        terms: terms
+        state: state
+    };
+    
+    db_update(path,dataToInsert,misc_GoToPage("user_info.html"));
+
+};
+
+const db_updateUserImage = function(url){
+    var path = '/users/' + localStorage.getItem('auth_UserUID');
+
+    const dummy = function(){
+        console.log("uploaded");
+    }
+
+    var dataToInsert = {    
+        profile_picture_link: url
+    }
+
+    db_update(path,dataToInsert,dummy);
+}
+
+/*
+Params: Function to update files to storage
+path: storage path from root on e.g. users_image/
+file: array from input type=file e.g. document.getElementById('fileInput').files[0];
+callback: function to be executed when uploaded is success to get url of uploaded file
+*/
+const db_saveImage = function(path, file, callback) {
+    //This function add imagens on data base
+    const name = path + "_" + file.name;
+    const metadata = {
+        contentType: file.type
     };
 
-    db_update(path,dataToInsert);
-};
+    // Create a storage ref
+    var storageRef = db_storage.ref(name);
+    // Upload file
+    var task = storageRef.put(file, metadata);
+
+    // Update progress bar
+    task.on('state_changed',
+        function progress(snapshot) {
+            var perc = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        },
+        function error(err) {
+            misc_DisplayErrorMessage("Upload imagem","Image Upload Error: " + err);
+        },
+        function complete() {  
+             // Upload completed successfully, now we can get the download URL
+            task.snapshot.ref.getDownloadURL().then(callback);
+        }
+    );
+}
+
+const db_saveUserImage = function(){
+    var image_path = 'users_images/' + localStorage.getItem('auth_UserUID');
+
+    var file = document.getElementById('fileInput').files[0];
+
+    db_saveImage(image_path, file, db_updateUserImage);
+}
 
 ///////////////////////////////// EXAMPLES /////////////////////////////////
 //  Below there are one (1) method to examplify how to use the methods above
@@ -168,4 +306,4 @@ var insertData = function(userId, name, notificationKey) {
 
     db_set(path, postData);
 };
-////////////////////////////// END OF EXAMPLES //////////////////////////////
+////////////////////////////// END OF EXAMPLES /////////////////////////////

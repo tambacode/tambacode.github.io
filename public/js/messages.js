@@ -65,8 +65,8 @@ const messages_GetMessageCard = function(uid, img, title, description, timestamp
     card = card.replace('{2}', misc_GetHourMin(timestamp));
     card = card.replace('{3}', uid);
     card = card.replace('{4}', uid);
-    //card = card.replace('{5}', img);
-    card = card.replace('{5}', 'imgs/black.png');
+    card = card.replace('{5}', img);
+    //card = card.replace('{5}', 'imgs/black.png');
 
     return card;
 };
@@ -161,7 +161,7 @@ const message_GetMessageContent = function(owner, timestamp, content)
     let timestampMsg = '<p style="font-size: x-small;margin: 0 10px;">' + misc_GetHourMin(timestamp) + '</p>';
 
     if (owner) {
-        let ownerMsg = '<div class="two wide column"></div><div class="right aligned fourteen wide column"><div class="blue ui right pointing label">{0}</div>' + timestampMsg + '</div>';
+        let ownerMsg = '<div class="two wide column"></div><div class="right aligned fourteen wide column"><div class="orange ui right pointing label">{0}</div>' + timestampMsg + '</div>';
         return ownerMsg.replace('{0}', content);
     } else {
         let otherMsg = '<div class="fourteen wide column"><div class="ui left pointing label">{0}</div>' + timestampMsg + '</div><div class="two wide column"></div>'; 
@@ -226,9 +226,8 @@ const message_RemoveErrorNullMsg = function() {
 };
 
 const message_StartChatWithProductOwner = function() {
-    //const adUID = misc_GetUrlParam('uid');
     const currentUID = localStorage.getItem('auth_UserUID');
-    const adUID = '-Lkavh0cBxzZvDpHzMEC';
+    const adUID = misc_GetUrlParam('uid');
 
     const path = 'ad/' + adUID + '/user';
 

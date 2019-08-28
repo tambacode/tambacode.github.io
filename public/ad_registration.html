@@ -1,12 +1,11 @@
 
 <html>
   <head>
-    <title>Shared.Farm</title>
+    <title>Shared.Farm - Cadastro de Anúncio</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <link rel="manifest" href="manifest.json"/>
-    <!-- Please don't use this type of comment >> // << because it is compiled in the HTML-->
     <link rel="stylesheet" type="text/css" href="semanticUI/semantic.css"/>
     <link rel="stylesheet" type="text/css" href="semanticUI/components/Semantic-UI-Alert.css"/>
     <link rel="stylesheet" type="text/css" href="css/webapp.css"/>
@@ -18,6 +17,7 @@
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-messaging.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-storage.js"></script>
     <script src="semanticUI/semantic.min.js"></script>
     <script type="text/javascript" src="semanticUI/components/Semantic-UI-Alert.js"></script>
     <script src="js/main.js"></script>
@@ -28,31 +28,35 @@
     <script src="js/ad.js"></script>
   </head>
   <body>
-    <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home</a><a onClick="messages_GoTo();" class="item">Mensagens</a><a onClick="auth_LogoffUser();" class="item">Sair</a></div>
+    <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home<i class="home icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ads_MyAds.html');" class="item">Meus Anúncios<i class="shopping bag icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ads_MyFavorites.html');" class="item">Favoritos<i class="heart icon Large"></i></a><a onClick="messages_GoTo();" class="item">Mensagens<i class="comment icon Large"></i></a><a id="LogoutButton" onClick="auth_LogoffUser();" class="item hidden">Sair<i class="user circle icon Large"></i></a></div>
     <div class="pusher">
       <div id="menu" class="ui sf_header">
         <div class="ui padded grid">
-          <div class="blue row">
+          <div class="orange row">
             <div class="three wide column">
-              <button onclick="ui_openSidebar();" class="ui icon button blue"><i class="icon list large"></i></button>
+              <button onclick="ui_openSidebar();" class="ui icon button orange"><i class="icon list large"></i></button>
             </div>
             <div class="ten wide column">
               <div class="ui search">
                 <div class="ui icon input big fluid">
-                  <input type="text" placeholder="Pesquisar..." class="prompt"/><i class="search icon"></i>
+                  <input id="adsSearchInput" type="text" placeholder="Pesquisar..." class="prompt"/><i id="adsSearchButton" onclick="ads_SearchAd();" class="link search icon"></i>
                 </div>
                 <div class="results"></div>
               </div>
             </div>
             <div class="right aligned three wide column">
-              <button onclick="user_OpenProfile();" class="ui icon button blue"><i class="icon user circle large"></i></button>
+              <button onclick="user_OpenProfile();" class="ui icon button orange"><i class="icon user circle large"></i></button>
             </div>
+            <script>
+              const searchTerm = misc_GetUrlParam('searchTerm');
+              $("#adsSearchInput").val(searchTerm);
+            </script>
           </div>
         </div>
       </div>
       <div id="all"><br/>
         <div class="ui container">                   
-          <form id="InsertAdRegistration" class="ui form">
+          <form id="InsertAdRegistration" onsubmit="db_InsertAdRegistration(); return false;" class="ui form">
             <div class="field">
               <label>Título</label>
               <input type="text" name="title" id="title" maxlength="50" required="required" placeholder="Título do anúncio"/>
@@ -61,30 +65,40 @@
               <label>Descrição</label>
               <textarea type="text" name="description" id="description" maxlength="250" required="required" placeholder="Descrição" class="ui padded sixteen column grid"></textarea>
             </div>
-            <div class="field">                   
-              <div class="inline fields">
-                <label>Categoria</label>
-                <div class="field">
-                  <div class="ui radio checkbox">
-                    <input type="radio" name="category" id="products" value="produtos" checked=""/>
-                    <label>Produtos</label>
-                  </div>
+            <div class="field"></div>
+            <div class="inline fields">
+              <label>Categoria</label>
+              <div class="field">
+                <div onclick="ad_GetCategory();" class="ui radio checkbox">
+                  <input type="radio" name="category" id="products" value="produtos" checked=""/>
+                  <label>Produtos</label>
                 </div>
-                <div class="field">
-                  <div class="ui radio checkbox">
-                    <input type="radio" name="category" id="services" value="servicos"/>
-                    <label>Serviços</label>
-                  </div>
+              </div>
+              <div class="field">
+                <div onclick="ad_GetCategory();" class="ui radio checkbox">
+                  <input type="radio" name="category" id="services" value="servicos"/>
+                  <label>Serviços                    </label>
                 </div>
+              </div>
+            </div>
+            <label>Subcategoria</label>
+            <div class="field">
+              <div id="subcategory" class="ui dropdown">
+                <div class="text"></div><i class="dropdown icon"></i>
+              </div>
+            </div>
+            <div class="field">
+              <label>Imagem</label>
+              <div id="ImagesGrid" class="ui padded centered grid">
               </div>
             </div>
             <div class="field">
               <label>Preço R$</label>
-              <input type="text" name="price" id="price" minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," required="required" onClick="$(this).maskMoney();"/>
+              <input type="text" name="price" id="price" minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," required="required" onclick="$(this).maskMoney();"/>
             </div>
             <div class="field">
               <label>Localização</label>
-              <input type="text" name="location" id="location" maxlength="100" placeholder="Localização"/>
+              <input type="text" name="locationad" id="locationad" maxlength="100" placeholder="Localização"/>
             </div>
             <div class="field">
               <label>CEP</label>
@@ -92,14 +106,38 @@
             </div>
             <div class="field">
               <label>Telefone</label>
-              <input type="text" name="tel" id="tel" minlength="11" maxlength="11" placeholder="(00) 00000-0000" onkeypress="$(this).mask('(00) 00000-0000');"/>
+              <div class="inline fields">
+                <div class="ui equal width center grid">
+                  <div class="column">
+                    <div class="field">
+                      <input type="text" name="tel" id="tel" minlength="11" maxlength="11" placeholder="(00) 00000-0000" onkeypress="$(this).mask('(00) 00000-0000');"/>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div style="padding-top: 10px;" class="field">
+                      <div class="ui checkbox">
+                        <input type="checkbox" id="tel_visible" name="tel_visible" checked=""/>
+                        <label>Visível no anúncio?</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="field">
-              <button id="InsertAdRegistration" onClick="db_InsertAdRegistration();" class="ui button">Cadastrar</button>
+              <button id="InsertAdRegistrationButton" class="orange ui button">Cadastrar</button>
+            </div>
+            <div class="field">
+              <button onclick="ad_update();" id="updateButton" class="orange ui button hidden">Editar</button>
             </div>
           </form>
         </div>
       </div>
     </div>
+    <script>
+      ad_Register_AddNewImage();
+      ad_GetCategory();
+      ad_fillfieldforEdit();
+    </script>
   </body>
 </html>

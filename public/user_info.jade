@@ -1,0 +1,57 @@
+html
+    head
+        title Shared.Farm
+        
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        meta(http-equiv="X-UA-Compatible" content="ie=edge")
+        link( rel="manifest" crossorigin="use-credentials" href="%PUBLIC_URL%/manifest.json")
+        
+        // Please don't use this type of comment >> // << because it is compiled in the HTML
+        //- Use this one instead >> //- << because it does not compile in the HTML
+
+        //- CSS
+        include templates/styles
+        
+        //- Script
+        include templates/scripts
+    body
+        include templates/sideBar
+        .pusher
+            include templates/header
+            #all
+                br
+                include templates/loader
+                #display_user_edit.ui(style="display:none;")
+                    .ui.grid#imagebackgrounded(style="background-image: url('');")
+                        .row
+                        .row
+                            img.ui.medium.centered.circular.image#imageuploaded(src="" style="border:5px solid white;")
+                        .row
+                    .ui.centered.segments
+                        .ui.segment
+                            i.user.icon
+                            label#name ...
+                        .ui.segment
+                            i.mail.icon
+                            label#email ...
+                        .ui.segment
+                            i.phone.icon
+                            label#phone_with_ddd ...
+                        .ui.segment
+                            i.map.marker.alternate.icon
+                            label#city_state ...
+                    .ui.padded.column.row.grid
+                        .two.wide.column
+                        .ten.wide.column.centered
+                            a.ui.orange.button(href="user_edit.html")
+                                i.save.icon
+                                |Editar infomações
+                        .two.wide.column
+                include templates/home
+                br
+                br
+            include templates/footer
+        script(src='js/user.js')
+        script.
+            db_getUserInfo();

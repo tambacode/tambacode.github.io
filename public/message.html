@@ -11,10 +11,13 @@
     <link rel="stylesheet" type="text/css" href="css/webapp.css"/>
     <link rel="stylesheet" type="text/css" href="css/sharedfarm.css"/>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-messaging.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-storage.js"></script>
     <script src="semanticUI/semantic.min.js"></script>
     <script type="text/javascript" src="semanticUI/components/Semantic-UI-Alert.js"></script>
     <script src="js/main.js"></script>
@@ -22,40 +25,46 @@
     <script src="js/auth.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/messages.js"></script>
+    <script src="js/ad.js"></script>
   </head>
   <body>
-    <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home</a><a onClick="messages_GoTo();" class="item">Mensagens</a><a onClick="auth_LogoffUser();" class="item">Sair</a></div>
+    <div class="ui sidebar vertical menu"><a href="index.html" class="item">Home<i class="home icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ads_MyAds.html');" class="item">Meus Anúncios<i class="shopping bag icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ads_MyFavorites.html');" class="item">Favoritos<i class="heart icon Large"></i></a><a onClick="messages_GoTo();" class="item">Mensagens<i class="comment icon Large"></i></a><a id="LogoutButton" onClick="auth_LogoffUser();" class="item hidden">Sair<i class="user circle icon Large"></i></a></div>
     <div class="pusher">
       <div id="menu" class="ui sf_header">
         <div class="ui padded grid">
-          <div class="blue row">
+          <div class="orange row">
             <div class="three wide column">
-              <button onclick="ui_openSidebar();" class="ui icon button blue"><i class="icon list large"></i></button>
+              <button onclick="ui_openSidebar();" class="ui icon button orange"><i class="icon list large"></i></button>
             </div>
             <div class="ten wide column">
               <div class="ui search">
                 <div class="ui icon input big fluid">
-                  <input type="text" placeholder="Pesquisar..." class="prompt"/><i class="search icon"></i>
+                  <input id="adsSearchInput" type="text" placeholder="Pesquisar..." class="prompt"/><i id="adsSearchButton" onclick="ads_SearchAd();" class="link search icon"></i>
                 </div>
                 <div class="results"></div>
               </div>
             </div>
             <div class="right aligned three wide column">
-              <button onclick="user_OpenProfile();" class="ui icon button blue"><i class="icon user circle large"></i></button>
+              <button onclick="user_OpenProfile();" class="ui icon button orange"><i class="icon user circle large"></i></button>
             </div>
+            <script>
+              const searchTerm = misc_GetUrlParam('searchTerm');
+              $("#adsSearchInput").val(searchTerm);
+            </script>
           </div>
         </div>
       </div>
-      <div id="all">
+      <div id="all"><br/>
+        <div id="ads" class="ui grid">
+        </div>
         <div id="chatMessages" class="ui padded grid">
-          <div class="row"></div>
           <div id="loader" class="sixteen wide column row">
             <div class="ui active centered inline loader"></div>
           </div>
         </div>
         <div id="messageInput" class="ui">
           <div class="ui icon input fluid">
-            <input id="textMessage" type="text" placeholder="Digite uma mensagem..." onClick="message_SendMessage();" class="prompt"/><i class="chevron right icon"></i>
+            <input id="textMessage" type="text" placeholder="Digite uma mensagem..." class="prompt"/><i onClick="message_SendMessage();" class="chevron right link icon"></i>
           </div>
         </div><br/><br/>
       </div>

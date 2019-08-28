@@ -1,0 +1,42 @@
+html
+    head
+        title Shared.Farm - Pesquisa de anúncios
+        
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        meta(http-equiv="X-UA-Compatible" content="ie=edge")
+        link( rel="manifest" crossorigin="use-credentials" href="%PUBLIC_URL%/manifest.json")
+        
+        //- CSS
+        include templates/styles
+        
+        //- Script
+        include templates/scripts
+    body
+        include templates/sideBar
+        .pusher
+            include templates/header
+            include templates/AnunciarAgora
+            #all
+                #filters.ui.padded.grid
+                #ads.ui.grid
+                    include templates/loader
+                    //each val in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                        .four.wide.column.product_image
+                            a(href="ad_detail.html?uid=TESTID")
+                                img.ui.tiny.rounded.image(src="imgs/black.png")
+                        .twelve.wide.column.product_info
+                            a(href="ad_detail.html?uid=TESTID")
+                                h4#title
+                                    | Terra para cultivo de batataaa
+                            i.red.large.link.heart.outline.icon.favoriteItem(onclick="ads_FavoriteAdClick(this);", uid="TESTID")
+                            h3#price
+                                | R$3.900,00
+                            span#info
+                                | info sobre o produto como localização
+                            .ui.divider(style="width: 100%;")
+                br
+                br
+            include templates/footer
+        script.
+            ads_List_ListAdsByTerm(misc_GetUrlParam("searchTerm"));

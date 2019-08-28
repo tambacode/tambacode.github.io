@@ -1,0 +1,101 @@
+html
+    head
+        title Shared.Farm
+        
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        meta(http-equiv="X-UA-Compatible" content="ie=edge")
+        link( rel="manifest" crossorigin="use-credentials" href="%PUBLIC_URL%/manifest.json")
+        
+        // Please don't use this type of comment >> // << because it is compiled in the HTML
+        //- Use this one instead >> //- << because it does not compile in the HTML
+
+        //- CSS
+        include templates/styles
+        
+        //- Script
+        include templates/scripts
+    body
+        include templates/sideBar
+        .pusher
+            include templates/header
+            #all
+                include templates/loader
+                #display_user_edit.ui.container(style="display:none")         
+                    form.ui.form.fluid.user_edit
+                        .field
+                            .ui.grid#imagebackgrounded(style="background-image: url('');")
+                                .row
+                                .row
+                                    .ui.centered.circular.image#user_image
+                                        .ui.dimmer
+                                            .content
+                                                .ui.small.primary.button(onclick="user_openFileDialog()") Subir nova
+                                                input#fileInput(type="file" style="display: none;")
+                                        img.ui.small.image#imageuploaded(src="" style="border:5px solid white;")
+                                .row
+                        br
+                        .field.required
+                            label Nome
+                            input#name(type="text" name="name" placeholder="Nome completo")
+                        .field.required
+                            label Email
+                            input#email(type="email" name="email" placeholder="email")
+                        .field
+                            .ui.grid                       
+                                .six.wide.column
+                                    .field.required
+                                        label DDD
+                                        input#phone_ddd(type="tel" name="phone_ddd" placeholder="99")
+                                .ten.wide.column
+                                    .field.required
+                                        label Telefone
+                                        input#phone_number(type="tel" name="phone_number" placeholder="99999-9999")
+                        .field
+                            .ui.grid
+                                .ten.wide.column                                
+                                    .field.required
+                                        label CEP
+                                        input#cep(type="text" name="cep" placeholder="99999-999")
+                                .six.wide.column
+                                    .field
+                                        label Número
+                                        input#house_number(input type="text" name="house_number" placeholder="123")
+                        .field
+                            label Logradouro
+                            input#publicplace(input type="email" name="publicplace" placeholder="Rua, Avenida, ...")
+                        .field
+                            label Bairro
+                            input#district(input type="text" name="district" placeholder="Bairro ...")
+                        .field
+                            label Complemento
+                            input#complement(input type="text" name="complement" placeholder="KM12, Fazenda ...")
+                        .field
+                            .ui.grid
+                                .six.wide.column
+                                    .field
+                                        label UF
+                                        select.ui.compact.dropdown#state
+                                            option(value="") ...
+                                .ten.wide.column
+                                    .field
+                                        label Localidade
+                                        input#city(input type="text" name="city" placeholder="São Paulo")
+                        .field
+                            .ui.padded.column.row.grid
+                                .two.wide.column
+                                .ten.wide.column.centered
+                                    .ui.fluid.primary.submit.button
+                                        i.save.icon
+                                        |Salvar infomações
+                                .two.wide.column
+                        .field
+                            .ui.error.message
+                include templates/home
+                br
+                br
+            include templates/footer
+        script(src='js/user.js')
+        script.
+            db_getUserToEdit();
+            user_initComponent();
