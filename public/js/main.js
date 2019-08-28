@@ -13,23 +13,31 @@ fb.firebaseConfig = {
 firebase.initializeApp(fb.firebaseConfig);
 
 ////////////////// USER //////////////////
-user_OpenProfile = function() {
+const user_OpenProfile = function() {
 	auth_RequireLoggingToAccess('user_info.html');
 };
 ////////////////// USER //////////////////
 
-misc_GetUrlParam = function(param) {
+const misc_GoToHome = function() {
+    auth_RequireLoggingToAccess('index.html');
+};
+
+const misc_GetUrlParam = function(param) {
 	var url = new URL(window.location.href);
 	return url.searchParams.get(param);
 };
 
-misc_GoToPage = function(url) {
-    if (window.location.pathname.replace('/', '') != url) {
+const misc_GoToPage = function(url, forceChange) {
+    if (window.location.pathname.replace('/', '') != url || forceChange) {
         window.location.href = url; 
     }
 }
 
-misc_RemoveLoader = function() {
+const misc_LowerCase = function(string) {
+    return string.toLowerCase();
+};
+
+const misc_RemoveLoader = function() {
     var loader = $('#loader');
 
     if (loader != null) {
@@ -40,7 +48,18 @@ misc_RemoveLoader = function() {
     return false;
 }
 
-misc_RemoveErrorNullMsg = function() {
+const misc_waitImageLoadReady = function(objHandler, url, callback){
+    $(objHandler)
+        .attr('src', url)
+        .one("load", callback)
+        .each(function() {
+            if(this.complete) {
+                $(this).load();
+            }
+        });
+}
+
+const misc_RemoveErrorNullMsg = function() {
     var errorMSG = $('#errorMsg');
 
     if (errorMSG) {
@@ -54,15 +73,15 @@ misc_RemoveErrorNullMsg = function() {
     }
 }
 
-misc_GetErrorMsg = function(withRow) {
+const misc_GetErrorMsg = function(withRow) {
     return misc_GetNullValueOrder(withRow, 'errorMsg', 'Erro ao executar a pesquisa');
 }
 
-misc_GetNullValueMsg = function(withRow) {
+const misc_GetNullValueMsg = function(withRow) {
     return misc_GetNullValueOrder(withRow, 'nullValueMsg', 'Nenhum valor encontrado');
 }
 
-misc_GetNullValueOrder = function(withRow, id, message) {
+const misc_GetNullValueOrder = function(withRow, id, message) {
     var str = '';
 
     if (withRow) {
@@ -79,7 +98,7 @@ misc_GetNullValueOrder = function(withRow, id, message) {
     return str;
 }
 
-misc_GetHourMin = function(timestamp) {
+const misc_GetHourMin = function(timestamp) {
     const date = new Date(parseInt(timestamp));
 
     var h = date.getHours();
@@ -96,7 +115,7 @@ misc_GetHourMin = function(timestamp) {
     return h + ":" + m;
 }
 
-misc_GetDate = function(date, includeDate, includeTime) {
+const misc_GetDate = function(date, includeDate, includeTime) {
     var msg = '';
 
     if (includeDate) {
@@ -110,7 +129,7 @@ misc_GetDate = function(date, includeDate, includeTime) {
     return '';
 }
 
-misc_GetDescriptiveMonth = function(month) {
+const misc_GetDescriptiveMonth = function(month) {
     switch(month) {
         case 0:
             return 'Janeiro'

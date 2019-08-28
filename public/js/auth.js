@@ -3,7 +3,7 @@ var auth_Init = function() {
         if (firebaseUser) {
             auth_LogOnUser(firebaseUser);
         } else {
-            auth_LogoffUser();
+            auth_UserLoggedOut();
         }
     });
 }
@@ -49,7 +49,7 @@ var auth_LoginSuccessful = function(result, providerName) {
     };
 
     var onNullValue = function(snapshot) {
-        db_InsertUserOnLogin(path, result.user.displayName, providerName, providerToken);
+        db_InsertUserOnLogin(path, result.user.displayName, result.user.email, providerName, providerToken);
 
         auth_LogOnUser(snapshot);
     };
@@ -71,16 +71,22 @@ var auth_LogOnUser = function(firebaseUser) {
         auth_RequireLoggingToAccess(redirectUrl);
     } else {
         $('#LogoutButton').removeClass("hidden");
+        $('#PerfilButton').removeClass("hidden");
     }
 }
 
-var auth_LogoffUser = function() {
-    if (localStorage.getItem('auth_UserOnline')) {
-        firebase.auth().signOut();
+const auth_LogoffUser = function() {
+    firebase.auth().signOut();
+};
+
+const auth_UserLoggedOut = function() {
+    if (localStorage.getItem('auth_UserOnline') != null) {
         localStorage.removeItem('auth_UserOnline');
         localStorage.removeItem('auth_UserUID');
 
-        misc_GoToPage('index.html');
+        misc_GoToPage('index.html', true);
+    } else {
+        $('#LoginButton').removeClass("hidden");
     }
 };
 

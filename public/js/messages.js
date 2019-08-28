@@ -4,8 +4,8 @@ const messages_GoTo = function() {
 };
 
 const messages_DisplayMessageList = function() {
-    const path = localStorage.getItem('auth_UserUID') + '/messages';
-    const userRef = rootRef.child('users');
+    const path = localStorage.getItem('auth_UserUID');
+    const tableOne = rootRef.child('users_messages');
     const msgsLastInfoRef = rootRef.child('messages_last_info');
 
     const messages = $("#messages");
@@ -54,7 +54,7 @@ const messages_DisplayMessageList = function() {
         $("#messages").empty().append(misc_GetErrorMsg(true));
     };
 
-    db_getInnerJoin(userRef, path, msgsLastInfoRef, onSucess, onNullValue, onError);
+    db_getInnerJoin(tableOne, path, msgsLastInfoRef, onSucess, onNullValue, onError);
 };
 
 const messages_GetMessageCard = function(uid, img, title, description, timestamp) {
@@ -240,18 +240,17 @@ const message_StartChatWithProductOwner = function() {
 };
 
 const message_StartChat = function(ownerUID, currentUID, adUID) {
-    // Add message to users/message/ (BOTH USERS)
-    // Add info to users/message/ (BOTH USERS)
+    // Add message to users_message/ (BOTH USERS)
+    // Add info to users_message/ (BOTH USERS)
     const addMessageToUser = function(userUID, messageUID)
     {
-        rootRef.child('users').child(userUID).child('messages').child(messageUID).set(messageUID);  
+        rootRef.child('users_messages').child(userUID).child(messageUID).set(messageUID);  
     }
 
     // Create message in messages_last_info
     var createMessageLastInfo = function(messageUID, ad_uid, ad_title, ad_image) {
         const msgLastInfoPath = 'messages_last_info/' + messageUID;
         
-        //snapshot.val().title
         const dataToInsert = {
             "ad_uid": ad_uid,
             "ad_title": ad_title,
@@ -275,9 +274,8 @@ const message_StartChat = function(ownerUID, currentUID, adUID) {
         newMsgPath = newMsgPath + messageUID;
 
         const adTitle = snapshot.val().title;
-        const adImage = "Test";
+        const adImage = $("#image").attr("src");
 
-        //snapshot.val().title
         const dataToInsert = {
             "ad_uid": adUID,
             "ad_title": adTitle,
@@ -300,7 +298,6 @@ const message_StartChat = function(ownerUID, currentUID, adUID) {
 }
 
 const message_ErrorFunction = function(error) {
-    console.log(error);
     misc_DisplayErrorMessage('Erro ao iniciar um chat', 'Favor tentar mais tarde');
 };
 ///////////////////////////////// SEND MESSAGE  /////////////////////////////////

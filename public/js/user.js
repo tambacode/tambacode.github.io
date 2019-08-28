@@ -1,4 +1,4 @@
-const user_getStates = function(){
+const user_InitDropdownWithStates = function(dropdown){
   var states_list = ["AC","AL","AM","AP","BA",
                      "CE","DF","ES","GO","MA",
                      "MG","MS","MT","PA","PB",
@@ -6,7 +6,7 @@ const user_getStates = function(){
                      "RO","RR","RS","SC","SE",
                      "SP","TO"];
   $.each(states_list, function (i, sigla) {
-    $("#state").append(new Option(sigla, sigla));
+    dropdown.append(new Option(sigla, sigla));
   });
 }
 
@@ -81,24 +81,13 @@ const user_previewImage = function(evt){
     misc_DisplayErrorMessage("Tamanho da imagem","Imagem maior de 5MB");
     return;
   }
-  if (evt.target.files && evt.target.files[0]) {
-    var reader = new FileReader();
-    reader.onload = function (e) {
-        $('#imageuploaded')
-          .attr('src', e.target.result);
-        $('#imagebackgrounded')
-          .attr('style','background-image: url("' + e.target.result +'"); background-size: auto, cover;');
-    };
-    reader.readAsDataURL(evt.target.files[0]);
-    db_saveUserImage();
-    $('#user_image').dimmer('hide');
-;
-  }
+  ad_Register_SetImageLoading($('#fileInput'));
+  db_saveUserImage();
 }
 
 const user_initComponent = function(){
   $('#state').dropdown();
-  user_getStates();
+  user_InitDropdownWithStates($("#state"));
   $('#user_image').dimmer({ on: 'hover' });
   $('#fileInput').change(user_previewImage);
   $('#cep')
@@ -115,13 +104,13 @@ const user_initComponent = function(){
             prompt: 'Preencha com seu nome completo'
           }]
         },
-        email: {
+        /*email: {
           identifier: 'email',
           rules: [{
             type: 'email',
             prompt: 'Coloque um email válido'
           }]
-        },
+        },*/
         phone_ddd: {
           identifier: 'phone_ddd',
           rules: [{
@@ -135,14 +124,14 @@ const user_initComponent = function(){
             type: 'regExp[/^[0-9]{5}-[0-9]{4}$/gm]',
             prompt: 'O telefone não confere com o padrão 99999-8888'
           }]
-        },
+        } /*, Removed
         cep: {
           identifier: '',
           rules: [{
             type: 'regExp[/^[0-9]{5}-[0-9]{3}$/gm]',
             prompt: 'Preencha seu CEP no formato 99999-000'
           }]
-        }
+        }*/
       }, onSuccess: function(event){
                         event.preventDefault();
                         db_updateUserInfo();

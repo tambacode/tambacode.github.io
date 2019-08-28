@@ -17,47 +17,40 @@ html
         include templates/scripts
     body
         include templates/sideBar
+        include templates/filterSideBar
         .pusher
             include templates/header
             #all
-                br
                 .ui.container
-                    .ui.fluid.centered.small.image#image
-                        a.ui.red.right.corner.label
-                            i.heart.icon
-                        img(src="imgs/black.png")
-                    h1.label#title
-                    h3.label#location
-                    h3.label#description
+                    .ui.fluid.centered.small.image
+                        img#image(src="")
+                    h1.ui.header
+                        #title| 
+                        .sub.header
+                            i.map.marker.alternate.icon
+                            .content#address
+                    h2.ui.orange.header
+                        #price| 
+                        .sub.header#description
+                    .ui.dividing.header
                     .ui.two.column.grid
                         .column
                             .ui.raised.segment
-                                a.ui.blue.ribbon.label Categoria
-                                label#category Serviço                                 
+                                a.ui.orange.ribbon.label Categoria
+                                label#category
                         .column
-                            .ui.segment
-                                a.ui.green.tag.label#price R$ 60,00
-                    br
-                    .ui.two.column.grid
-                        .five.wide.column                    
-                            .ui.tiny.circular.image#picture
-                                img(src="imgs/elliot.jpg")
-                            .label#name
-                                | Jeferson Barros                                                    
-                        .fourten.wide.column
-                            br                     
-                            .ui.label#phone
-                                i.phone.icon
-                                    |  92 98447-4596
-                            br                                        
-                            .ui.label#email
-                                i.mail.icon
-                                    |  jeferson.ba@gmail.com
-                    br
-                    .button.fluid.ui.primary.button(id='SendMessage' onclick="message_StartChatWithProductOwner();")
+                            .ui.raised.segment
+                                a.ui.orange.ribbon.label Subcategoria
+                                label#subcategory
+                    h3.ui.dividing.header
+                    h1.ui.header
+                        #name| 
+                        .sub.header
+                            i.map.marker.alternate.icon
+                            .content#district
+                    .button.fluid.ui.orange.button(id='SendMessage' onclick="message_StartChatWithProductOwner();")
                         | Enviar Mensagem
-                    br
-                    .button.fluid.ui.primary.button(id='EditAd' onclick="ad_RedirectForEditAd();")
+                    button.fluid.ui.orange.button(id='EditAd' onclick="ad_RedirectForEditAd();")
                         | Editar Anuncio
             include templates/footer
     script.

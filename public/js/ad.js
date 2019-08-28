@@ -1,6 +1,33 @@
 /* This file is dedicate to store all logic part about ad_registration interface */
 
 ///////////////////////////////// AD REG /////////////////////////////////
+const ad_checkPopupType = function(){
+    const edit = misc_GetUrlParam('isitforEdit');
+    if (!edit){
+        $('.ui.modal')
+            .modal('setting', 'closable', false)
+            .modal('show');
+        $(function(){
+            $('[type="date"]').prop('min', function(){
+                return new Date().toJSON().split('T')[0];
+            });
+        });
+    }
+}
+
+
+const ad_selectedType = function(id){
+    $('#' + id)
+        .prop('checked', 'true')
+        .prop('disabled', false);
+    if (id === 'events') { 
+        $('.field.events').removeClass('hidden');
+    }
+    ad_GetCategory();
+    $('.ui.modal').modal('hide');
+}
+
+
 const db_InsertAdRegistration = function(flagUpdate, adUID) {
     // Test if there is any image being uploaded
     if (ad_UploadingImage > 0) {
@@ -30,6 +57,8 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
         var category = "produtos";
     } else if(services.checked == true) {
         var category = "servicos";
+    } else {
+        var category = "eventos";
     }
     const subcategory = document.getElementById('subcategory').innerText;
 
@@ -37,6 +66,8 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
     var location = document.getElementById('locationad').value;
     var cep = document.getElementById('cep').value;
 	var tel = document.getElementById('tel').value;
+    var state = document.getElementById('statead').value;
+    var city = document.getElementById('cityad').value;
     var tel_visible = document.getElementById('tel_visible');
 
     if(tel_visible.checked == true){
@@ -57,9 +88,21 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
         cep: cep,
         tel: tel,
         tel_visible: tel_visible_info,
+        state: state,
+        city: city,
         images: "",
         timestamp: Date.now()             
     };
+
+    if (category === "eventos") {
+        var event_date = document.getElementById('datead').value;
+        var event_site = document.getElementById('sitead').value;
+        var event_url = document.getElementById('urlad').value;
+
+        dataToInsert.event_date = event_date;
+        dataToInsert.event_site = event_site;
+        dataToInsert.event_url = event_url;
+    }
 
     if(!flagUpdate){
         ad_Register_SaveImagePathToDB(key, ad_CurrentlyAddedImages);
@@ -87,74 +130,70 @@ var db_InsertAdRegistrationOnUsers = function(key){
     db_set(path, key);
 };
 
+const ad_InitDropDownWithServices = function(dropDownField, adAny) {
+    var values = [];
+
+    if (adAny) {
+        values.push({ name: 'Selecione', value: '', selected : true });
+        values.push({ name: 'Tratorista', value: 'Tratorista'});
+    } else {
+        values.push({ name: 'Tratorista', value: 'Tratorista', selected : true });
+    }
+
+    values.push({ name : 'Agricultor', value : 'Agricultor' });
+    values.push({ name : 'Manutencao de Maquinario', value : 'Manutencao de Maquinario' });
+    values.push({ name : 'Medico Veterinario', value : 'Medico Veterinario' });
+    values.push({ name : 'Caseiro', value : 'Caseiro' });
+
+    dropDownField.dropdown({ values: values });
+};
+
+const ad_InitDropDownWithProducts = function(dropDownField, adAny) {
+    var values = [];
+
+    if (adAny) {
+        values.push({ name: 'Selecione', value: '', selected : true });
+        values.push({ name: 'Cereais', value: 'Cereais'});
+    } else {
+        values.push({ name: 'Cereais', value: 'Cereais', selected: true });
+    }
+
+    values.push({ name : 'Organicos', value : 'Organicos' });
+    values.push({ name : 'Proteina', value : 'Proteina' });
+    values.push({ name : 'Vegetais', value : 'Vegetais' });
+    values.push({ name : 'Frutas', value : 'Frutas' });
+    values.push({ name : 'Laticinios', value : 'Laticinios' });
+    values.push({ name : 'Flores e Plantas', value : 'Flores e Plantas' });
+    
+    dropDownField.dropdown({ values: values });
+};
+
+const ad_InitDropDownWithEvents = function(dropDownField, adAny) {
+    var values = [];
+
+    if (adAny) {
+        values.push({ name: 'Selecione', value: '', selected : true });
+        values.push({ name: 'Colaborativo', value: 'Colaborativo'});
+    } else {
+        values.push({ name: 'Colaborativo', value: 'Colaborativo', selected: true });
+    }
+
+    values.push({ name : 'Não-colaborativo', value : 'Não-colaborativo' });
+    
+    dropDownField.dropdown({ values: values });
+};
+
 const ad_GetCategory = function() {
     const products = document.getElementById('products');
     const services = document.getElementById('services');
+    const events = document.getElementById('events');
 
-    if (products.checked == true) {
-                $('#subcategory')
-                  .dropdown({
-                    values: [
-                      {
-                        name: 'Cereais',
-                        value: 'Cereais',
-                        selected: true
-                      },
-                      {
-                        name     : 'Organicos',
-                        value    : 'Organicos'                        
-                      },
-                      {
-                        name     : 'Proteina',
-                        value    : 'Proteina'                        
-                      },
-                      {
-                        name     : 'Vegetais',
-                        value    : 'Vegetais'                        
-                      },
-                      {
-                        name     : 'Frutas',
-                        value    : 'Frutas'                        
-                      },
-                      {
-                        name     : 'Laticinios',
-                        value    : 'Laticinios'                        
-                      },
-                      {
-                        name     : 'Flores e Plantas',
-                        value    : 'Flores e Plantas'                        
-                      }
-                    ]
-                  })
-                ;
-    } else if(services.checked == true) {
-            $('#subcategory')
-                  .dropdown({
-                    values: [
-                      {
-                        name: 'Tratorista',
-                        value: 'Tratorista',
-                        selected : true
-                      },
-                      {
-                        name     : 'Agricultor',
-                        value    : 'Agricultor'                        
-                      },
-                      {
-                        name     : 'Manutencao de Maquinario',
-                        value    : 'Manutencao de Maquinario'                        
-                      },
-                      {
-                        name     : 'Medico Veterinario',
-                        value    : 'Medico Veterinario'                        
-                      },
-                      {
-                        name     : 'Caseiro',
-                        value    : 'Caseiro'                        
-                      }
-                    ]
-                  })
-                ;
+    if (products.checked === true) {
+        ad_InitDropDownWithProducts($('#subcategory'));
+    } else if(services.checked === true) {
+        ad_InitDropDownWithServices($('#subcategory'));                  
+    } else {
+        ad_InitDropDownWithEvents($('#subcategory'));
     }
 }
 ///////////////////////////////// AD REG /////////////////////////////////
@@ -217,13 +256,13 @@ const ad_Register_RemovePlusIcon = function(target) {
 };
 
 const ad_Register_SetImageLoading = function(target) {
-    var loading = '<div class="ui active inverted dimmer"><div class="ui text loader">Carregando</div></div>';
+    var loading = '<div class="ui active inverted dimmer" id="divloader"><div class="ui text loader">Carregando</div></div>';
 
     $(target).parent().append(loading);
 };
 
 const ad_Register_AddNewImage = function() {
-    var imageCard = '<div class="five wide column row" id="{0}"><div class="ui active inverted dimmer"><i onclick="$(this).parent().parent().find(\'input\').click();" class="plus big click icon"></i></div><img src="imgs/black.png" class="ui tiny image"><input id="{1}" type="file" value="upload" style="display: none;"></div>';
+    var imageCard = '<div class="five wide column row" id="{0}"><div class="ui active inverted dimmer"><i onclick="$(this).parent().parent().find(\'input\').click();" class="plus big click icon"></i></div><img src="imgs/black.png" class="ui tiny image list"><input id="{1}" type="file" value="upload" style="display: none;"></div>';
 
     const columnId = 'ImageColumn' + ad_QtdRegisterImages;
     const inputId = 'ImageInput' + ad_QtdRegisterImages;
@@ -254,6 +293,8 @@ const ad_fillfieldforEdit = function(){
 
     //Get all fields
     if (adUID){
+        ad_Register_SetImageLoading('#all');
+
         $('#InsertAdRegistrationButton').addClass('hidden');
         $('#updateButton').removeClass('hidden');
         ad_GetAllValues();
@@ -268,7 +309,7 @@ const ad_fillfieldforEdit = function(){
 
                 ad_CurrentlyAddedImages.push(item);
 
-                var imageCard = '<div class="five wide column row" id="{0}"><div class="ui active inverted dimmer"><i onclick="$(this).parent().parent().find(\'input\').click();" class="plus big click icon"></i></div><img src="imgs/black.png" class="ui tiny image"><input id="{1}" type="file" value="upload" style="display: none;"></div>';
+                var imageCard = '<div class="five wide column row" id="{0}"><div class="ui active inverted dimmer"><i onclick="$(this).parent().parent().find(\'input\').click();" class="plus big click icon"></i></div><img src="imgs/black.png" class="ui tiny list image"><input id="{1}" type="file" value="upload" style="display: none;"></div>';
 
                 const columnId = 'ImageColumn' + ad_QtdRegisterImages;
                 const inputId = 'ImageInput' + ad_QtdRegisterImages;
@@ -285,7 +326,7 @@ const ad_fillfieldforEdit = function(){
                 ad_QtdRegisterImages = ad_QtdRegisterImages + 1;
                 
             });
-
+                $('#divloader').remove();
         };
         db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
     }
@@ -310,7 +351,7 @@ const ads_SearchAd = function() {
 };
 
 const ad_GetAdCard = function(uid, image, title, price, description, showFavoriteButton, favoriteSelected) {
-    const addImage = '<div class="four wide column product_image"><a href="ad_detail.html?uid={0}"><img src="{1}" class="ui tiny rounded image"></a></div>';
+    const addImage = '<div class="four wide column product_image"><a href="ad_detail.html?uid={0}"><img src="{1}" class="ui tiny rounded image list"></a></div>';
     const addInfo  = '<div class="twelve wide column product_info"><a href="ad_detail.html?uid={2}"><h4 id="title">{3}</h4></a><i onclick="ads_List_FavoriteAdClick(this);" uid="{4}" class="red large link {5} {6} icon favoriteItem"></i><h3 id="price">{7}</h3><span id="info">{8}</span><div style="width: 100%;" class="ui divider"></div></div>';
 
     var card = addImage + addInfo;
@@ -332,23 +373,85 @@ const ad_List_AddCardToList = function(holder, card) {
     holder.append(card);
 };
 
-const ads_List_ListAdsByTerm = function(term) {
+const ads_GetFilterFields = function(byUrl) {
+    var fields = {};
+
+    if (!byUrl) {
+        fields['searchTerm'] = $('#filter_term').val();
+        fields['category'] = $("input[name='filter_category']:checked").val();
+        fields['state'] = $('#filter_state').dropdown('get value');
+        fields['city'] = $('#filter_city').dropdown('get value');
+        fields['subcategory'] = $('#filter_Subcategory').dropdown('get value');
+        fields['minprice'] = $('#filter_minprice').val();
+        fields['maxprice'] = $('#filter_maxprice').val();
+    } else {
+        fields['searchTerm'] = misc_GetUrlParam('searchTerm');
+        fields['category'] = misc_GetUrlParam('category');
+        fields['state'] = misc_GetUrlParam('state');
+        fields['city'] = misc_GetUrlParam('city');
+        fields['subcategory'] = misc_GetUrlParam('subcategory');
+        fields['minprice'] = misc_GetUrlParam('minprice');
+        fields['maxprice'] = misc_GetUrlParam('maxprice');
+    }
+
+    return fields;
+}
+
+const ads_ApplyFilter = function() {
+    const fields = ads_GetFilterFields(false);
+
+    misc_GoToPage('ad_search.html?searchTerm=' + fields['searchTerm'] + '&state=' + fields['state'] + '&city=' + fields['city'] +
+        '&subcategory=' + fields['subcategory'] + '&category=' + fields['category'] + '&minprice=' + fields['minprice'] + '&maxprice=' + fields['maxprice']);
+};
+
+const ads_IsObjectFiltersValid = function(filters, obj) {
+    var searchTerm = misc_LowerCase(filters['searchTerm']);
+    var title = misc_LowerCase(obj['title']);
+    if (title.includes(searchTerm) == false) { return false; }
+
+    if (filters['category']) {
+        if (filters['category'] != obj['category']) { return false; }
+    }
+
+    //if (filters['state'] != obj['state']) { return false; }
+    //if (filters['citys'] != obj['citys']) { return false; }
+
+    if (filters['subcategory']) {
+        if (filters['subcategory'] != obj['subcategory']) { return false; }
+    }
+
+    const price = parseFloat(obj['price']);
+    if (filters['minprice']) {
+        if (price < parseFloat(filters['minprice'])) { return false; }
+    }
+
+    if (filters['maxprice']) {
+        if (price > parseFloat(filters['maxprice'])) { return false; }
+    }
+
+    return true;
+};
+
+const ads_List_ListAdsByTerm = function() {
     const firstCall = (lastAdUIDReceived == null);
 
     var onSucess = function(snapshot) {
         misc_RemoveLoader();
-        
         const holder = $("#ads");
+        const filters = ads_GetFilterFields(true);
+        
         $.each(snapshot.val(), function(uid, obj) {
             lastAdUIDReceived = uid;
 
-            db_get("ads_images",
-                function(snapshot) {
-                    const imgsRef = snapshot.val();
-                    const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
+            if (ads_IsObjectFiltersValid(filters, obj)) {
+                db_get("ads_images",
+                    function(snapshot) {
+                        const imgsRef = snapshot.val();
+                        const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
 
-                    ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, false));
-                }, null, null);
+                        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, false));
+                    }, null, null);
+            }
         });
     };
 
@@ -360,12 +463,12 @@ const ads_List_ListAdsByTerm = function(term) {
 
     if (firstCall) {
         //TODO: Change "title" to "timestamp", when this field is added to database, so we can order the ads list by their creation date.
-        db_getOrderByChildContainsLimitToLast("ad", "title", term, 10, onSucess, onError, onError);
-        //db_get("ad", onSucess, onError, onError);
+        //db_getOrderByChildContainsLimitToLast("ad", "title", term, 10, onSucess, onError, onError);
+        db_get("ad", onSucess, onError, onError);
     } else {
         console.log("ADD PAGINATION HERE");
     }
-};
+};  
 
 const ads_List_FavoriteAdClick = function(self) {
     const item = $(self);
@@ -400,58 +503,93 @@ const ads_List_UnfavoriteAd = function(uid) {
 /////////////////////////////////  AD DETAIL /////////////////////////////////
 const ad_GetAllValues = function(){
     const adUID = misc_GetUrlParam('uid');
+    const edit = misc_GetUrlParam('isitforEdit');
     var adPath = 'ad/' + adUID;
-    var title = document.getElementById(title);
-    var location = document.getElementById(location);
-    var description = document.getElementById(description);
-    var category = document.getElementById(category);
-    var price = document.getElementById(price);
-    var name = document.getElementById(name);
 
     var onSucess = function(snapshot) {
-        console.log("onSucess from db_get()");
         var val = snapshot.val();
-        console.log("val");
-        console.log(val);
-        ad_ValuesIntoDetail(val);
+
+        db_get("ads_images", 
+            function(snapshot) {
+                const imgsRef = snapshot.val();
+                const imgURL = imgsRef[adUID][Object.keys(imgsRef[adUID])[0]];
+                ad_ValuesIntoDetail(val,imgURL);
+            }
+            , null
+            , null
+        );
+
     };
 
-    db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
-/*
-category: "produtos"
-cep: "12312-312"
-description: "123123"
-location: "1231231231"
-price: "1.231,23"
-tel: "(12) 31231-2312"
-title: "123123"
-user: "ATZNxS0zbdZRX8Apy7JiHZmujaG2"
-*/
+    db_get('ad/' + adUID, onSucess, ad_ErrorFunction, ad_ErrorFunction);
+    if(!edit){
+        document.getElementById("SendMessage").style.visibility = "hidden";
+        document.getElementById("EditAd").style.visibility = "hidden";
+    }
+    
+    //visible
 }
 
-const ad_ValuesIntoDetail = function(val) {
+const ad_ValuesIntoDetail = function(val, imgURL) {
     const edit = misc_GetUrlParam('isitforEdit');
+    var id = "";
     if (edit){
         title.value = val.title;
         description.value = val.description;
-        if(val.category = 'Produtos'){
+        if(val.category === 'produtos'){
             products.checked = true;
-        }else{
+            id = "products";
+        }else if (val.category === 'serviços'){
             services.checked = true;
+            id = "services";
+        } else {
+            events.checked = true;
+            id = "events";
         }
-        ad_GetCategory();
+        ad_selectedType(id);
+        //ad_GetCategory();
         $('#subcategory').dropdown('set selected', val.subcategory);
         price.value = val.price;
         locationad.value = val.location;
         cep.value = val.cep;
         tel.value = val.tel;
+        cityad.value = val.city;
+        $('#statead').dropdown('set selected', val.city); 
+        if (val.category === "eventos"){
+            datead.value = val.event_date;
+            sitead.value = val.event_site;
+            urlad.value = val.event_url;
+        }
     }else{
-        category.innerText = val.category;
-        description.innerText = val.description;
-        location.innerText = val.location;
-        price.innerText = val.price;
+        image.src = imgURL;
         title.innerText = val.title;
-        name.innerText = val.user;
+        address.innerText = val.location;
+        price.innerText = "R$ " + val.price;
+        description.innerText = val.description;
+        category.innerText = val.category;
+        subcategory.innerText = val.subcategory;
+
+        db_get('/users/'+val.user, 
+            function(snapshot) {
+                const valUser = snapshot.val();
+                console.log(valUser);
+                $("#name").text(valUser.name);
+                $("#district").text(valUser.district);
+                console.log(valUser.district);
+                //$("#district").text(valUser.district + ", " + valUser.city);
+                $("#email").text(valUser.email);
+                $("#phone").text(valUser.phone);
+            }
+            , null
+            , null
+        );
+        
+        if (firebase.auth().currentUser.uid == val.user) {
+            document.getElementById("EditAd").style.visibility = "visible";
+        } else {
+            document.getElementById("SendMessage").style.visibility = "visible";
+        }
+
     }
 };
 
@@ -460,3 +598,42 @@ const ad_ErrorFunction = function(error) {
 };
 
 /////////////////////////////////  AD DETAIL /////////////////////////////////
+/////////////////////////////////  AD LIST   /////////////////////////////////
+
+const ad_List_ListAdsByUser = function(term) {
+    const getUser = localStorage.getItem('auth_UserUID');
+    const firstCall = (lastAdUIDReceived == null);
+
+    var onSucess = function(snapshot) {
+        misc_RemoveLoader();
+        
+        const holder = $("#ads");
+        $.each(snapshot.val(), function(uid, obj) {
+            lastAdUIDReceived = uid;
+
+            db_get("ads_images",
+                function(snapshot) {
+                    const imgsRef = snapshot.val();
+                    const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
+                    
+                    ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, false));                                           
+                }, null, null);
+        });
+    };
+
+    const onError = function(snapshot) {
+        if (misc_RemoveLoader()) {
+            $("#ads").append(misc_GetErrorMsg(true));
+        }
+    };
+
+    if (firstCall) {
+        //TODO: Change "title" to "timestamp", when this field is added to database, so we can order the ads list by their creation date.
+        db_getOrderByChildContainsLimitToLast("ad", "user", getUser, 50, onSucess, onError, onError);
+        //db_get("ad", onSucess, onError, onError);
+    } else {
+        console.log("ADD PAGINATION HERE");
+    }
+};
+
+/////////////////////////////////  AD LIST   /////////////////////////////////

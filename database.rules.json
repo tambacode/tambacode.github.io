@@ -22,6 +22,10 @@
     "ads_images": {
       ".read": true,
       ".write": true,
+    },
+    "users_messages": {
+      ".read": true,
+      ".write": true, 
     }
   }
 }
