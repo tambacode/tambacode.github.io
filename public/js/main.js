@@ -256,10 +256,13 @@ const misc_GetStateIdFromSigla = function(uf){
     return stateId;
 };
 
-const misc_InitDropdownWithStates = function(dropdownState, dropdownCity){
+const misc_InitDropdownWithStates = function(dropdownState, dropdownCity, adAnyState, onCityDropdownFillCallback){
     var values = [];
     
     //values.push({ name: 'Selecione', value: '', selected : true });
+    if (adAnyState) {
+        values.push({ name: 'Selecione', value: ''});
+    }
 
     $.each(misc_ListWithStates, function (id, state) {
         values.push({ name: state.nome, value: state.sigla});
@@ -268,14 +271,14 @@ const misc_InitDropdownWithStates = function(dropdownState, dropdownCity){
     dropdownState.dropdown({
         onChange: function (value, text, $selectedItem) {
             dropdownCity.addClass('loading disabled');
-            misc_InitDropdownCityFromStateSelection(value, dropdownCity).then(function(){
+            misc_InitDropdownCityFromStateSelection(value, dropdownCity, onCityDropdownFillCallback).then(function(){
                 dropdownCity.removeClass('loading disabled');
             });
         }
     });
 };
 
-const misc_InitDropdownCityFromStateSelection = async function (sigla, dropdownCity){
+const misc_InitDropdownCityFromStateSelection = async function (sigla, dropdownCity, onCityDropdownFillCallback){
     var values = [];
     var stateId = misc_GetStateIdFromSigla(sigla);
     const urlCityIbge = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados/' + stateId + '/municipios';
@@ -286,5 +289,10 @@ const misc_InitDropdownCityFromStateSelection = async function (sigla, dropdownC
     $.each(listWithCities, function (id, city) {
         values.push({ name: city.nome, value: city.nome});
     });
+    
     dropdownCity.dropdown({ values: values });
+
+    if (onCityDropdownFillCallback) {
+        onCityDropdownFillCallback();
+    }
 };

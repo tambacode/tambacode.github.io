@@ -51,10 +51,10 @@
                 .field
                     button.orange.ui.button(id='btnApplyFilter', onclick="ads_ApplyFilter();") Aplicar Filtro
 script.
-    const filterSideBar_InitFields = function() {
-        // Get values
-        const fields = ads_GetFilterFields(true);
+    // Get values
+    const fields = ads_GetFilterFields(true);
 
+    const filterSideBar_InitFields = function() {
         // Set Values
         if (fields['searchTerm']) { $('#filter_term').val(fields['searchTerm']); }
         if (fields['category']) {
@@ -68,7 +68,7 @@ script.
         }
         
         if (fields['state']) { $('#filter_state').dropdown('set selected', fields['state']); }
-        if (fields['city']) { $('#filter_city').dropdown('set selected', fields['city']); }
+        // City field below
 
         if (fields['subcategory']) { $('#filter_Subcategory').dropdown('set selected', fields['subcategory']); }
 
@@ -76,6 +76,10 @@ script.
         if (fields['maxprice']) { $('#filter_maxprice').val(fields['maxprice']); }
     };
 
+    const filterSideBase_InitCity = function() {
+        if (fields['city']) { $('#filter_city').dropdown('set selected', fields['city']); }
+    }
+
     ad_InitDropDownWithProducts($('#filter_Subcategory'), true);
-    misc_InitDropdownWithStates($('#filter_state'), $('#filter_city'));
+    misc_InitDropdownWithStates($('#filter_state'), $('#filter_city'), true, filterSideBase_InitCity);
     filterSideBar_InitFields();

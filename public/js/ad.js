@@ -431,7 +431,7 @@ const ads_IsObjectFiltersValid = function(filters, obj) {
         if (filters['category'] != obj['category']) { return false; }
     }
 
-    //if (filters['state'] != obj['state']) { return false; }
+    if (filters['state'] != obj['state']) { return false; }
     //if (filters['citys'] != obj['citys']) { return false; }
 
     if (filters['subcategory']) {
