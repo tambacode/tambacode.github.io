@@ -1,0 +1,15 @@
+#menu.ui.sf_header
+    .ui.padded.grid
+        .blue.row
+            .three.wide.column
+                button.ui.icon.button.blue(onclick="ui_openSidebar();")
+                    i.icon.list.large
+            .ten.wide.column
+                .ui.search
+                    .ui.icon.input.big.fluid
+                        input.prompt(type='text', placeholder='Pesquisar...')
+                        i.search.icon
+                    .results
+            .right.aligned.three.wide.column
+                button.ui.icon.button.blue(onclick="user_OpenProfile();")
+                    i.icon.user.circle.large

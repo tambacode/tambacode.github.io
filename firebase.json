@@ -8,7 +8,11 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ]
+    ],
+    "rewrites": [{
+      "source": "/profile",
+      "function": "app"
+    }]
   },
   "storage": {
     "rules": "storage.rules"

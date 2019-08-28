@@ -1,0 +1,22 @@
+.ui.sf_header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 3;
+}
+#all {
+  padding-top: 75.41px;
+}
+.ui.sf_footer {
+  bottom: 0;
+}
+.vertical-center {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.ui.login.card {
+  width: 85%;
+}
+/*# sourceMappingURL=sharedfarm.css.map */
