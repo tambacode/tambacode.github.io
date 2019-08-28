@@ -431,8 +431,13 @@ const ads_IsObjectFiltersValid = function(filters, obj) {
         if (filters['category'] != obj['category']) { return false; }
     }
 
-    if (filters['state'] != obj['state']) { return false; }
-    //if (filters['citys'] != obj['citys']) { return false; }
+    if (filters['state']) {
+        if (filters['state'] != obj['state']) { return false; }
+    }
+
+    if (filters['city']) {
+        if (filters['city'] != obj['city']) { return false; }
+    }
 
     if (filters['subcategory']) {
         if (filters['subcategory'] != obj['subcategory']) { return false; }
@@ -458,11 +463,14 @@ const ads_List_ListAdsByTerm = function() {
         misc_RemoveLoader();
         const holder = $("#ads");
         const filters = ads_GetFilterFields(true);
+        var cardAdded = false;
         
         $.each(snapshot.val(), function(uid, obj) {
             lastAdUIDReceived = uid;
 
             if (ads_IsObjectFiltersValid(filters, obj)) {
+                cardAdded = true;
+
                 db_get("ads_images",
                     function(snapshot) {
                         const imgsRef = snapshot.val();
@@ -472,6 +480,11 @@ const ads_List_ListAdsByTerm = function() {
                     }, null, null);
             }
         });
+
+        // Not card add, we must display the Null value message
+        if (!cardAdded) {
+            holder.append(misc_GetNullValueMsg(true));
+        }
     };
 
     const onError = function(snapshot) {

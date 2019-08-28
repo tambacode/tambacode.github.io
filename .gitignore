@@ -64,3 +64,5 @@ build/Release
 # dotenv environment variables file
 .env
 /serviceAccountKey.json
+
+public/templates/*.html

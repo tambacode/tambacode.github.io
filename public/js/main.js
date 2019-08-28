@@ -267,6 +267,7 @@ const misc_InitDropdownWithStates = function(dropdownState, dropdownCity, adAnyS
     $.each(misc_ListWithStates, function (id, state) {
         values.push({ name: state.nome, value: state.sigla});
     });
+    
     dropdownState.dropdown({ values: values });
     dropdownState.dropdown({
         onChange: function (value, text, $selectedItem) {
