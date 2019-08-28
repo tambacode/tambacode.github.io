@@ -47,19 +47,66 @@
           </div>
         </div>
       </div>
-      <div id="all">
-        <div class="bottomFloating">
-          <button onclick="window.location.href='ad_registration.html'" class="ui primary button"><i class="icon plus">                       </i>Anunciar Agora</button>
+      <div id="all"><br/>
+        <div class="ui container">               
+          <form onSubmit="return db_updateUserInfo();" class="ui form fluid ad_user">
+            <div class="field">
+              <label>Nome</label>
+              <input type="text" name="name" id="name" placeholder="Nome completo"/>
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input type="email" name="email" id="email" placeholder="email"/>
+            </div>
+            <div class="field">
+              <label>Telefone</label>
+              <input type="tel" name="phone" id="phone" placeholder="YYXXXXXZZZZ"/>
+            </div>
+            <div class="field">
+              <label>CEP</label>
+              <input type="text" name="cep" id="cep" placeholder="XXXXXX-XXX"/>
+            </div>
+            <div class="field">
+              <label>Logradouro</label>
+              <input input="input" type="email" name="publicplace" id="publicplace" placeholder="Rua, Avenida, ..."/>
+            </div>
+            <div class="field">
+              <label>Numero</label>
+              <input input="input" type="text" name="number" id="number" placeholder="11"/>
+            </div>
+            <div class="field">
+              <label>Bairro</label>
+              <input input="input" type="text" name="district" id="district" placeholder="Bairro ..."/>
+            </div>
+            <div class="field">
+              <label>Complemento</label>
+              <input input="input" type="text" name="complement" id="complement" placeholder="KM12, Fazenda ..."/>
+            </div>
+            <div class="field">
+              <label>Localidade</label>
+              <input input="input" type="text" name="city" id="city" placeholder="São Paulo"/>
+            </div>
+            <div class="field">
+              <label>UF</label>
+              <input input="input" type="text" name="state" id="state" placeholder="SAO ..."/>
+            </div>
+            <div class="inline field">
+              <div class="ui checkbox">
+                <input type="checkbox" name="terms" id="terms"/>
+                <label>Eu concordo com a politica e termos</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui primary submit button">Salvar</div>
+              <div class="ui clear button">Limpar</div>
+            </div>
+            <div class="field">
+              <div class="ui error message"></div>
+            </div>
+          </form>
         </div><br/><br/>
       </div>
     </div>
-    <script>
-      var testVar = 'var';
-      var testMethod = function() {
-          console.log("Button Clicked");
-          console.log("Please don't add code here");
-          console.log("Add it in a JS file already created or create a new one");
-      }
-    </script>
+    <script src="js/ad_user.js"></script>
   </body>
 </html>

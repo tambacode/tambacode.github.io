@@ -1,9 +1,7 @@
-var auth_UserOnline = false;
-
 var auth_Init = function() {
     firebase.auth().onAuthStateChanged(firebaseUser => {
         if (firebaseUser) {
-            auth_LogOnUser();
+            auth_LogOnUser(firebaseUser);
         } else {
             auth_LogoffUser();
         }
@@ -11,7 +9,7 @@ var auth_Init = function() {
 }
 
 var auth_RequireLoggingToAccess = function(url) {
-    if (auth_UserOnline) {
+    if (localStorage.getItem('auth_UserOnline')) {
         misc_GoToPage(url);
     } else {
         misc_GoToPage('login.html?redirectUrl=' + url);
@@ -31,7 +29,7 @@ var auth_RequestLogin = function(provider, providerName) {
 
 var auth_LoginSuccessful = function(result, providerName) {
     // Some params from facebook
-    //result.user.uid | result.user.displayName | result.credential.accessToken
+    //result.user.uid | result.user.displayName | result.credential.accessToken | result.user.photoURL
 
     var providerToken = null;
     var uid = null
@@ -47,32 +45,27 @@ var auth_LoginSuccessful = function(result, providerName) {
     var path = '/users/' + uid;
 
     var onSucess = function(snapshot) {
-        auth_LogOnUser();
+        auth_LogOnUser(snapshot);
     };
 
     var onNullValue = function(snapshot) {
         db_InsertUserOnLogin(path, result.user.displayName, providerName, providerToken);
 
-        auth_LogOnUser();
+        auth_LogOnUser(snapshot);
     };
 
     db_get(path, onSucess, onNullValue, auth_LoginFailed);
 };
 
 var auth_LoginFailed = function(error, providerName) {
-    $.uiAlert({
-        textHead: 'Problema no login',
-        text: 'Não foi possível realizar o login no ' + providerName,
-        bgcolor: '#DB2828',
-        textcolor: '#fff',
-        position: 'top-center',
-        time: 2
-    });
+    const text = 'Não foi possível realizar o login no ' + providerName;
+    misc_DisplayErrorMessage('Problema no login', text);
 };
 
-var auth_LogOnUser = function() {
-    auth_UserOnline = true;
-
+var auth_LogOnUser = function(firebaseUser) {
+    localStorage.setItem('auth_UserOnline', true);
+    localStorage.setItem('auth_UserUID', firebaseUser.uid);
+    
     redirectUrl = misc_GetUrlParam('redirectUrl');
     if (redirectUrl) {
         auth_RequireLoggingToAccess(redirectUrl);
@@ -80,10 +73,11 @@ var auth_LogOnUser = function() {
 }
 
 var auth_LogoffUser = function() {
-    if (auth_UserOnline)
+    if (localStorage.getItem('auth_UserOnline'))
     {
         firebase.auth().signOut();
-        auth_UserOnline = false;
+        localStorage.removeItem('auth_UserOnline');
+        localStorage.removeItem('auth_UserUID');
 
         misc_GoToPage('index.html');
     }

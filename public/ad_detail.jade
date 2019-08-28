@@ -1,0 +1,71 @@
+html
+    head
+        title Shared.Farm
+        
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        meta(http-equiv="X-UA-Compatible" content="ie=edge")
+        link( rel="manifest" href="manifest.json")
+        
+        // Please don't use this type of comment >> // << because it is compiled in the HTML
+        //- Use this one instead >> //- << because it does not compile in the HTML
+
+        //- CSS
+        include templates/styles
+        
+        //- Script
+        include templates/scripts
+    body
+        include templates/sideBar
+        .pusher
+            include templates/header
+            #all
+                br
+                .ui.container
+                    .ui.fluid.centered.small.image#image
+                        a.ui.red.right.corner.label
+                            i.heart.icon
+                        img(src="imgs/black.png")
+                    br
+                    .ui.orange.label#title 
+                        | Serviço de capinagem
+                    br
+                    .ui.message#location
+                        .header
+                            | Localização
+                        p(lingdex='1')
+                            | Vila Sumaúma, Município de Mucajaí, ao lado da E.E. Sadoc Perdeira
+                    .ui.message#description
+                        .header
+                            | Descrição do anúncio
+                        p(lingdex='1')
+                            | Realizo serviço de capinagem em qualquer tipo de terreno. Cobro por diária
+                    .ui.two.column.grid
+                        .column
+                            .ui.raised.segment
+                                a.ui.blue.ribbon.label Categoria
+                                label#category Serviço                                 
+                        .column
+                            .ui.segment
+                                a.ui.green.tag.label#price R$ 60,00
+                    br
+                    .ui.two.column.grid
+                        .five.wide.column                    
+                            .ui.tiny.circular.image#picture
+                                img(src="imgs/elliot.jpg")
+                            .label#name
+                                | Jeferson Barros                                                    
+                        .fourten.wide.column
+                            br                     
+                            .ui.label#phone
+                                i.phone.icon
+                                    |  92 98447-4596
+                            br                                        
+                            .ui.label#email
+                                i.mail.icon
+                                    |  jeferson.ba@gmail.com
+                    br
+                    .button.fluid.ui.primary.button(id='SendMessage' onclick="message_StartChatWithProductOwner();")
+                        | Enviar Mensagem
+                    br
+            include templates/footer
