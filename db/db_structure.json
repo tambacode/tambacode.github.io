@@ -16,6 +16,7 @@
 				"city" : "Amazonas",
 				"state" : "AM",
 				"profile_picture_link": "url link containing the source image to the profile image",
+				"pictureRotate":"e.g. 90 to be used to rotate image",
 				"push_notification_key" : "notification_key",
 				"ads_id": {
 					"uid_1": "uid_1",

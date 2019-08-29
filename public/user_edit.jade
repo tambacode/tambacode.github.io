@@ -25,16 +25,21 @@ html
                 .ui.container#display_user_edit(style="display:none")         
                     form.ui.form.fluid.user_edit
                         .field
-                            .ui.grid
-                                .row
-                                .row
-                                    .ui.centered.circular.image#user_image
+                            .ui.equal.width.center.aligned.grid
+                                .ten.wide.column
+                                    //- .ui.blurring.dimmable.centered.rounded.image#user_image
                                         .ui.dimmer
                                             .content
-                                                i.ui.small.primary.button(onclick="user_openFileDialog()") Subir nova
-                                                input#fileInput(type="file" style="display: none;")
-                                        img.ui.image#imageuploaded(src="" style="height: 200px; width: 200px;")
-                                .row
+                                                .center
+                                                    //- i.ui.small.primary.button(onclick="user_openFileDialog()")
+                                                        |Subir nova
+                                    .ui.centered.rounded.image#user_image
+                                        .content
+                                            input(id="fileInput" type="file" style="display: none;")
+                                        img.ui.image#imageuploaded(src="" style="height: 200; width: 200;")
+                                    .row
+                                        i.circular.inverted.orange.undo.icon(onclick="user_RotateImage();")
+                                        i.circular.inverted.orange.upload.icon(onclick="user_openFileDialog()")
                         br
                         .field.required
                             label Nome
@@ -93,7 +98,7 @@ html
                                 .ten.wide.column.centered
                                     .ui.fluid.orange.submit.button
                                         i.save.icon
-                                        |Salvar informações
+                                        |Salvar
                                 .two.wide.column
                         .field
                             .ui.error.message

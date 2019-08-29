@@ -48,8 +48,9 @@ const misc_RemoveLoader = function() {
     return false;
 };
 
-const misc_waitImageLoadReady = function(objHandler, url, callback){
-    $(objHandler)
+const misc_waitImageLoadReady = function(image, url, callback){
+    
+    $(image)
         .attr('src', url)
         .one("load", callback)
         .each(function() {
@@ -57,6 +58,29 @@ const misc_waitImageLoadReady = function(objHandler, url, callback){
                 $(this).load();
             }
         });
+};
+
+const misc_GetImageRotation = function(image) {
+    var el = $(image),
+        tr = el.css("-webkit-transform") || el.css("-moz-transform") || el.css("-ms-transform") || el.css("-o-transform") || '',
+        info = {rad: 0, deg: 0};
+    if (tr = tr.match('matrix\\((.*)\\)')) {
+        tr = tr[1].split(',');
+        if(typeof tr[0] != 'undefined' && typeof tr[1] != 'undefined') {
+            info.rad = Math.atan2(tr[1], tr[0]);
+            info.deg = parseFloat((info.rad * 180 / Math.PI).toFixed(1));
+        }
+    }
+    return info;
+};
+
+const misc_SetImageRotation = function(image, angleValue){
+  
+  $(image).css({
+        "-webkit-transform": "rotate(" + angleValue + "deg)",
+        "-moz-transform": "rotate(" + angleValue + "deg)",
+        "transform": "rotate(" + angleValue + "deg)" /* For modern browsers(CSS3)  */
+    });
 };
 
 const misc_RemoveErrorNullMsg = function() {

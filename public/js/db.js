@@ -166,6 +166,11 @@ var db_getUserToEdit = function() {
                     });
                 }
             }
+            else if (field === "pictureRotate") {
+                if (value !== undefined) {
+                    misc_SetImageRotation($('#imageuploaded'), value);
+                }
+            }
             else
                 $('#' + field).val(value);
         });
@@ -192,6 +197,7 @@ var db_getUserInfo = function() {
         var temp_info = "";
 
         if (snapshot.val().profile_picture_link !== undefined) {
+            misc_SetImageRotation($('#imageuploaded'), snapshot.val().pictureRotate);
             misc_waitImageLoadReady($('#imageuploaded'), snapshot.val().profile_picture_link, function(){
                 user_showFields();
                 misc_RemoveLoader();                
@@ -249,6 +255,7 @@ var db_updateUserInfo = function() {
     var complement = document.getElementById('complement').value;
     var city = document.getElementById('city').innerText;
     var state = document.getElementById('state').innerText;
+    var pictureRotate = misc_GetImageRotation($('#imageuploaded')).deg;;
     
     var dataToInsert = {
         name: name,
@@ -261,7 +268,8 @@ var db_updateUserInfo = function() {
         district: district,
         complement: complement,
         city: city,
-        state: state
+        state: state,
+        pictureRotate: pictureRotate
     };
     
     db_update(path,dataToInsert,misc_GoToPage("user_info.html"));
@@ -270,8 +278,8 @@ var db_updateUserInfo = function() {
 
 const doneSuccess = function(url){
     misc_waitImageLoadReady($('#imageuploaded'), url, function() {
-            $('#user_image').dimmer('hide');
-            ad_Register_RemoveLoadingIconFromImage($('#fileInput'));
+        //$('#user_image').dimmer('hide');
+        ad_Register_RemoveLoadingIconFromImage($('#fileInput'));
     });
 }
 
@@ -279,7 +287,8 @@ const db_updateUserImage = function(url){
     var path = '/users/' + localStorage.getItem('auth_UserUID');
 
     var dataToInsert = {
-        profile_picture_link: url
+        profile_picture_link: url,
+        pictureRotate: 0
     }
 
     db_update(path,dataToInsert, doneSuccess(url));

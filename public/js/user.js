@@ -77,10 +77,20 @@ const user_previewImage = function(evt){
   db_saveUserImage();
 }
 
+const user_RotateImage = function(imageId){
+  
+  var angleValue = misc_GetImageRotation($('#imageuploaded')).deg;
+
+  ((angleValue +=90) > 270) ? (angleValue = 0) : (angleValue);
+
+  misc_SetImageRotation($('#imageuploaded'), angleValue);
+  
+}
+
 const user_initComponent = function(){
   //$('#state').dropdown();
   misc_InitDropdownWithStates($("#state"), $("#city"));
-  $('#user_image').dimmer({ on: 'hover' });
+  //$('#user_image').dimmer({ on: 'hover' });
   $('#fileInput').change(user_previewImage);
   $('#cep')
     .blur(function(){ user_searchCep(this); })
