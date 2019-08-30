@@ -37,8 +37,13 @@ const misc_LowerCase = function(string) {
     return string.toLowerCase();
 };
 
-const misc_RemoveLoader = function() {
-    var loader = $('#loader');
+const misc_RemoveLoader = function(parent) {
+    var loader;
+    if (parent) {
+        loader = parent.find('#loader');
+    } else {        
+        loader = $('#loader');
+    }
 
     if (loader != null) {
         loader.remove();

@@ -49,7 +49,7 @@
                         .field
                             input(type='text', name='maxprice', id='filter_maxprice', minlength="1", maxlength="14", data-symbol="R$ " data-thousands="." data-decimal=","  onkeydown='$(this).maskMoney();', placeholder="Max.")
                 .field
-                    button.orange.ui.button(id='btnApplyFilter', onclick="ads_ApplyFilter();") Aplicar Filtro
+                    button.green.ui.button(id='btnApplyFilter', onclick="ads_ApplyFilter();") Aplicar Filtro
 script.
     // Get values
     const fields = ads_GetFilterFields(true);

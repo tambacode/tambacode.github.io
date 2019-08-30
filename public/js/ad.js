@@ -52,7 +52,7 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
     }
 
     if (ad_CurrentlyAddedImages.length == 0) {
-        misc_DisplayErrorMessage('Nenhuma imagem', 'Favor adicionar ao menos uma imagem para efetuar o cadastro do anúncio.');
+        misc_DisplayErrorMessage('Nenhuma imagem', 'Favor adicionar ao menos uma imagem para efetuar o cadastro do anÃºncio.');
         return;
     }
 
@@ -157,8 +157,8 @@ const ad_InitDropDownWithServices = function(dropDownField, adAny) {
     }
 
     values.push({ name : 'Agricultor', value : 'Agricultor' });
-    values.push({ name : 'Manutenção de Maquinário', value : 'Manutenção de Maquinário' });
-    values.push({ name : 'Médico Veterinário', value : 'Médico Veterinário' });
+    values.push({ name : 'ManutenÃ§Ã£o de MaquinÃ¡rio', value : 'ManutenÃ§Ã£o de MaquinÃ¡rio' });
+    values.push({ name : 'MÃ©dico VeterinÃ¡rio', value : 'MÃ©dico VeterinÃ¡rio' });
     values.push({ name : 'Caseiro', value : 'Caseiro' });
 
     dropDownField.dropdown({ values: values });
@@ -174,11 +174,11 @@ const ad_InitDropDownWithProducts = function(dropDownField, adAny) {
         values.push({ name: 'Cereais', value: 'Cereais', selected: true });
     }
 
-    values.push({ name : 'Orgânicos', value : 'Orgânicos' });
-    values.push({ name : 'Proteína', value : 'Proteína' });
+    values.push({ name : 'OrgÃ¢nicos', value : 'OrgÃ¢nicos' });
+    values.push({ name : 'ProteÃ­na', value : 'ProteÃ­na' });
     values.push({ name : 'Vegetais', value : 'Vegetais' });
     values.push({ name : 'Frutas', value : 'Frutas' });
-    values.push({ name : 'Laticínios', value : 'Laticínios' });
+    values.push({ name : 'LaticÃ­nios', value : 'LaticÃ­nios' });
     values.push({ name : 'Flores e Plantas', value : 'Flores e Plantas' });
     
     dropDownField.dropdown({ values: values });
@@ -194,7 +194,7 @@ const ad_InitDropDownWithEvents = function(dropDownField, adAny) {
         values.push({ name: 'Colaborativo', value: 'Colaborativo', selected: true });
     }
 
-    values.push({ name : 'Não-colaborativo', value : 'Não-colaborativo' });
+    values.push({ name : 'NÃ£o-colaborativo', value : 'NÃ£o-colaborativo' });
     
     dropDownField.dropdown({ values: values });
 };
@@ -471,13 +471,7 @@ const ads_List_ListAdsByTerm = function() {
             if (ads_IsObjectFiltersValid(filters, obj)) {
                 cardAdded = true;
 
-                db_get("ads_images",
-                    function(snapshot) {
-                        const imgsRef = snapshot.val();
-                        const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
-
-                        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, false));
-                    }, null, null);
+                ads_AddAdToDiv(snapshot, uid, obj, holder);
             }
         });
 
@@ -494,13 +488,45 @@ const ads_List_ListAdsByTerm = function() {
     };
 
     if (firstCall) {
-        //TODO: Change "title" to "timestamp", when this field is added to database, so we can order the ads list by their creation date.
-        //db_getOrderByChildContainsLimitToLast("ad", "title", term, 10, onSucess, onError, onError);
         db_get("ad", onSucess, onError, onError);
     } else {
         console.log("ADD PAGINATION HERE");
     }
-};  
+};
+
+const ads_AddAdToDiv = function(snapshot, uid, obj, holder) {
+    db_get("ads_images", function(snapshot) {
+        const imgsRef = snapshot.val();
+        const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
+
+        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, false));
+    }, null, null);
+};
+
+const ads_List_ListLastAdsOnDiv = function(div, qtdAdsToList, table, fieldToOrder, fieldTestValue) {
+    const onSucess = function(snapshot) {
+        var cardAdded = false;
+        
+        $.each(snapshot.val(), function(uid, obj) {
+            if (!fieldTestValue || obj[fieldToOrder] == fieldTestValue) {
+                cardAdded = true;
+                misc_RemoveLoader(div);
+                ads_AddAdToDiv(snapshot, uid, obj, div);
+            }
+        });
+
+        // Not card add, we must remove the category
+        if (!cardAdded) {
+            div.remove();
+        }
+    };
+
+    const onError = function(snapshot) {
+        div.remove();
+    };
+
+    db_getOrderByChildLimitToLast(table, fieldToOrder, qtdAdsToList, onSucess, onError, onError);
+};
 
 const ads_List_FavoriteAdClick = function(self) {
     const item = $(self);
@@ -576,7 +602,7 @@ const ad_ValuesIntoDetail = function(val, imgURL) {
         if(val.category === 'produtos'){
             products.checked = true;
             id = "products";
-        }else if (val.category === 'serviços'){
+        }else if (val.category === 'serviÃ§os'){
             services.checked = true;
             id = "services";
         } else {
@@ -634,7 +660,7 @@ const ad_ValuesIntoDetail = function(val, imgURL) {
 };
 
 const ad_ErrorFunction = function(error) {
-    misc_DisplayErrorMessage('Erro ao exibir anúncio', 'Favor tentar mais tarde');
+    misc_DisplayErrorMessage('Erro ao exibir anÃºncio', 'Favor tentar mais tarde');
 };
 
 /////////////////////////////////  AD DETAIL /////////////////////////////////
