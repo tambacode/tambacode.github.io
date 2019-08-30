@@ -25,13 +25,37 @@ var db_set = function(path, postData) {
 };
 
 //https://firebase.google.com/docs/database/web/read-and-write
-var db_update = function(path, postData, callback) {
+var db_update = function(path, callback) {
     db.ref(path).update(postData,
         function (error){
             if (error === null)
                 callback;
             else
                 misc_DisplayErrorMessage("Cadastro","Cadastro não foi realizado");
+        });
+};
+
+//Delete from database
+var db_delete = function(path, callback) {
+    db.ref(path).remove(
+        function (error){
+            if (error === null)
+                callback;
+            else
+                misc_DisplayErrorMessage("Exclusão","Não foi possível excluir este anúncio");
+        });
+};
+
+//Delete from storage
+var db_deleteFromStorage = function(reference, onError){
+        // Create a reference to the file to delete
+        var desertRef = rootStorageRef.child('ads_images/' + reference);
+
+        // Delete the file
+        desertRef.delete().then(function() {
+          // File deleted successfully
+        }).catch(function(error) {
+            onError(error);
         });
 };
 

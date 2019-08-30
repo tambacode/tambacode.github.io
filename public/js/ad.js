@@ -682,3 +682,29 @@ const ad_List_ListAdsByUser = function(term) {
 };
 
 /////////////////////////////////  AD LIST   /////////////////////////////////
+
+/////////////////////////////////  AD DELETE   /////////////////////////////////
+const ad_delete = function(){
+    const adUID = misc_GetUrlParam('uid');
+
+    //remove add
+    db_delete('ad/' + adUID);
+    db_delete('ads_images/' + adUID);
+
+
+    //Remove images from storage
+    var onSucess = function(snapshot) {       
+        $.each(snapshot.val(), function(uid, obj) {
+
+            var imgfordel = obj.substring(obj.indexOf('%2F') + 3);
+
+            imgfordel = imgfordel.substring(0, 20);
+            
+            db_deleteFromStorage(imgfordel, null);
+        });
+
+        //misc_GoToPage('ad_list.html');
+    };
+    db_get("ads_images/" + adUID, onSucess, null, null);
+}
+/////////////////////////////////  AD DELETE   /////////////////////////////////
