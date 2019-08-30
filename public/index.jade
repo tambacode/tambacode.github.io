@@ -20,61 +20,70 @@ html
             include templates/AnunciarAgora
             #all
                 br
-                .ui.equal.width.centered.padded.grid
-                    .green.row
-                        .colunm
-                            h4.ui.white.header
-                                i.inverted.star.outline.icon
-                                .content
-                                    | Novidades
                 #adsLast.sharedAds.ui.grid
+                    div(style="width: 100%;")
+                        .ui.equal.width.centered.padded.grid
+                            .green.row
+                                .colunm
+                                    h4.ui.white.header
+                                        i.inverted.star.outline.icon
+                                        .content
+                                            | Novidades
                     include templates/loader
-                .ui.equal.width.centered.padded.grid
-                    .green.row
-                        .colunm
-                            h4.ui.white.header
-                                i.inverted.tags.icon
-                                .content
-                                    | Produtos
                 #adsProducts.sharedAds.ui.grid
+                    div(style="width: 100%;")
+                        .ui.equal.width.centered.padded.grid
+                            .green.row
+                                .colunm
+                                    h4.ui.white.header
+                                        i.inverted.tags.icon
+                                        .content
+                                            | Produtos
                     include templates/loader
-                .ui.equal.width.centered.padded.grid
-                    .green.row
-                        .colunm
-                            h4.ui.white.header
-                                i.inverted.handshake.outline.icon
-                                .content
-                                    | Serviços
                 #adsServices.sharedAds.ui.grid
+                    div(style="width: 100%;")
+                        .ui.equal.width.centered.padded.grid
+                            .green.row
+                                .colunm
+                                    h4.ui.white.header
+                                        i.inverted.handshake.outline.icon
+                                        .content
+                                            | Serviços
                     include templates/loader
-                .ui.equal.width.centered.padded.grid
-                    .green.row
-                        .colunm
-                            h4.ui.white.header
-                                i.inverted.calendar.alternate.outline.icon
-                                .content
-                                    | Eventos
                 #adsEvents.sharedAds.ui.grid
+                    div(style="width: 100%;")
+                        .ui.equal.width.centered.padded.grid
+                            .green.row
+                                .colunm
+                                    h4.ui.white.header
+                                        i.inverted.calendar.alternate.outline.icon
+                                        .content
+                                            | Eventos
                     include templates/loader
                 #adsFindout.ui.padded.centered.grid
-                    .sixteen.wide.colunm
-                        .ui.card
-                          .content
-                            .center.aligned.header Anúncios para todos as necessidades!
-                            .center.aligned.description
-                                | O que você produra? Produtos, serviços ou eventos? Seja o que for, encontre facilmente através da pesquisa.
-                          .extra.content
-                            .center.aligned.author
-                                button.ui.green.button(onclick="ui_openFilterSidebar();")
-                                    i.icon.filter                        
-                                    | Pesquisar
-                #adsHistory.ui.equal.width.centered.padded.grid
-                    .green.row
-                        .colunm
-                            h4.ui.white.header
-                                i.inverted.eye.icon
-                                .content
-                                    | Seu Histórico
+                    br
+                    .ui.card
+                      .content
+                        .center.aligned.header Anúncios para todos as necessidades!
+                        .center.aligned.description
+                            | O que você produra? Produtos, serviços ou eventos? Seja o que for, encontre facilmente através da pesquisa.
+                      .extra.content
+                        .center.aligned.author
+                            button.ui.green.button(onclick="ui_openFilterSidebar();")
+                                i.icon.filter                        
+                                | Pesquisar
+                    br
+                #adsHistory.sharedAds.ui.grid
+                    div(style="width: 100%;")
+                        .ui.equal.width.centered.padded.grid
+                            .green.row
+                                .colunm
+                                    h4.ui.white.header
+                                        i.inverted.eye.icon
+                                        .content
+                                            | Últimos Anúncios vistos
+                    include templates/loader
+                br
                 br
                 br
                 br
