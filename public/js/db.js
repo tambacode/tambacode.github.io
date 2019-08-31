@@ -5,7 +5,7 @@ var rootStorageRef = db_storage.ref();
 
 //  Use to get a new key when inserting a new data on DB
 //  path (string): 'SharedFarm/Users'
-var db_GetNewPushKey = function(path) {
+const db_GetNewPushKey = function(path) {
     var key = db.ref().child(path).push().key;
     return key;
 };
@@ -20,12 +20,12 @@ var db_GetNewPushKey = function(path) {
         };
 */
 
-var db_set = function(path, postData) {
+const db_set = function(path, postData) {
     db.ref(path).set(postData);
 };
 
 //https://firebase.google.com/docs/database/web/read-and-write
-var db_update = function(path, callback) {
+const db_update = function(path, callback) {
     db.ref(path).update(postData,
         function (error){
             if (error === null)
@@ -36,7 +36,7 @@ var db_update = function(path, callback) {
 };
 
 //Delete from database
-var db_delete = function(path, callback) {
+const db_delete = function(path, callback) {
     db.ref(path).remove(
         function (error){
             if (error === null)
@@ -47,7 +47,7 @@ var db_delete = function(path, callback) {
 };
 
 //Delete from storage
-var db_deleteFromStorage = function(reference, onError){
+const db_deleteFromStorage = function(reference, onError){
         // Create a reference to the file to delete
         var desertRef = rootStorageRef.child('ads_images/' + reference);
 
@@ -73,7 +73,7 @@ var db_get = function(path, onSucess, onNullValue, onError) {
         });
 };
 
-var db_getOrderByChild = function(path, orderByChild, onSucess, onNullValue, onError) {
+const db_getOrderByChild = function(path, orderByChild, onSucess, onNullValue, onError) {
     db.ref(path).orderByChild(orderByChild).once('value')
         .then(function(snapshot) {
             if (snapshot.val() == null)
@@ -87,7 +87,7 @@ var db_getOrderByChild = function(path, orderByChild, onSucess, onNullValue, onE
         });
 };
 
-var db_getOrderByChildLimitToLast = function(path, orderByChild, limitToLast, onSucess, onNullValue, onError) {
+const db_getOrderByChildLimitToLast = function(path, orderByChild, limitToLast, onSucess, onNullValue, onError) {
     db.ref(path).orderByChild(orderByChild).limitToLast(limitToLast).once('value')
         .then(function(snapshot) {
             if (snapshot.val() == null)
@@ -101,7 +101,7 @@ var db_getOrderByChildLimitToLast = function(path, orderByChild, limitToLast, on
         });
 };
 
-var db_getOrderByChildContainsLimitToLast = function(path, orderByChild, containsString, limitToLast, onSucess, onNullValue, onError) {
+const db_getOrderByChildContainsLimitToLast = function(path, orderByChild, containsString, limitToLast, onSucess, onNullValue, onError) {
     //.startAt(containsString)
     //.endAt(endAt + "\uf8ff")
     db.ref(path).orderByChild(orderByChild)
@@ -138,9 +138,14 @@ const db_getInnerJoinorderByValue = function(table1, pathInTableOne, table2, onS
     });
 }
 
-var db_getInnerJoin = function(table1, pathInTableOne, table2, onSucess, onNullValue, onError) {
+var db_getInnerJoin = function(table1, pathInTableOne, table2, onSucess, onNullValue, onError, useValueToSearchOnChild) {
     table1.child(pathInTableOne).on('child_added', snap => {
-        let lastInfoRef = table2.child(snap.key);
+        let lastInfoRef;
+        if (useValueToSearchOnChild) {
+            lastInfoRef = table2.child(snap.val());
+        } else {
+            lastInfoRef = table2.child(snap.key);
+        }
         
         lastInfoRef.once('value')
             .then(function(snapshot) {
@@ -154,10 +159,35 @@ var db_getInnerJoin = function(table1, pathInTableOne, table2, onSucess, onNullV
                 onError(error);
             });
     });
-}
+};
+
+const db_getInnerJoinLimitToLast = function(table1, pathInTableOne, table2, onSucess, onNullValue, onError, useValueToSearchOnChild, limitToLast) {
+    table1.child(pathInTableOne)
+        .limitToLast(limitToLast)
+        .on('child_added', snap => {
+            let lastInfoRef;
+            if (useValueToSearchOnChild) {
+                lastInfoRef = table2.child(snap.val());
+            } else {
+                lastInfoRef = table2.child(snap.key);
+            }
+            
+            lastInfoRef.once('value')
+                .then(function(snapshot) {
+                    if (snapshot.val() == null)
+                    {
+                        onNullValue(snapshot);
+                    } else {
+                        onSucess(snapshot);
+                    }
+                }).catch(function(error) {
+                    onError(error);
+                });
+    });
+};
 
 ///////////////////////////////// USERS /////////////////////////////////
-var db_InsertUserOnLogin = function(path, name, email, providerName, providerToken) {
+const db_InsertUserOnLogin = function(path, name, email, providerName, providerToken) {
     var dataToInsert = {
         name: name,
         email: email,
@@ -170,7 +200,7 @@ var db_InsertUserOnLogin = function(path, name, email, providerName, providerTok
     db_set(path, dataToInsert);
 };
 
-var db_getUserToEdit = function() {
+const db_getUserToEdit = function() {
     var path = '/users/' + localStorage.getItem('auth_UserUID');
 
     var onSuccess = function(snapshot) {
@@ -213,7 +243,7 @@ var db_getUserToEdit = function() {
     db_get(path, onSuccess, onNullValue, onError);
 };
 
-var db_getUserInfo = function() {
+const db_getUserInfo = function() {
     var path = '/users/' + localStorage.getItem('auth_UserUID');
 
     var onSuccess = function(snapshot) {
@@ -262,7 +292,7 @@ var db_getUserInfo = function() {
     db_get(path, onSuccess, onNullValue, onError);
 };
 
-var db_updateUserInfo = function() {
+const db_updateUserInfo = function() {
     var path = '/users/' + localStorage.getItem('auth_UserUID');
     
     //Form fields
@@ -358,16 +388,3 @@ const db_saveUserImage = function(){
 
     db_saveImage(image_path, file, db_updateUserImage);
 }
-
-///////////////////////////////// EXAMPLES /////////////////////////////////
-//  Below there are one (1) method to examplify how to use the methods above
-var insertData = function(userId, name, notificationKey) {
-    var path = 'data/' + userId + '/customerData';
-    var postData = {
-        name: name,
-        notificationKey: notificationKey
-    };
-
-    db_set(path, postData);
-};
-////////////////////////////// END OF EXAMPLES /////////////////////////////

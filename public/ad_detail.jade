@@ -22,6 +22,7 @@ html
         .pusher
             include templates/header
             #all
+                br
                 include templates/loader
                 .ui.container(style="display:none")
                     .ui.fluid.centered.small.image
@@ -56,4 +57,4 @@ html
                         | Editar Anúncio
             include templates/footer
     script.
-        ad_GetAllValues(); 
+        ad_FillDetailPage(misc_GetUrlParam('uid')); 

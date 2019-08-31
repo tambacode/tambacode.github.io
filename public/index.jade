@@ -21,7 +21,7 @@ html
             #all
                 br
                 #adsLast.sharedAds.ui.grid
-                    div(style="width: 100%;")
+                    .sharedAdsHeader
                         .ui.equal.width.centered.padded.grid
                             .green.row
                                 .colunm
@@ -31,7 +31,7 @@ html
                                             | Novidades
                     include templates/loader
                 #adsProducts.sharedAds.ui.grid
-                    div(style="width: 100%;")
+                    .sharedAdsHeader
                         .ui.equal.width.centered.padded.grid
                             .green.row
                                 .colunm
@@ -41,7 +41,7 @@ html
                                             | Produtos
                     include templates/loader
                 #adsServices.sharedAds.ui.grid
-                    div(style="width: 100%;")
+                    .sharedAdsHeader
                         .ui.equal.width.centered.padded.grid
                             .green.row
                                 .colunm
@@ -51,7 +51,7 @@ html
                                             | Serviços
                     include templates/loader
                 #adsEvents.sharedAds.ui.grid
-                    div(style="width: 100%;")
+                    .sharedAdsHeader
                         .ui.equal.width.centered.padded.grid
                             .green.row
                                 .colunm
@@ -74,7 +74,7 @@ html
                                 | Pesquisar
                     br
                 #adsHistory.sharedAds.ui.grid
-                    div(style="width: 100%;")
+                    .sharedAdsHeader
                         .ui.equal.width.centered.padded.grid
                             .green.row
                                 .colunm
@@ -87,7 +87,6 @@ html
                 br
                 br
                 br
-                br
             include templates/footer
         script.
             const qtdAdsToListByType = 3;
@@ -95,3 +94,4 @@ html
             ads_List_ListLastAdsOnDiv($('#adsProducts'), qtdAdsToListByType, 'ad', 'category', 'produtos');
             ads_List_ListLastAdsOnDiv($('#adsServices'), qtdAdsToListByType, 'ad', 'category', 'servicos');
             ads_List_ListLastAdsOnDiv($('#adsEvents'), qtdAdsToListByType, 'ad', 'category', 'eventos');
+            ads_List_ListInnerJoinAdsOnDiv($('#adsHistory'), qtdAdsToListByType, 'user_last_viewed_ads', 'ad');

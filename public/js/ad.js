@@ -345,6 +345,7 @@ const ad_fillfieldforEdit = function(){
             ad_showFields();
             //$('#divloader').remove();
         };
+
         db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
     } else {
         ad_showFields();    
@@ -503,6 +504,25 @@ const ads_AddAdToDiv = function(snapshot, uid, obj, holder) {
     }, null, null);
 };
 
+const ads_List_ListInnerJoinAdsOnDiv = function(div, qtdAdsToList, table, innerJoinTable) {
+    const tableOne = rootRef.child(table);
+    const path = localStorage.getItem('auth_UserUID');
+    const tableTwo = rootRef.child(innerJoinTable);
+
+    const onSucess = function(snapshot) {
+        if (div) {
+            misc_RemoveLoader(div);
+            ads_AddAdToDiv(snapshot, snapshot.key, snapshot.val(), div);
+        }
+    };
+
+    const onError = function(snapshot) {
+        if (div) { div.remove(); }
+    };
+
+    db_getInnerJoinLimitToLast(tableOne, path, tableTwo, onSucess, onError, onError, true, qtdAdsToList);
+};
+
 const ads_List_ListLastAdsOnDiv = function(div, qtdAdsToList, table, fieldToOrder, fieldTestValue) {
     const onSucess = function(snapshot) {
         var cardAdded = false;
@@ -557,10 +577,16 @@ const ads_List_UnfavoriteAd = function(uid) {
     console.log(uid);
     console.log("ads_List_UnfavoriteAd method needs to be implemented");   
 };
+
 ///////////////////////////////// ADS SEARCH /////////////////////////////////
 /////////////////////////////////  AD DETAIL /////////////////////////////////
-const ad_GetAllValues = function(){
-    const adUID = misc_GetUrlParam('uid');
+const ad_AddLastViewedAd = function(timestamp, uid) {
+    const userUID = localStorage.getItem('auth_UserUID');
+    
+    rootRef.child('user_last_viewed_ads').child(userUID).child(timestamp).set(uid);  
+};
+
+const ad_FillDetailPage = function(adUID){
     const edit = misc_GetUrlParam('isitforEdit');
     const user = localStorage.getItem('auth_UserUID');
     var adPath = 'ad/' + adUID;
@@ -573,25 +599,21 @@ const ad_GetAllValues = function(){
                 const imgsRef = snapshot.val();
                 const imgURL = imgsRef[adUID][Object.keys(imgsRef[adUID])[0]];
                 ad_ValuesIntoDetail(val,imgURL);
-            }
-            , null
-            , null
-        );
-        if(val.user == user) {
+            }, null, null);
+
+        if (val.user == user) {
             document.getElementById("SendMessage").style.visibility = "hidden";
         }
+
+        ad_AddLastViewedAd(Date.now(), adUID);
     };
 
-    db_get('ad/' + adUID, onSucess, ad_ErrorFunction, ad_ErrorFunction);
-    
-
+    db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
 
     if(!edit){
         document.getElementById("EditAd").style.visibility = "hidden";
     }
-    
-    //visible
-}
+};
 
 const ad_ValuesIntoDetail = function(val, imgURL) {
     const edit = misc_GetUrlParam('isitforEdit');

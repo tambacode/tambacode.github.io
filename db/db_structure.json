@@ -79,6 +79,12 @@
 				"-LlP6HtKyfEVRBdFaAb6": "https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/ads_images%2F-LlP6CYEiOz13fDD8i7-?alt=media&token=972aec08-30f1-4709-9e1a-48c7bf5a9a19",
 				"-LlP9c0v0KHMqDkaLi5n": "https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/ads_images%2F-LlP6DZn1E7KlpyR0rA1?alt=media&token=89f70e80-3777-4a27-8637-4a45aad5deaa",
 			}
+		},
+		"user_last_viewed_ads": {
+			"user_uid": {
+				"timestamp_number": "ad_uid",
+				"timestamp_number": "ad_uid",
+			}
 		}
 	}
 }
