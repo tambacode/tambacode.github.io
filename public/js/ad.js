@@ -142,7 +142,7 @@ const ad_Register_SaveImagePathToDB = function(adUID, imagesArray) {
 };
 
 var db_InsertAdRegistrationOnUsers = function(key){
-    var path = 'users/' + localStorage.getItem('auth_UserUID') + '/ad/' + key;
+    var path = 'user_ad/' + localStorage.getItem('auth_UserUID') + '/ad/' + key;
     db_set(path, key);
 };
 
