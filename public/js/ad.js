@@ -313,7 +313,7 @@ const ad_fillfieldforEdit = function(){
 
         $('#ad_add').addClass('hidden');
         $('#ad_edit').removeClass('hidden');
-        ad_GetAllValues();
+        ad_FillDetailPage(adUID);
         //Get images
         var adPath = 'ads_images/' + adUID;
         var onSucess = function(snapshot) {
@@ -737,8 +737,6 @@ const ad_delete = function(){
 
     //remove add
     db_delete('ad/' + adUID);
-    db_delete('ads_images/' + adUID);
-
 
     //Remove images from storage
     var onSucess = function(snapshot) {       
@@ -750,8 +748,10 @@ const ad_delete = function(){
             
             db_deleteFromStorage(imgfordel, null);
         });
-
-        //misc_GoToPage('ad_list.html');
+        
+        //After remove all images from storage
+        db_delete('ads_images/' + adUID);
+        misc_GoToPage('ad_list.html');
     };
     db_get("ads_images/" + adUID, onSucess, null, null);
 }
