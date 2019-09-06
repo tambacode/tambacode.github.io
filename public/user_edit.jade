@@ -22,19 +22,24 @@ html
             include templates/header
             #all
                 include templates/loader
-                #display_user_edit.ui.container(style="display:none")         
+                .ui.container#display_user_edit(style="display:none")         
                     form.ui.form.fluid.user_edit
                         .field
-                            .ui.grid
-                                .row
-                                .row
-                                    .ui.centered.circular.image#user_image
+                            .ui.equal.width.center.aligned.grid
+                                .ten.wide.column
+                                    //- .ui.blurring.dimmable.centered.rounded.image#user_image
                                         .ui.dimmer
                                             .content
-                                                i.ui.small.primary.button(onclick="user_openFileDialog()") Subir nova
-                                                input#fileInput(type="file" style="display: none;")
-                                        img.ui.image#imageuploaded(src="" style="height: 200px; width: 200px;")
-                                .row
+                                                .center
+                                                    //- i.ui.small.primary.button(onclick="user_openFileDialog()")
+                                                        |Subir nova
+                                    .ui.centered.rounded.image#user_image
+                                        .content
+                                            input(id="fileInput" type="file" style="display: none;")
+                                        img.ui.image#imageuploaded(src="" style="height: 200; width: 200;")
+                                    .row
+                                        i.circular.inverted.orange.undo.icon(onclick="user_RotateImage();")
+                                        i.circular.inverted.orange.upload.icon(onclick="user_openFileDialog()")
                         br
                         .field.required
                             label Nome
@@ -76,23 +81,27 @@ html
                                 .six.wide.column
                                     .field
                                         label UF
-                                        select.ui.compact.dropdown#state
-                                            option(value="") ...
+                                        .ui.search.compact.selection.dropdown#state
+                                            input(type="hidden" name="state")
+                                            i.dropdown.icon
+                                            .default.text Estado
                                 .ten.wide.column
                                     .field
-                                        label Localidade
-                                        input#city(input type="text" name="city" placeholder="São Paulo")
+                                        label Cidade
+                                        .ui.search.compact.selection.dropdown#city
+                                            input(type="hidden" name="city")
+                                            i.dropdown.icon
+                                            .default.text Cidade
                         .field
                             .ui.padded.column.row.grid
                                 .two.wide.column
                                 .ten.wide.column.centered
                                     .ui.fluid.orange.submit.button
                                         i.save.icon
-                                        |Salvar infomações
+                                        |Salvar
                                 .two.wide.column
                         .field
                             .ui.error.message
-                include templates/home
                 br
                 br
             include templates/footer

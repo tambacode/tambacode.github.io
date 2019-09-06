@@ -22,6 +22,11 @@
     transform: translateY(-50%);
 }
 
+.sharedAdsHeader {
+	width: 100%;
+	margin-bottom: 10px;
+};
+
 .ui.login.card {
 	width: 85%;
 }
@@ -43,6 +48,10 @@ span#timestamp {
 	padding-bottom: 3px;
 }
 
+.five.wide.column.row > .ui.active.inverted.dimmer {
+	z-index: 2 !important;
+}
+
 #messageInput {
 	position: fixed;
 	width: 100%;
@@ -50,14 +59,18 @@ span#timestamp {
 	z-index: 2;
 }
 
-#ads {
+#loader > .ui.loader {
+	z-index: 2;
+}
+
+.sharedAds {
 	.product_image {
-		padding: 0 0 0 1.5rem;
+		padding: 0 0 0 20px !important;
 		margin-bottom: 10px;
 	}
 
 	.product_info {
-		padding: 0 2rem 0 1rem;
+		padding: 0 14px !important;
 		margin-bottom: 10px;
 
 		.favoriteItem {

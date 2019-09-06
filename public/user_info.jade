@@ -26,7 +26,7 @@ html
                 #display_user_edit.ui(style="display:none;")
                     .ui.grid
                         .row
-                            img.ui.centered.circular.image#imageuploaded(src="" style="height: 250px; width: 250px;")
+                            img.ui.centered.rounded.image#imageuploaded(src="" style="height: 200px; width: 200px;")
                     .ui.centered.segments
                         .ui.segment
                             i.user.icon
@@ -54,11 +54,10 @@ html
                     .ui.padded.column.row.grid
                         .two.wide.column
                         .ten.wide.column.centered
-                            a.ui.orange.button(href="user_edit.html")
-                                i.save.icon
-                                |Editar infomações
+                            a.ui.fluid.orange.button(href="user_edit.html")
+                                i.pencil.alternate.icon
+                                |Editar
                         .two.wide.column
-                include templates/home
                 br
                 br
             include templates/footer

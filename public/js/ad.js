@@ -1,5 +1,20 @@
 /* This file is dedicate to store all logic part about ad_registration interface */
 
+const ad_initComponent = function(){
+    $('form.ad_register')
+        .form({
+        onSuccess: function(event){
+            event.preventDefault();
+        }
+    });
+}
+
+const ad_showFields = function(){
+    misc_RemoveLoader();
+    $(".ui.container").show();
+}
+
+
 ///////////////////////////////// AD REG /////////////////////////////////
 const ad_checkPopupType = function(){
     const edit = misc_GetUrlParam('isitforEdit');
@@ -30,14 +45,15 @@ const ad_selectedType = function(id){
 
 const db_InsertAdRegistration = function(flagUpdate, adUID) {
     // Test if there is any image being uploaded
+
     if (ad_UploadingImage > 0) {
         misc_DisplayErrorMessage('Imagem carregando', 'Favor aguardar todas as imagens finalizarem o upload');
-        return
+        return;
     }
 
     if (ad_CurrentlyAddedImages.length == 0) {
-        misc_DisplayErrorMessage('Nenhuma imagem', 'Favor adicionar ao menos uma imagem para efetuar o cadastro do an�ncio.');
-        return
+        misc_DisplayErrorMessage('Nenhuma imagem', 'Favor adicionar ao menos uma imagem para efetuar o cadastro do anÃºncio.');
+        return;
     }
 
     if(!flagUpdate){
@@ -66,8 +82,8 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
     var location = document.getElementById('locationad').value;
     var cep = document.getElementById('cep').value;
 	var tel = document.getElementById('tel').value;
-    var state = document.getElementById('statead').value;
-    var city = document.getElementById('cityad').value;
+    var state = document.getElementById('statead').innerText;
+    var city = document.getElementById('cityad').innerText;
     var tel_visible = document.getElementById('tel_visible');
 
     if(tel_visible.checked == true){
@@ -126,7 +142,7 @@ const ad_Register_SaveImagePathToDB = function(adUID, imagesArray) {
 };
 
 var db_InsertAdRegistrationOnUsers = function(key){
-    var path = 'users/' + localStorage.getItem('auth_UserUID') + '/ad/' + key;
+    var path = 'user_ad/' + localStorage.getItem('auth_UserUID') + '/ad/' + key;
     db_set(path, key);
 };
 
@@ -141,8 +157,8 @@ const ad_InitDropDownWithServices = function(dropDownField, adAny) {
     }
 
     values.push({ name : 'Agricultor', value : 'Agricultor' });
-    values.push({ name : 'Manutencao de Maquinario', value : 'Manutencao de Maquinario' });
-    values.push({ name : 'Medico Veterinario', value : 'Medico Veterinario' });
+    values.push({ name : 'ManutenÃ§Ã£o de MaquinÃ¡rio', value : 'ManutenÃ§Ã£o de MaquinÃ¡rio' });
+    values.push({ name : 'MÃ©dico VeterinÃ¡rio', value : 'MÃ©dico VeterinÃ¡rio' });
     values.push({ name : 'Caseiro', value : 'Caseiro' });
 
     dropDownField.dropdown({ values: values });
@@ -158,11 +174,11 @@ const ad_InitDropDownWithProducts = function(dropDownField, adAny) {
         values.push({ name: 'Cereais', value: 'Cereais', selected: true });
     }
 
-    values.push({ name : 'Organicos', value : 'Organicos' });
-    values.push({ name : 'Proteina', value : 'Proteina' });
+    values.push({ name : 'OrgÃ¢nicos', value : 'OrgÃ¢nicos' });
+    values.push({ name : 'ProteÃ­na', value : 'ProteÃ­na' });
     values.push({ name : 'Vegetais', value : 'Vegetais' });
     values.push({ name : 'Frutas', value : 'Frutas' });
-    values.push({ name : 'Laticinios', value : 'Laticinios' });
+    values.push({ name : 'LaticÃ­nios', value : 'LaticÃ­nios' });
     values.push({ name : 'Flores e Plantas', value : 'Flores e Plantas' });
     
     dropDownField.dropdown({ values: values });
@@ -178,7 +194,7 @@ const ad_InitDropDownWithEvents = function(dropDownField, adAny) {
         values.push({ name: 'Colaborativo', value: 'Colaborativo', selected: true });
     }
 
-    values.push({ name : 'N�o-colaborativo', value : 'N�o-colaborativo' });
+    values.push({ name : 'NÃ£o-colaborativo', value : 'NÃ£o-colaborativo' });
     
     dropDownField.dropdown({ values: values });
 };
@@ -293,11 +309,11 @@ const ad_fillfieldforEdit = function(){
 
     //Get all fields
     if (adUID){
-        ad_Register_SetImageLoading('#all');
+        //ad_Register_SetImageLoading('#all');
 
-        $('#InsertAdRegistrationButton').addClass('hidden');
-        $('#updateButton').removeClass('hidden');
-        ad_GetAllValues();
+        $('#ad_add').addClass('hidden');
+        $('#ad_edit').removeClass('hidden');
+        ad_FillDetailPage(adUID);
         //Get images
         var adPath = 'ads_images/' + adUID;
         var onSucess = function(snapshot) {
@@ -326,11 +342,14 @@ const ad_fillfieldforEdit = function(){
                 ad_QtdRegisterImages = ad_QtdRegisterImages + 1;
                 
             });
-                $('#divloader').remove();
+            ad_showFields();
+            //$('#divloader').remove();
         };
+
         db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
+    } else {
+        ad_showFields();    
     }
-    
 }
 
 const ad_update = function(){
@@ -413,20 +432,26 @@ const ads_IsObjectFiltersValid = function(filters, obj) {
         if (filters['category'] != obj['category']) { return false; }
     }
 
-    //if (filters['state'] != obj['state']) { return false; }
-    //if (filters['citys'] != obj['citys']) { return false; }
+    if (filters['state']) {
+        if (filters['state'] != obj['state']) { return false; }
+    }
+
+    if (filters['city']) {
+        if (filters['city'] != obj['city']) { return false; }
+    }
 
     if (filters['subcategory']) {
         if (filters['subcategory'] != obj['subcategory']) { return false; }
     }
 
-    const price = parseFloat(obj['price']);
+    const price = misc_GetFloatNumber(obj['price']);
+    
     if (filters['minprice']) {
-        if (price < parseFloat(filters['minprice'])) { return false; }
+        if (price < misc_GetFloatNumber(filters['minprice'])) { return false; }
     }
 
     if (filters['maxprice']) {
-        if (price > parseFloat(filters['maxprice'])) { return false; }
+        if (price > misc_GetFloatNumber(filters['maxprice'])) { return false; }
     }
 
     return true;
@@ -439,20 +464,22 @@ const ads_List_ListAdsByTerm = function() {
         misc_RemoveLoader();
         const holder = $("#ads");
         const filters = ads_GetFilterFields(true);
+        var cardAdded = false;
         
         $.each(snapshot.val(), function(uid, obj) {
             lastAdUIDReceived = uid;
 
             if (ads_IsObjectFiltersValid(filters, obj)) {
-                db_get("ads_images",
-                    function(snapshot) {
-                        const imgsRef = snapshot.val();
-                        const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
+                cardAdded = true;
 
-                        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, false));
-                    }, null, null);
+                ads_AddAdToDiv(snapshot, uid, obj, holder);
             }
         });
+
+        // Not card add, we must display the Null value message
+        if (!cardAdded) {
+            holder.append(misc_GetNullValueMsg(true));
+        }
     };
 
     const onError = function(snapshot) {
@@ -462,13 +489,64 @@ const ads_List_ListAdsByTerm = function() {
     };
 
     if (firstCall) {
-        //TODO: Change "title" to "timestamp", when this field is added to database, so we can order the ads list by their creation date.
-        //db_getOrderByChildContainsLimitToLast("ad", "title", term, 10, onSucess, onError, onError);
         db_get("ad", onSucess, onError, onError);
     } else {
         console.log("ADD PAGINATION HERE");
     }
-};  
+};
+
+const ads_AddAdToDiv = function(snapshot, uid, obj, holder) {
+    db_get("ads_images", function(snapshot) {
+        const imgsRef = snapshot.val();
+        const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
+
+        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, false));
+    }, null, null);
+};
+
+const ads_List_ListInnerJoinAdsOnDiv = function(div, qtdAdsToList, table, innerJoinTable) {
+    const tableOne = rootRef.child(table);
+    const path = localStorage.getItem('auth_UserUID');
+    const tableTwo = rootRef.child(innerJoinTable);
+
+    const onSucess = function(snapshot) {
+        if (div) {
+            misc_RemoveLoader(div);
+            ads_AddAdToDiv(snapshot, snapshot.key, snapshot.val(), div);
+        }
+    };
+
+    const onError = function(snapshot) {
+        if (div) { div.remove(); }
+    };
+
+    db_getInnerJoinLimitToLast(tableOne, path, tableTwo, onSucess, onError, onError, true, qtdAdsToList);
+};
+
+const ads_List_ListLastAdsOnDiv = function(div, qtdAdsToList, table, fieldToOrder, fieldTestValue) {
+    const onSucess = function(snapshot) {
+        var cardAdded = false;
+        
+        $.each(snapshot.val(), function(uid, obj) {
+            if (!fieldTestValue || obj[fieldToOrder] == fieldTestValue) {
+                cardAdded = true;
+                misc_RemoveLoader(div);
+                ads_AddAdToDiv(snapshot, uid, obj, div);
+            }
+        });
+
+        // Not card add, we must remove the category
+        if (!cardAdded) {
+            div.remove();
+        }
+    };
+
+    const onError = function(snapshot) {
+        div.remove();
+    };
+
+    db_getOrderByChildLimitToLast(table, fieldToOrder, qtdAdsToList, onSucess, onError, onError);
+};
 
 const ads_List_FavoriteAdClick = function(self) {
     const item = $(self);
@@ -499,11 +577,18 @@ const ads_List_UnfavoriteAd = function(uid) {
     console.log(uid);
     console.log("ads_List_UnfavoriteAd method needs to be implemented");   
 };
+
 ///////////////////////////////// ADS SEARCH /////////////////////////////////
 /////////////////////////////////  AD DETAIL /////////////////////////////////
-const ad_GetAllValues = function(){
-    const adUID = misc_GetUrlParam('uid');
+const ad_AddLastViewedAd = function(timestamp, uid) {
+    const userUID = localStorage.getItem('auth_UserUID');
+    
+    rootRef.child('user_last_viewed_ads').child(userUID).child(timestamp).set(uid);  
+};
+
+const ad_FillDetailPage = function(adUID){
     const edit = misc_GetUrlParam('isitforEdit');
+    const user = localStorage.getItem('auth_UserUID');
     var adPath = 'ad/' + adUID;
 
     var onSucess = function(snapshot) {
@@ -514,21 +599,21 @@ const ad_GetAllValues = function(){
                 const imgsRef = snapshot.val();
                 const imgURL = imgsRef[adUID][Object.keys(imgsRef[adUID])[0]];
                 ad_ValuesIntoDetail(val,imgURL);
-            }
-            , null
-            , null
-        );
+            }, null, null);
 
+        if (val.user == user) {
+            document.getElementById("SendMessage").style.visibility = "hidden";
+        }
+
+        ad_AddLastViewedAd(Date.now(), adUID);
     };
 
-    db_get('ad/' + adUID, onSucess, ad_ErrorFunction, ad_ErrorFunction);
+    db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
+
     if(!edit){
-        document.getElementById("SendMessage").style.visibility = "hidden";
         document.getElementById("EditAd").style.visibility = "hidden";
     }
-    
-    //visible
-}
+};
 
 const ad_ValuesIntoDetail = function(val, imgURL) {
     const edit = misc_GetUrlParam('isitforEdit');
@@ -539,7 +624,7 @@ const ad_ValuesIntoDetail = function(val, imgURL) {
         if(val.category === 'produtos'){
             products.checked = true;
             id = "products";
-        }else if (val.category === 'servi�os'){
+        }else if (val.category === 'serviÃ§os'){
             services.checked = true;
             id = "services";
         } else {
@@ -553,14 +638,16 @@ const ad_ValuesIntoDetail = function(val, imgURL) {
         locationad.value = val.location;
         cep.value = val.cep;
         tel.value = val.tel;
-        cityad.value = val.city;
-        $('#statead').dropdown('set selected', val.city); 
+        $('#statead').dropdown('set selected', val.state);
+        setTimeout( function(){
+            $('#cityad').dropdown('set selected', val.city);
+        }, 2000);
         if (val.category === "eventos"){
             datead.value = val.event_date;
             sitead.value = val.event_site;
             urlad.value = val.event_url;
         }
-    }else{
+    } else {
         image.src = imgURL;
         title.innerText = val.title;
         address.innerText = val.location;
@@ -579,6 +666,7 @@ const ad_ValuesIntoDetail = function(val, imgURL) {
                 //$("#district").text(valUser.district + ", " + valUser.city);
                 $("#email").text(valUser.email);
                 $("#phone").text(valUser.phone);
+                ad_showFields();
             }
             , null
             , null
@@ -594,7 +682,7 @@ const ad_ValuesIntoDetail = function(val, imgURL) {
 };
 
 const ad_ErrorFunction = function(error) {
-    misc_DisplayErrorMessage('Erro ao exibir an�ncio', 'Favor tentar mais tarde');
+    misc_DisplayErrorMessage('Erro ao exibir anÃºncio', 'Favor tentar mais tarde');
 };
 
 /////////////////////////////////  AD DETAIL /////////////////////////////////
@@ -629,7 +717,12 @@ const ad_List_ListAdsByUser = function(term) {
 
     if (firstCall) {
         //TODO: Change "title" to "timestamp", when this field is added to database, so we can order the ads list by their creation date.
-        db_getOrderByChildContainsLimitToLast("ad", "user", getUser, 50, onSucess, onError, onError);
+        if(term == "mylist"){
+            db_getOrderByChildContainsLimitToLast("ad", "user", getUser, 50, onSucess, onError, onError);
+        }else if(term == "myfavs"){
+            db_getOrderByChildContainsLimitToLast("ad", "favorite", 1, 50, onSucess, $("#adlistfav").append("<div> Pagina em desenvolvimento </div>"), misc_RemoveLoader());
+        }     
+        
         //db_get("ad", onSucess, onError, onError);
     } else {
         console.log("ADD PAGINATION HERE");
@@ -637,3 +730,29 @@ const ad_List_ListAdsByUser = function(term) {
 };
 
 /////////////////////////////////  AD LIST   /////////////////////////////////
+
+/////////////////////////////////  AD DELETE   /////////////////////////////////
+const ad_delete = function(){
+    const adUID = misc_GetUrlParam('uid');
+
+    //remove add
+    db_delete('ad/' + adUID);
+
+    //Remove images from storage
+    var onSucess = function(snapshot) {       
+        $.each(snapshot.val(), function(uid, obj) {
+
+            var imgfordel = obj.substring(obj.indexOf('%2F') + 3);
+
+            imgfordel = imgfordel.substring(0, 20);
+            
+            db_deleteFromStorage(imgfordel, null);
+        });
+        
+        //After remove all images from storage
+        db_delete('ads_images/' + adUID);
+        misc_GoToPage('ad_list.html');
+    };
+    db_get("ads_images/" + adUID, onSucess, null, null);
+}
+/////////////////////////////////  AD DELETE   /////////////////////////////////

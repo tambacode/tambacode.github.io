@@ -7,8 +7,9 @@ html
         meta(http-equiv="X-UA-Compatible" content="ie=edge")
         link( rel="manifest" href="manifest.json")
         
-        // Please don't use this type of comment >> // << because it is compiled in the HTML
-        //- Use this one instead >> //- << because it does not compile in the HTML
+        //- Required Core Stylesheet
+        link(rel="stylesheet" href="semanticUI/node_modules/@glidejs/glide/dist/css/glide.core.min.css")
+        script(src="semanticUI/node_modules/@glidejs/glide/dist/glide.min.js")
 
         //- CSS
         include templates/styles
@@ -21,7 +22,9 @@ html
         .pusher
             include templates/header
             #all
-                .ui.container
+                br
+                include templates/loader
+                .ui.container(style="display:none")
                     .ui.fluid.centered.small.image
                         img#image(src="")
                     h1.ui.header
@@ -33,7 +36,7 @@ html
                         #price| 
                         .sub.header#description
                     .ui.dividing.header
-                    .ui.two.column.grid
+                    .ui.two.column.padded.grid
                         .column
                             .ui.raised.segment
                                 a.ui.orange.ribbon.label Categoria
@@ -48,10 +51,10 @@ html
                         .sub.header
                             i.map.marker.alternate.icon
                             .content#district
-                    .button.fluid.ui.orange.button(id='SendMessage' onclick="message_StartChatWithProductOwner();")
+                    .button.fluid.ui.orange.button(id='SendMessage' onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner(), 'ad_detail.html');")
                         | Enviar Mensagem
                     button.fluid.ui.orange.button(id='EditAd' onclick="ad_RedirectForEditAd();")
-                        | Editar Anuncio
+                        | Editar Anúncio
             include templates/footer
     script.
-        ad_GetAllValues(); 
+        ad_FillDetailPage(misc_GetUrlParam('uid')); 
