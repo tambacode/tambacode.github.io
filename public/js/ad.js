@@ -586,6 +586,18 @@ const ad_AddLastViewedAd = function(timestamp, uid) {
     rootRef.child('user_last_viewed_ads').child(userUID).child(timestamp).set(uid);  
 };
 
+const ad_addSliderItem = function(item){
+    var htmlSlider = "<li class='slider__slides glide__slides'><img src='{0}'></li>";
+    var htmlBullet = "<button class='slider__bullet glide__bullet' data-glide-dir='={0}')></button>"
+
+    htmlBullet = htmlBullet.replace("{0}", item.key);
+    htmlSlider = htmlSlider.replace("{0}", item.value);
+
+    $("#sliderImages").append(htmlSlider);
+    $("#bulletImages").append(htmlBullet);
+
+}
+
 const ad_FillDetailPage = function(adUID){
     const edit = misc_GetUrlParam('isitforEdit');
     const user = localStorage.getItem('auth_UserUID');
@@ -593,13 +605,24 @@ const ad_FillDetailPage = function(adUID){
 
     var onSucess = function(snapshot) {
         var val = snapshot.val();
+        var counter = 0;
+        var imgPath = "ads_images/" + adUID;
 
-        db_get("ads_images", 
+        db_get(imgPath, 
             function(snapshot) {
-                const imgsRef = snapshot.val();
-                const imgURL = imgsRef[adUID][Object.keys(imgsRef[adUID])[0]];
-                ad_ValuesIntoDetail(val,imgURL);
-            }, null, null);
+                snapshot.forEach(function(imageUrl){
+                    var item = {
+                        key : counter,
+                        value : imageUrl.val()
+                    };
+                    ad_addSliderItem(item);
+                    counter++;
+
+                })
+                //const imgsRef = snapshot.val();
+                //const imgURL = imgsRef[adUID][Object.keys(imgsRef[adUID])[0]];
+                ad_ValuesIntoDetail(val, (counter-1));
+            }, ad_ErrorFunction, ad_ErrorFunction);
 
         if (val.user == user) {
             document.getElementById("SendMessage").style.visibility = "hidden";
@@ -615,7 +638,31 @@ const ad_FillDetailPage = function(adUID){
     }
 };
 
-const ad_ValuesIntoDetail = function(val, imgURL) {
+const ad_InitGlide = function(icounter){
+
+    var autoplayValue = 0;
+
+    (icounter == 0) ? autoplayValue : autoplayValue = 3000;
+
+    var glide = new Glide('#intro', {
+      type: 'slider',
+      autoplay: autoplayValue,
+      perView: 4,
+      focusAt: 'center',
+      breakpoints: {
+        800: {
+          perView: 2
+        },
+        480: {
+          perView: 1
+        }
+      }
+    });
+
+    glide.mount();
+}
+
+const ad_ValuesIntoDetail = function(val, icounter) {
     const edit = misc_GetUrlParam('isitforEdit');
     var id = "";
     if (edit){
@@ -648,7 +695,7 @@ const ad_ValuesIntoDetail = function(val, imgURL) {
             urlad.value = val.event_url;
         }
     } else {
-        image.src = imgURL;
+        //image.src = imgURL;
         title.innerText = val.title;
         address.innerText = val.location;
         price.innerText = "R$ " + val.price;
@@ -667,6 +714,7 @@ const ad_ValuesIntoDetail = function(val, imgURL) {
                 $("#email").text(valUser.email);
                 $("#phone").text(valUser.phone);
                 ad_showFields();
+                ad_InitGlide(icounter);
             }
             , null
             , null

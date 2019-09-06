@@ -9,7 +9,9 @@ html
         
         //- Required Core Stylesheet
         link(rel="stylesheet" href="semanticUI/node_modules/@glidejs/glide/dist/css/glide.core.min.css")
-        script(src="semanticUI/node_modules/@glidejs/glide/dist/glide.min.js")
+        link(rel="stylesheet" href="semanticUI/node_modules/@glidejs/glide/dist/css/glide.theme.min.css")
+
+        //- script(src="semanticUI/node_modules/@glidejs/glide/dist/glide.min.js")
 
         //- CSS
         include templates/styles
@@ -25,7 +27,33 @@ html
                 br
                 include templates/loader
                 .ui.container(style="display:none")
-                    .ui.fluid.centered.small.image
+                    //- .ui.fluid.centered.small.image
+                        img#image(src="")
+                    .ui.fluid.centered.rounded.medium.image
+                        #intro.slider.glide.glide--ltr.glide--carousel.glide--swipeable
+                            .slider__track.glide__track(data-glide-el="track")
+                                ul.slider__slides.glide__slides#sliderImages
+                                    //-li.slider__slides.glide__slides
+                                        img#image(src="")
+                                    //-li.slider__slides.glide__slides
+                                        img#image2(src="")
+                                    //-li.slider__slides.glide__slides
+                                        img#image3(src="")
+                                    //-li.slider__slides.glide__slides
+                                        img#image4(src="")                     
+                            //-div(data-glide-el="controls")
+                                button.slider__arrow.slider__arrow--prev.glide__arrow.glide__arrow--prev(data-glide-dir="<")
+                                    svg(xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24")
+                                        path(d="M0 12l10.975 11 2.848-2.828-6.176-6.176H24v-3.992H7.646l6.176-6.176L10.975 1 0 12z")
+                                button.slider__arrow.slider__arrow--next.glide__arrow.glide__arrow--next(data-glide-dir=">")
+                                    svg(xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24")
+                                        path(d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z")
+                            div.slider__bullets.glide__bullets#bulletImages(data-glide-el="controls[nav]")
+                                //-button.slider__bullet.glide__bullet(data-glide-dir="=0")
+                                //-button.slider__bullet.glide__bullet(data-glide-dir="=1")
+                                //-button.slider__bullet.glide__bullet(data-glide-dir="=2")    
+                                //-button.slider__bullet.glide__bullet(data-glide-dir="=3")
+                    //-.ui.fluid.centered.small.image
                         img#image(src="")
                     h1.ui.header
                         #title| 
@@ -56,5 +84,6 @@ html
                     button.fluid.ui.orange.button(id='EditAd' onclick="ad_RedirectForEditAd();")
                         | Editar Anúncio
             include templates/footer
+    script(src="semanticUI/node_modules/@glidejs/glide/dist/glide.min.js")
     script.
-        ad_FillDetailPage(misc_GetUrlParam('uid')); 
+        ad_FillDetailPage(misc_GetUrlParam('uid'));
