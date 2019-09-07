@@ -587,6 +587,7 @@ const ad_AddLastViewedAd = function(timestamp, uid) {
 };
 
 const ad_addSliderItem = function(item){
+    
     var htmlSlider = "<li class='slider__slides glide__slides'><img src='{0}'></li>";
     var htmlBullet = "<button class='slider__bullet glide__bullet' data-glide-dir='={0}')></button>"
 
@@ -597,6 +598,22 @@ const ad_addSliderItem = function(item){
     $("#bulletImages").append(htmlBullet);
 
 }
+
+const ad_addSliderVideo = function(ivideo){
+    
+    var htmlSlider = "<li class='slider__slides glide__slides'><iframe src='{0}'></iframe></li>";
+    var htmlBullet = "<button class='slider__bullet glide__bullet' data-glide-dir='={0}')></button>"
+    var nKey = $("#bulletImages button").length;
+
+    htmlBullet = htmlBullet.replace("{0}", nKey);
+    htmlSlider = htmlSlider.replace("{0}", ivideo);
+
+    $("#sliderImages").append(htmlSlider);
+    $("#bulletImages").append(htmlBullet);
+
+}
+
+
 
 const ad_FillDetailPage = function(adUID){
     const edit = misc_GetUrlParam('isitforEdit');
@@ -697,8 +714,8 @@ const ad_ValuesIntoDetail = function(val, icounter) {
             $('#cityad').dropdown('set selected', val.city);
         }, 2000);
         if (val.category === "eventos"){
-            datead.value = val.event_date;
             sitead.value = val.event_site;
+            datead.value = val.event_date;
             urlad.value = val.event_url;
         }
     } else {
@@ -709,6 +726,12 @@ const ad_ValuesIntoDetail = function(val, icounter) {
         description.innerText = val.description;
         category.innerText = val.category;
         subcategory.innerText = val.subcategory;
+        if (val.category === "eventos"){
+            ad_addSliderVideo(val.event_url);
+            datead.innerText = val.event_date;
+            $("#urlad").prop("href", val.event_site);
+            $('#adevents').removeClass('hidden');
+        }
 
         db_get('/users/'+val.user, 
             function(snapshot) {
