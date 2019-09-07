@@ -53,6 +53,21 @@ const misc_RemoveLoader = function(parent) {
     return false;
 };
 
+const misc_imagePreview = function(evt, imgDiv, callback){
+  var tgt = evt.target || window.event.srcElement,
+  files = tgt.files;
+
+  // FileReader support
+  if (FileReader && files && files.length) {
+      var fr = new FileReader();
+      fr.onload = function () {
+          $(imgDiv).attr("src", fr.result);
+          callback;
+      }
+      fr.readAsDataURL(files[0]);
+  }
+}
+
 const misc_waitImageLoadReady = function(image, url, callback){
     
     $(image)

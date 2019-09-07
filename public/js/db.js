@@ -25,7 +25,7 @@ const db_set = function(path, postData) {
 };
 
 //https://firebase.google.com/docs/database/web/read-and-write
-const db_update = function(path, callback) {
+const db_update = function(path, postData, callback) {
     db.ref(path).update(postData,
         function (error){
             if (error === null)
@@ -309,7 +309,7 @@ const db_updateUserInfo = function() {
     var complement = document.getElementById('complement').value;
     var city = document.getElementById('city').innerText;
     var state = document.getElementById('state').innerText;
-    var pictureRotate = misc_GetImageRotation($('#imageuploaded')).deg;;
+    var pictureRotate = misc_GetImageRotation($('#imageuploaded')).deg;
     
     var dataToInsert = {
         name: name,
@@ -330,12 +330,6 @@ const db_updateUserInfo = function() {
 
 };
 
-const doneSuccess = function(url){
-    misc_waitImageLoadReady($('#imageuploaded'), url, function() {
-        //$('#user_image').dimmer('hide');
-        ad_Register_RemoveLoadingIconFromImage($('#fileInput'));
-    });
-}
 
 const db_updateUserImage = function(url){
     var path = '/users/' + localStorage.getItem('auth_UserUID');
@@ -343,6 +337,15 @@ const db_updateUserImage = function(url){
     var dataToInsert = {
         profile_picture_link: url,
         pictureRotate: 0
+    }
+
+    const doneSuccess = function(url){
+        /*misc_waitImageLoadReady($('#imageuploaded'), url, function() {
+            //$('#user_image').dimmer('hide');
+            ad_Register_RemoveLoadingIconFromImage($('#fileInput'));
+        });*/
+        ad_Register_RemoveLoadingIconFromImage($('#fileInput'));
+        db_updateUserInfo();
     }
 
     db_update(path,dataToInsert, doneSuccess(url));
@@ -386,5 +389,10 @@ const db_saveUserImage = function(){
 
     var file = document.getElementById('fileInput').files[0];
 
-    db_saveImage(image_path, file, db_updateUserImage);
+    if (file) {
+        ad_Register_SetImageLoading($('#fileInput'));
+        db_saveImage(image_path, file, db_updateUserImage);
+    } else {
+        db_updateUserInfo();
+    }
 }

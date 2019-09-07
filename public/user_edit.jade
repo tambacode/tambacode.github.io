@@ -26,7 +26,17 @@ html
                     form.ui.form.fluid.user_edit
                         .field
                             .ui.equal.width.center.aligned.grid
-                                .ten.wide.column
+                                .row
+                                    link(rel="stylesheet" href="/css/misc.css")
+                                    .container#user_image
+                                        .content
+                                            input(id="fileInput" type="file" style="display: none;")
+                                        img#imageuploaded(src="")
+                                        i.circular.inverted.teal.undo.icon.btnleft(onclick="user_RotateImage();")
+                                        i.circular.inverted.teal.upload.icon.btnright(onclick="user_openFileDialog()")
+                                //-.row
+                                    .orage.ui.button(onclick="db_saveUserImage();") Salvar imagem
+                                //-.ten.wide.column
                                     //- .ui.blurring.dimmable.centered.rounded.image#user_image
                                         .ui.dimmer
                                             .content
@@ -96,7 +106,7 @@ html
                             .ui.padded.column.row.grid
                                 .two.wide.column
                                 .ten.wide.column.centered
-                                    .ui.fluid.orange.submit.button
+                                    .ui.fluid.orange.submit.button#btnsave
                                         i.save.icon
                                         |Salvar
                                 .two.wide.column
