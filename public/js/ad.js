@@ -727,7 +727,7 @@ const ad_ValuesIntoDetail = function(val, icounter) {
         category.innerText = val.category;
         subcategory.innerText = val.subcategory;
         if (val.category === "eventos"){
-            ad_addSliderVideo(val.event_url);
+            ad_addSliderVideo("https://www.youtube.com/embed/" + val.event_url);
             datead.innerText = val.event_date;
             $("#urlad").prop("href", val.event_site);
             $('#adevents').removeClass('hidden');

@@ -77,13 +77,21 @@ html
                             //-img#imgpreview(style="width: 500px")                                                  
                         .field.hidden.events
                             label Data do evento
-                            input(type='date' name='datead' id='datead')
+                            .ui.left.icon.small.input
+                                i.calendar.icon                                
+                                input(type='date' name='datead' id='datead')
                         .field.hidden.events
                             label Site do evento
-                            input(type='text' name='sitead' id='sitead' maxlength="200" placeholder='Site de divulgação do evento')
+                            .ui.labeled.small.input
+                                .ui.label
+                                    | http://
+                                input(type='text' name='sitead' id='sitead' maxlength="200" placeholder='www.yoursite.com')
                         .field.hidden.events
-                            label Url do evento
-                            input(type='text' name='urlad' id='urlad' maxlength="200" placeholder='http://www.xyz.com/video')
+                            label Youtube link ID do evento
+                            .ui.labeled.small.input
+                                .ui.label
+                                    | youtube.com/watch?v=
+                                input(type='text' name='urlad' id='urlad' maxlength="200" placeholder='{ID}')
                         .field
                             .ui.grid
                                 .six.wide.column
