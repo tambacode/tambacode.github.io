@@ -605,30 +605,37 @@ const ad_FillDetailPage = function(adUID){
 
     var onSucess = function(snapshot) {
         var val = snapshot.val();
-        var counter = 0;
-        var imgPath = "ads_images/" + adUID;
-
-        db_get(imgPath, 
-            function(snapshot) {
-                snapshot.forEach(function(imageUrl){
-                    var item = {
-                        key : counter,
-                        value : imageUrl.val()
-                    };
-                    ad_addSliderItem(item);
-                    counter++;
-
-                })
-                //const imgsRef = snapshot.val();
-                //const imgURL = imgsRef[adUID][Object.keys(imgsRef[adUID])[0]];
-                ad_ValuesIntoDetail(val, (counter-1));
-            }, ad_ErrorFunction, ad_ErrorFunction);
-
-        if (val.user == user) {
-            document.getElementById("SendMessage").style.visibility = "hidden";
-        }
 
         ad_AddLastViewedAd(Date.now(), adUID);
+
+        if(!edit){
+            
+            var counter = 0;
+            var imgPath = "ads_images/" + adUID;
+            
+            db_get(imgPath, 
+                function(snapshot) {
+                    snapshot.forEach(function(imageUrl){
+                        var item = {
+                            key : counter,
+                            value : imageUrl.val()
+                        };
+                        ad_addSliderItem(item);
+                        counter++;
+
+                    })
+                    //const imgsRef = snapshot.val();
+                    //const imgURL = imgsRef[adUID][Object.keys(imgsRef[adUID])[0]];
+                    ad_ValuesIntoDetail(val, (counter-1));
+                }, ad_ErrorFunction, ad_ErrorFunction
+            );
+
+            if (val.user == user) {
+                document.getElementById("SendMessage").style.visibility = "hidden";
+            }
+
+        } else 
+            ad_ValuesIntoDetail(val, null);
     };
 
     db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
