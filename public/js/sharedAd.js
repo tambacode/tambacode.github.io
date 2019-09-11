@@ -1,6 +1,6 @@
 /* This file is dedicate to store all logic part about ad_registration interface */
 
-const ad_initComponent = function(){
+const ad_initComponent = function() {
     $('form.ad_register')
         .form({
         onSuccess: function(event){
@@ -9,11 +9,14 @@ const ad_initComponent = function(){
     });
 }
 
-const ad_showFields = function(){
+const ad_showFields = function() {
     misc_RemoveLoader();
     $(".ui.container").show();
 }
 
+const ad_GetFirstImageFromAdSlider = function() {
+    return $('#sliderImages').find('li').find('img').attr('src');
+};
 
 ///////////////////////////////// AD REG /////////////////////////////////
 const ad_checkPopupType = function(){
@@ -583,11 +586,12 @@ const ads_List_UnfavoriteAd = function(uid) {
 const ad_AddLastViewedAd = function(timestamp, uid) {
     const userUID = localStorage.getItem('auth_UserUID');
     
-    rootRef.child('user_last_viewed_ads').child(userUID).child(timestamp).set(uid);  
+    if (userUID) {
+        rootRef.child('user_last_viewed_ads').child(userUID).child(timestamp).set(uid);
+    }
 };
 
 const ad_addSliderItem = function(item){
-    
     var htmlSlider = "<li class='slider__slides glide__slides'><img src='{0}'></li>";
     var htmlBullet = "<button class='slider__bullet glide__bullet' data-glide-dir='={0}')></button>"
 
@@ -596,11 +600,9 @@ const ad_addSliderItem = function(item){
 
     $("#sliderImages").append(htmlSlider);
     $("#bulletImages").append(htmlBullet);
-
-}
+};
 
 const ad_addSliderVideo = function(ivideo){
-    
     var htmlSlider = "<li class='slider__slides glide__slides'><iframe src='{0}'></iframe></li>";
     var htmlBullet = "<button class='slider__bullet glide__bullet' data-glide-dir='={0}')></button>"
     var nKey = $("#bulletImages button").length;
@@ -610,10 +612,7 @@ const ad_addSliderVideo = function(ivideo){
 
     $("#sliderImages").append(htmlSlider);
     $("#bulletImages").append(htmlBullet);
-
-}
-
-
+};
 
 const ad_FillDetailPage = function(adUID){
     const edit = misc_GetUrlParam('isitforEdit');
@@ -684,7 +683,7 @@ const ad_InitGlide = function(icounter){
     });
 
     glide.mount();
-}
+};
 
 const ad_ValuesIntoDetail = function(val, icounter) {
     const edit = misc_GetUrlParam('isitforEdit');
@@ -832,5 +831,5 @@ const ad_delete = function(){
         misc_GoToPage('ad_list.html');
     };
     db_get("ads_images/" + adUID, onSucess, null, null);
-}
+};
 /////////////////////////////////  AD DELETE   /////////////////////////////////

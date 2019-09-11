@@ -26,6 +26,12 @@
     "users_messages": {
       ".read": true,
       ".write": true, 
+    },
+    "user_last_viewed_ads": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
     }
   }
 }

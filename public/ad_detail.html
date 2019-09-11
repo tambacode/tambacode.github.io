@@ -27,7 +27,7 @@
     <script src="js/auth.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/messages.js"></script>
-    <script src="js/ad.js"></script>
+    <script src="js/sharedAd.js"></script>
   </head>
   <body>
     <div class="ui left sidebar vertical menu"><a href="index.html" class="item">Home<i class="home icon Large"></i></a><a id="PerfilButton" onClick="user_OpenProfile();" class="item hidden">Meu Perfil<i class="user circle icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list.html');" class="item">Meus Anúncios<i class="shopping bag icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_favorites.html');" class="item">Favoritos<i class="heart icon Large"></i></a><a onClick="messages_GoTo();" class="item">Mensagens<i class="comment icon Large"></i></a><a id="LogoutButton" onClick="auth_LogoffUser();" class="item hidden">Sair<i class="sign-out icon Large"></i></a><a id="LoginButton" onClick="auth_RequireLoggingToAccess('index.html');" class="item hidden">Login<i class="sign-in icon Large"></i></a></div>
@@ -218,7 +218,7 @@
               <div id="district" class="content"></div>
             </div>
           </h1>
-          <div id="SendMessage" onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner(), 'ad_detail.html');" class="button fluid ui orange button">Enviar Mensagem</div>
+          <div id="SendMessage" onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner, 'ad_detail.html');" class="button fluid ui orange button">Enviar Mensagem</div>
           <button id="EditAd" onclick="ad_RedirectForEditAd();" class="fluid ui orange button">Editar Anúncio</button>
         </div>
       </div>
