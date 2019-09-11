@@ -32,6 +32,10 @@
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid"
       }
+    },
+    "users_favorites": {
+      ".read": true,
+      ".write": true, 
     }
   }
 }
