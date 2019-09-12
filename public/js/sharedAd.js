@@ -572,13 +572,43 @@ const ads_List_FavoriteAdClick = function(self) {
 };
 
 const ads_List_FavoriteAd = function(uid) {
-    console.log(uid);
-    console.log("ads_List_FavoriteAd method needs to be implemented");
+    //Fav an Ad.
+
+    const ad = uid;
+    const user = localStorage.getItem('auth_UserUID');
+    const path = 'users_favorites/' + user + '/' + ad;
+    const pathAd = 'ad/' + ad;
+    const tableone = rootRef.child('ad');
+
+    
+    var onSuccess = function (snapshot){
+        const favsRef = snapshot.val();
+        const title = favsRef.title;
+        const price = favsRef.price;
+        const description = favsRef.description;
+
+        var dataToInsert = {
+            user: user,
+            ad: ad,
+            title: title,
+            price: price,
+            description: description,
+            timestamp: Date.now()             
+        };
+
+        db_set(path, dataToInsert);
+    };
+
+    db_get(pathAd, onSuccess, null, null);
 };
 
 const ads_List_UnfavoriteAd = function(uid) {
-    console.log(uid);
-    console.log("ads_List_UnfavoriteAd method needs to be implemented");   
+    
+    const user = localStorage.getItem('auth_UserUID');
+    const path = 'users_favorites/' + user + '/' + uid;
+
+    //Unfavorite Ad
+    db_delete(path);
 };
 
 ///////////////////////////////// ADS SEARCH /////////////////////////////////
