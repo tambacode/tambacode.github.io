@@ -798,6 +798,7 @@ const ad_ErrorFunction = function(error) {
 const ad_List_ListAdsByUser = function(term) {
     const getUser = localStorage.getItem('auth_UserUID');
     const firstCall = (lastAdUIDReceived == null);
+    const path = "users_favorites/" + getUser;
 
     var onSucess = function(snapshot) {
         misc_RemoveLoader();
@@ -811,7 +812,12 @@ const ad_List_ListAdsByUser = function(term) {
                     const imgsRef = snapshot.val();
                     const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
                     
-                    ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, false));                                           
+                    if(term == "myfavs"){
+                        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, true)); 
+                    }else{
+                        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, false)); 
+                    }
+                                                              
                 }, null, null);
         });
     };
@@ -827,7 +833,7 @@ const ad_List_ListAdsByUser = function(term) {
         if(term == "mylist"){
             db_getOrderByChildContainsLimitToLast("ad", "user", getUser, 50, onSucess, onError, onError);
         }else if(term == "myfavs"){
-            db_getOrderByChildContainsLimitToLast("ad", "favorite", 1, 50, onSucess, $("#adlistfav").append("<div> Pagina em desenvolvimento </div>"), misc_RemoveLoader());
+            db_get(path, onSucess, null, null);
         }     
         
         //db_get("ad", onSucess, onError, onError);
