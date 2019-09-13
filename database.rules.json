@@ -36,6 +36,10 @@
     "users_favorites": {
       ".read": true,
       ".write": true, 
+    },
+    "user_ad": {
+      ".read": true,
+      ".write": true, 
     }
   }
 }
