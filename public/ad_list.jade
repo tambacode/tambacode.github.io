@@ -14,13 +14,14 @@ html
         include templates/scripts
     body
         include templates/sideBar
+        include templates/filterSideBar
         .pusher
             include templates/header
             include templates/AnunciarAgora
             #all
-                #filters.ui.padded.grid
-                #ads.ui.grid
-                    include templates/loader                    
+                br
+                #ads.sharedAds.ui.grid
+                    include templates/loader
                 br
                 br
             include templates/footer

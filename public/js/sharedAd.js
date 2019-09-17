@@ -813,9 +813,9 @@ const ad_List_ListAdsByUser = function(term) {
                     const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
                     
                     if(term == "myfavs"){
-                        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, true)); 
+                        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, false, true)); 
                     }else{
-                        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, false)); 
+                        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, false, false)); 
                     }
                                                               
                 }, null, null);
