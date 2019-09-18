@@ -374,7 +374,7 @@ const ads_SearchAd = function() {
     }
 };
 
-const ad_GetAdCard = function(uid, image, title, price, description, showFavoriteButton, favoriteSelected) {
+const ad_GetAdCard = function(uid, image, category, title, price, description, showFavoriteButton, favoriteSelected) {
     const addImage = '<div class="four wide column product_image"><a href="ad_detail.html?uid={0}"><img src="{1}" class="ui tiny rounded image list"></a></div>';
     const addInfo  = '<div class="twelve wide column product_info"><a href="ad_detail.html?uid={2}"><h4 id="title">{3}</h4></a><i onclick="ads_List_FavoriteAdClick(this);" uid="{4}" class="red large link {5} {6} icon favoriteItem"></i><h3 id="price">{7}</h3><span id="info">{8}</span><div style="width: 100%;" class="ui divider"></div></div>';
 
@@ -386,7 +386,7 @@ const ad_GetAdCard = function(uid, image, title, price, description, showFavorit
     card = card.replace('{4}', uid);
     card = card.replace('{5}', (showFavoriteButton) ? "heart" : "");
     card = card.replace('{6}', (favoriteSelected) ? "" : "outline");
-    card = card.replace('{7}', misc_GetPrice(price));
+    card = card.replace('{7}', (category != 'fazendas') ? misc_GetPrice(price) : "&nbsp;");
     card = card.replace('{8}', misc_GetStringWithMaxCharacthers(description, 40));
 
     return card;
@@ -505,7 +505,7 @@ const ads_AddAdToDiv = function(snapshot, uid, obj, holder) {
         const imgsRef = snapshot.val();
         const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
 
-        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, true, false));
+        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.category, obj.title, obj.price, obj.description, true, false));
     }, null, null);
 };
 
@@ -819,9 +819,9 @@ const ad_List_ListAdsByUser = function(term) {
                     const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
                     
                     if(term == "myfavs"){
-                        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, false, true)); 
+                        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.category, obj.title, obj.price, obj.description, false, true)); 
                     }else{
-                        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.title, obj.price, obj.description, false, false)); 
+                        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.category, obj.title, obj.price, obj.description, false, false)); 
                     }
                                                               
                 }, null, null);
