@@ -30,6 +30,16 @@ html
                                         .content
                                             | Novidades
                     include templates/loader
+                #adsFarm.sharedAds.ui.grid
+                    .sharedAdsHeader
+                        .ui.equal.width.centered.padded.grid
+                            .green.row
+                                .colunm
+                                    h4.ui.white.header
+                                        i.inverted.star.outline.icon
+                                        .content
+                                            | Fazendas
+                    include templates/loader
                 #adsProducts.sharedAds.ui.grid
                     .sharedAdsHeader
                         .ui.equal.width.centered.padded.grid
@@ -91,6 +101,7 @@ html
         script.
             const qtdAdsToListByType = 3;
             ads_List_ListLastAdsOnDiv($('#adsLast'), qtdAdsToListByType, 'ad', 'timestamp', null);
+            ads_List_ListLastAdsOnDiv($('#adsFarm'), qtdAdsToListByType, 'ad', 'category', 'fazendas');
             ads_List_ListLastAdsOnDiv($('#adsProducts'), qtdAdsToListByType, 'ad', 'category', 'produtos');
             ads_List_ListLastAdsOnDiv($('#adsServices'), qtdAdsToListByType, 'ad', 'category', 'servicos');
             ads_List_ListLastAdsOnDiv($('#adsEvents'), qtdAdsToListByType, 'ad', 'category', 'eventos');

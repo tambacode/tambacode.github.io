@@ -62,23 +62,7 @@ html
                                         input(type='text' name='price' id='price' minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," required="required" onclick='$(this).maskMoney();')
                         .field
                             label Imagem
-                            .ui.padded.centered.grid#ImagesGrid
-                                //-.five.wide.column.row
-                                    .ui.active.inverted.dimmer
-                                        .ui.text.loader Carregando
-                                    img.ui.tiny.image(src="imgs/black.png")
-                                    input#image1(type='file', value='upload', style="display: none;")
-                                //-.five.wide.column.row
-                                    .ui.active.inverted.dimmer
-                                        i.plus.big.click.icon(onclick="console.log('11');")
-                                    img.ui.tiny.image(src="imgs/black.png")
-                                    input#image2(type='file', value='upload', style="display: none;")
-                                //-.five.wide.column.row
-                                    img.ui.tiny.image(src="imgs/black.png")
-                            //-p#uploadMsg.red.hide
-                            //-input#fileInput(type='file', value='upload', name='fileInput[]')
-                            //-progress#uploader(value="0" max="100") 0%   
-                            //-img#imgpreview(style="width: 500px")                                                  
+                            .ui.padded.centered.grid#ImagesGrid                                             
                         .field.hidden.events
                             label Data do evento
                             .ui.left.icon.small.input

@@ -73,11 +73,13 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
     var description = document.getElementById('description').value;
 
     if (products.checked == true) {
-        var category = "produtos";
+        var category = products.value;
     } else if(services.checked == true) {
-        var category = "servicos";
+        var category = services.value;
+    } else if(farm.checked == true) {
+        var category = farm.value;
     } else {
-        var category = "eventos";
+        var category = events.value;
     }
     const subcategory = document.getElementById('subcategory').innerText;
 
@@ -526,7 +528,7 @@ const ads_List_ListInnerJoinAdsOnDiv = function(div, qtdAdsToList, table, innerJ
     db_getInnerJoinLimitToLast(tableOne, path, tableTwo, onSucess, onError, onError, true, qtdAdsToList);
 };
 
-const ads_List_ListLastAdsOnDiv = function(div, qtdAdsToList, table, fieldToOrder, fieldTestValue) {
+const ads_List_ListLastAdsOnDiv = function(div, limitToLast, table, fieldToOrder, fieldTestValue) {
     const onSucess = function(snapshot) {
         var cardAdded = false;
         
@@ -548,7 +550,11 @@ const ads_List_ListLastAdsOnDiv = function(div, qtdAdsToList, table, fieldToOrde
         div.remove();
     };
 
-    db_getOrderByChildLimitToLast(table, fieldToOrder, qtdAdsToList, onSucess, onError, onError);
+    if (!fieldTestValue) {
+        db_getOrderByChildLimitToLast(table, fieldToOrder, limitToLast, onSucess, onError, onError);
+    } else {
+        db_getEqualToLimitToLast(table, fieldToOrder, fieldTestValue, limitToLast, onSucess, onError, onError);
+    }
 };
 
 const ads_List_FavoriteAdClick = function(self) {
