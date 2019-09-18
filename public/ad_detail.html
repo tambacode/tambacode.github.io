@@ -5,9 +5,18 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <link rel="manifest" href="manifest.json"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css"/>
+    <meta name="theme-color" content="#f2711c"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="application-name" content="Share.Farm"/>
+    <meta name="description" content="Compartilhando recursos."/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <link rel="manifest" crossorigin="use-credentials" href="manifest.json"/>
+    <link rel="canonical" href="http://localhost:5000//"/>
+    <link rel="icon" sizes="128x128" href="/imgs/icons/square128px.png"/>
+    <link rel="icon" sizes="256x256" href="/imgs/icons/square256px.png"/>
+    <link rel="icon" sizes="512x512" href="/imgs/icons/square512px.png"/>
+    <link rel="apple-touch-icon" href="/imgs/icons/square128px.png"/>
     <link rel="stylesheet" type="text/css" href="semanticUI/semantic.css"/>
     <link rel="stylesheet" type="text/css" href="semanticUI/components/Semantic-UI-Alert.css"/>
     <link rel="stylesheet" type="text/css" href="css/webapp.css"/>
@@ -28,6 +37,8 @@
     <script src="js/ui.js"></script>
     <script src="js/messages.js"></script>
     <script src="js/sharedAd.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css"/>
   </head>
   <body>
     <div class="ui left sidebar vertical menu"><a href="index.html" class="item">Home<i class="home icon Large"></i></a><a id="PerfilButton" onClick="user_OpenProfile();" class="item hidden">Meu Perfil<i class="user circle icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list.html');" class="item">Meus Anúncios<i class="shopping bag icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_favorites.html');" class="item">Favoritos<i class="heart icon Large"></i></a><a onClick="messages_GoTo();" class="item">Mensagens<i class="comment icon Large"></i></a><a id="LogoutButton" onClick="auth_LogoffUser();" class="item hidden">Sair<i class="sign-out icon Large"></i></a><a id="LoginButton" onClick="auth_RequireLoggingToAccess('index.html');" class="item hidden">Login<i class="sign-in icon Large"></i></a></div>

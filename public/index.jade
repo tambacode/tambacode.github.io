@@ -1,34 +1,7 @@
 html
-    head
-        title Shared.Farm
-        
-        meta(charset='utf-8')
-        meta(name='viewport', content='width=device-width, initial-scale=1')
-        meta(http-equiv="X-UA-Compatible" content="ie=edge")
-        meta(name="theme-color" content="#f2711c")
-        meta(name='mobile-web-app-capable' content='yes')
-        meta(name='apple-mobile-web-app-capable' content='yes')
-        meta(name='application-name' content='Share.Farm')
-        meta(name='description' content='Compartilhando recursos.')
-        meta(name='apple-mobile-web-app-status-bar-style' content='black')
+    
+    include templates/head
 
-        link(rel='canonical' href='http://localhost:5000//')
-        link()
-        link()
-        link()
-        link(rel="manifest" crossorigin="use-credentials" href="manifest.json")
-        link(rel="icon" sizes="192x192" href="/imgs/icons/square128px.png")
-        link(rel="icon" sizes="256x256" href="/imgs/icons/square256px.png")
-        link(rel="icon" sizes="512x512" href="/imgs/icons/square512px.png")
-
-        //- icons for Safari -->
-        link(rel="apple-touch-icon" href="/imgs/icons/square128px.png")
-        
-        //- CSS
-        include templates/styles
-        
-        //- Script
-        include templates/scripts
     body
         include templates/sideBar
         include templates/filterSideBar

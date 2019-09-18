@@ -1,23 +1,11 @@
 html
-    head
-        title Shared.Farm
-        
-        meta(charset='utf-8')
-        meta(name='viewport', content='width=device-width, initial-scale=1')
-        meta(http-equiv="X-UA-Compatible" content="ie=edge")
-        link( rel="manifest" href="manifest.json")
-        
+    
+    include templates/head
+      
         //- Required Core Stylesheet
         link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css")
         link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css")
 
-        //- script(src="semanticUI/node_modules/@glidejs/glide/dist/glide.min.js")
-
-        //- CSS
-        include templates/styles
-        
-        //- Script
-        include templates/scripts
     body
         include templates/sideBar
         include templates/filterSideBar
