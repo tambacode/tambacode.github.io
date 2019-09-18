@@ -34,6 +34,10 @@ html
                             .inline.fields
                                 .field
                                     .ui.radio.orange.checkbox
+                                        input(type='radio' name='category' id='farm' value="fazendas" disabled)
+                                        label Fazenda
+                                .field
+                                    .ui.radio.orange.checkbox
                                         input(type='radio' name='category' id='products' value="produtos" disabled)
                                         label Produtos
                                 .field
@@ -168,6 +172,10 @@ html
                                                     .ui.icon
                                                         i.icon.user.circle.large
                                             .ui.padded.column.row.grid
+                                                .sixteen.wide.column.centered
+                                                    button.big.ui.button(value="farm" onClick="ad_selectedType(this.value);")
+                                                        i.warehouse.icon
+                                                        | Fazenda
                                                 .sixteen.wide.column.centered
                                                     button.big.ui.button(value="products" onClick="ad_selectedType(this.value);")
                                                         i.cubes.icon
