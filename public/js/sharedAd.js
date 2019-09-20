@@ -639,15 +639,11 @@ const ad_addSliderItem = function(item){
 };
 
 const ad_addSliderVideo = function(ivideo){
-    var htmlSlider = "<li class='slider__slides glide__slides'><iframe src='{0}'></iframe></li>";
-    var htmlBullet = "<button class='slider__bullet glide__bullet' data-glide-dir='={0}')></button>"
-    var nKey = $("#bulletImages button").length;
-
-    htmlBullet = htmlBullet.replace("{0}", nKey);
-    htmlSlider = htmlSlider.replace("{0}", ivideo);
-
-    $("#sliderImages").append(htmlSlider);
-    $("#bulletImages").append(htmlBullet);
+    $('#youtubeVideo').embed({
+        source      : 'youtube',
+        //placeholder : '/images/bear-waving.jpg',
+        id          : ivideo        
+    });
 };
 
 const ad_FillDetailPage = function(adUID){
@@ -762,7 +758,7 @@ const ad_ValuesIntoDetail = function(val, icounter) {
         category.innerText = val.category;
         subcategory.innerText = val.subcategory;
         if (val.category === "eventos"){
-            ad_addSliderVideo("https://www.youtube.com/embed/" + val.event_url);
+            ad_addSliderVideo(val.event_url);
             datead.innerText = val.event_date;
             $("#urlad").prop("href", val.event_site);
             $('#adevents').removeClass('hidden');
