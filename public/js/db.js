@@ -343,8 +343,7 @@ const db_updateUserInfo = function() {
         pictureRotate: pictureRotate
     };
     
-    db_update(path,dataToInsert,misc_GoToPage("user_info.html"));
-
+    db_update(path, dataToInsert, misc_GoToPage("user_info.html"));
 };
 
 
@@ -365,7 +364,7 @@ const db_updateUserImage = function(url){
         db_updateUserInfo();
     }
 
-    db_update(path,dataToInsert, doneSuccess(url));
+    db_update(path, dataToInsert, doneSuccess(url));
 }
 
 /*

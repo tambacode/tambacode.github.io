@@ -19,6 +19,10 @@ const ad_GetFirstImageFromAdSlider = function() {
 };
 
 ///////////////////////////////// AD REG /////////////////////////////////
+const ad_SetAdParent = function(adTableRef, adUID, value) {
+    adTableRef.child(adUID).child('ad_parent').set(value);
+};
+
 const ad_checkPopupType = function(){
     const edit = misc_GetUrlParam('isitforEdit');
     if (!edit){
@@ -31,8 +35,7 @@ const ad_checkPopupType = function(){
             });
         });
     }
-}
-
+};
 
 const ad_selectedType = function(id){
     $('#' + id)
@@ -43,8 +46,7 @@ const ad_selectedType = function(id){
     }
     ad_GetCategory();
     $('.ui.modal').modal('hide');
-}
-
+};
 
 const db_InsertAdRegistration = function(flagUpdate, adUID) {
     // Test if there is any image being uploaded
@@ -125,15 +127,16 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
         dataToInsert.event_url = event_url;
     }
 
-    if(!flagUpdate){
+    const pageToRedirect = 'ad_registration_childrens.html?uid=' + key + '&nextStep=ad_detail';
+    if (!flagUpdate) {
         ad_Register_SaveImagePathToDB(key, ad_CurrentlyAddedImages);
         db_set(path, dataToInsert);
         db_InsertAdRegistrationOnUsers(key);
-        auth_RequireLoggingToAccess('ad_detail.html?uid=' + key);
-    }else if(flagUpdate == 'yes'){
-        db_update(path,dataToInsert,misc_GoToPage('ad_detail.html?uid=' + key));
+        
+        auth_RequireLoggingToAccess(pageToRedirect);
+    } else if(flagUpdate == 'yes') {
+        db_update(path, dataToInsert, auth_RequireLoggingToAccess(pageToRedirect));
     }
-    
 };
 
 const ad_Register_SaveImagePathToDB = function(adUID, imagesArray) {
@@ -374,23 +377,35 @@ const ads_SearchAd = function() {
     }
 };
 
-const ad_GetAdCard = function(uid, image, category, title, price, description, showFavoriteButton, favoriteSelected) {
+const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelected, showCheckbox) {
     const addImage = '<div class="four wide column product_image"><a href="ad_detail.html?uid={0}"><img src="{1}" class="ui tiny rounded image list"></a></div>';
-    const addInfo  = '<div class="twelve wide column product_info"><a href="ad_detail.html?uid={2}"><h4 id="title">{3}</h4></a><i onclick="ads_List_FavoriteAdClick(this);" uid="{4}" class="red large link {5} {6} icon favoriteItem"></i><h3 id="price">{7}</h3><span id="info">{8}</span><div style="width: 100%;" class="ui divider"></div></div>';
+    const addInfo  = '<div class="twelve wide column product_info"><a href="ad_detail.html?uid={2}"><h4 id="title">{3}</h4></a>{9}<h3 id="price">{7}</h3><span id="info">{8}</span><div style="width: 100%;" class="ui divider"></div></div>';
 
     var card = addImage + addInfo;
+
+    if (showCheckbox) {
+        // USE SEMANTIC ON FUTURE VERSION
+        //const item = '<div class="ui checkbox big"><input type="checkbox"></div>';
+
+        const selected = (obj.ad_parent != null && obj.ad_parent != '') ? 'checked' : '';
+        const item = '<input ' + selected + ' type="checkbox" name="checkAd" value="' + uid + '" class="favoriteItem">';
+
+        card = card.replace('{9}', item);
+    } else {
+        card = card.replace('{9}', '<i onclick="ads_List_FavoriteAdClick(this);" uid="{4}" class="red large link {5} {6} icon favoriteItem"></i>');
+        card = card.replace('{5}', (showFavoriteButton) ? "heart" : "");
+    }
+
     card = card.replace('{0}', uid);
     card = card.replace('{1}', image);
     card = card.replace('{2}', uid);
-    card = card.replace('{3}', title);
+    card = card.replace('{3}', obj.title);
     card = card.replace('{4}', uid);
-    card = card.replace('{5}', (showFavoriteButton) ? "heart" : "");
     card = card.replace('{6}', (favoriteSelected) ? "" : "outline");
-    card = card.replace('{7}', (category != 'fazendas') ? misc_GetPrice(price) : "&nbsp;");
-    card = card.replace('{8}', misc_GetStringWithMaxCharacthers(description, 40));
+    card = card.replace('{7}', (obj.category != 'fazendas') ? misc_GetPrice(obj.price) : "&nbsp;");
+    card = card.replace('{8}', misc_GetStringWithMaxCharacthers(obj.description, 40));
 
     return card;
-    //ad __ id, category, cep, description, location, price, tel, title, user
 };
 
 const ad_List_AddCardToList = function(holder, card) {
@@ -505,7 +520,7 @@ const ads_AddAdToDiv = function(snapshot, uid, obj, holder) {
         const imgsRef = snapshot.val();
         const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
 
-        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.category, obj.title, obj.price, obj.description, true, false));
+        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, true, false));
     }, null, null);
 };
 
@@ -646,7 +661,11 @@ const ad_addSliderVideo = function(ivideo){
     });
 };
 
-const ad_FillDetailPage = function(adUID){
+const ad_SetFarmFields = function() {
+    $('.notFarm').addClass('hidden');
+};
+
+const ad_FillDetailPage = function(adUID) {
     const edit = misc_GetUrlParam('isitforEdit');
     const user = localStorage.getItem('auth_UserUID');
     var adPath = 'ad/' + adUID;
@@ -656,8 +675,11 @@ const ad_FillDetailPage = function(adUID){
 
         ad_AddLastViewedAd(Date.now(), adUID);
 
-        if(!edit){
-            
+        if (val.category === 'fazendas'){
+            ad_SetFarmFields();
+        }
+
+        if (!edit) {
             var counter = 0;
             var imgPath = "ads_images/" + adUID;
             
@@ -682,8 +704,9 @@ const ad_FillDetailPage = function(adUID){
                 document.getElementById("SendMessage").style.visibility = "hidden";
             }
 
-        } else 
+        } else {
             ad_ValuesIntoDetail(val, null);
+        }
     };
 
     db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
@@ -720,20 +743,25 @@ const ad_InitGlide = function(icounter){
 const ad_ValuesIntoDetail = function(val, icounter) {
     const edit = misc_GetUrlParam('isitforEdit');
     var id = "";
-    if (edit){
+
+    if (edit) {
         title.value = val.title;
         description.value = val.description;
         if(val.category === 'produtos'){
             products.checked = true;
             id = "products";
-        }else if (val.category === 'serviÃ§os'){
+        } else if (val.category === 'serviÃ§os'){
             services.checked = true;
             id = "services";
+        } else if (val.category === 'fazendas'){
+            farm.checked = true;
+            id = "farm";
         } else {
             events.checked = true;
             id = "events";
         }
         ad_selectedType(id);
+
         //ad_GetCategory();
         $('#subcategory').dropdown('set selected', val.subcategory);
         price.value = val.price;
@@ -797,7 +825,7 @@ const ad_ErrorFunction = function(error) {
 /////////////////////////////////  AD DETAIL /////////////////////////////////
 /////////////////////////////////  AD LIST   /////////////////////////////////
 
-const ad_List_ListAdsByUser = function(term) {
+const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
     const getUser = localStorage.getItem('auth_UserUID');
     const firstCall = (lastAdUIDReceived == null);
     const path = "users_favorites/" + getUser;
@@ -807,20 +835,23 @@ const ad_List_ListAdsByUser = function(term) {
         
         const holder = $("#ads");
         $.each(snapshot.val(), function(uid, obj) {
-            lastAdUIDReceived = uid;
-
-            db_get("ads_images",
-                function(snapshot) {
-                    const imgsRef = snapshot.val();
-                    const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
-                    
-                    if(term == "myfavs"){
-                        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.category, obj.title, obj.price, obj.description, false, true)); 
-                    }else{
-                        ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj.category, obj.title, obj.price, obj.description, false, false)); 
-                    }
-                                                              
-                }, null, null);
+            
+            // This IF test if farms are enableb on this search or not
+            if (term != "mylistNoFarms" || (term == "mylistNoFarms" && obj.category != 'fazendas')) {
+                lastAdUIDReceived = uid;
+                
+                db_get("ads_images",
+                    function(snapshot) {
+                        const imgsRef = snapshot.val();
+                        const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
+                        
+                        if (term == "myfavs") {
+                            ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, true, enableCheckboxOnCards)); 
+                        }else {
+                            ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, false, enableCheckboxOnCards)); 
+                        }
+                    }, null, null);
+            }
         });
     };
 
@@ -832,9 +863,9 @@ const ad_List_ListAdsByUser = function(term) {
 
     if (firstCall) {
         //TODO: Change "title" to "timestamp", when this field is added to database, so we can order the ads list by their creation date.
-        if(term == "mylist"){
+        if (term == "mylist" || term == "mylistNoFarms") {
             db_getOrderByChildContainsLimitToLast("ad", "user", getUser, 50, onSucess, onError, onError);
-        }else if(term == "myfavs"){
+        } else if(term == "myfavs") {
             db_get(path, onSucess, null, null);
         }     
         

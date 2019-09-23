@@ -9,7 +9,7 @@
     "ad": {
       ".read": true,
       ".write": true,
-      ".indexOn": ["title", "timestamp", "category"]
+      ".indexOn": ["title", "timestamp", "category", "user"]
     },
     "messages": {
       ".read": true,
