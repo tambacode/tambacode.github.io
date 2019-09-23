@@ -761,7 +761,7 @@ const ad_ValuesIntoDetail = function(val, icounter) {
             ad_addSliderVideo(val.event_url);
             datead.innerText = val.event_date;
             $("#urlad").prop("href", val.event_site);
-            $('#adevents').removeClass('hidden');
+            $('#hiddendiv').removeClass('hidden');
         }
 
         db_get('/users/'+val.user, 
