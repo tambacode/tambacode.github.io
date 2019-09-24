@@ -76,9 +76,9 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
 
     if (products.checked == true) {
         var category = products.value;
-    } else if(services.checked == true) {
+    } else if (services.checked == true) {
         var category = services.value;
-    } else if(farm.checked == true) {
+    } else if (farm.checked == true) {
         var category = farm.value;
     } else {
         var category = events.value;
@@ -117,6 +117,7 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
         timestamp: Date.now()             
     };
 
+    var pageToRedirect = 'ad_detail.html?uid=' + key;
     if (category === "eventos") {
         var event_date = document.getElementById('datead').value;
         var event_site = document.getElementById('sitead').value;
@@ -125,9 +126,10 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
         dataToInsert.event_date = event_date;
         dataToInsert.event_site = event_site;
         dataToInsert.event_url = event_url;
+    } else if (category === "fazendas") {
+        pageToRedirect = 'ad_registration_childrens.html?uid=' + key + '&nextStep=ad_detail';
     }
 
-    const pageToRedirect = 'ad_registration_childrens.html?uid=' + key + '&nextStep=ad_detail';
     if (!flagUpdate) {
         ad_Register_SaveImagePathToDB(key, ad_CurrentlyAddedImages);
         db_set(path, dataToInsert);
@@ -214,9 +216,9 @@ const ad_GetCategory = function() {
 
     if (products.checked === true) {
         ad_InitDropDownWithProducts($('#subcategory'));
-    } else if(services.checked === true) {
+    } else if (services.checked === true) {
         ad_InitDropDownWithServices($('#subcategory'));                  
-    } else {
+    } else if (events.checked === true) {
         ad_InitDropDownWithEvents($('#subcategory'));
     }
 }
@@ -394,12 +396,15 @@ const ad_GetCardByUid = function(holder, uid) {
 }
 
 const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelected, showCheckbox) {
-    const addImage = '<div class="four wide column product_image"><a href="ad_detail.html?uid={0}"><img src="{1}" class="ui tiny rounded image list"></a></div>';
-    const addInfo  = '<div class="twelve wide column product_info"><a href="ad_detail.html?uid={2}"><h4 id="title">{3}</h4></a>{9}<h3 id="price">{7}</h3><span id="info">{8}</span><div style="width: 100%;" class="ui divider"></div></div>';
+    const addImage = '<div class="four wide column product_image"><a href="{0}"><img src="{1}" class="ui tiny rounded image list"></a></div>';
+    const addInfo  = '<div class="twelve wide column product_info"><a href="{2}"><h4 id="title">{3}</h4></a>{9}<h3 id="price">{7}</h3><span id="info">{8}</span><div style="width: 100%;" class="ui divider"></div></div>';
 
+    var link = 'ad_detail.html?uid=' + uid;
     var card = addImage + addInfo;
 
     if (showCheckbox) {
+        // IF SHOWCHECKBOX disable links
+        link = "#";
         // USE SEMANTIC ON FUTURE VERSION
         //const item = '<div class="ui checkbox big"><input type="checkbox"></div>';
 
@@ -412,9 +417,9 @@ const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelec
         card = card.replace('{5}', (showFavoriteButton) ? "heart" : "");
     }
 
-    card = card.replace('{0}', uid);
+    card = card.replace('{0}', link);
     card = card.replace('{1}', image);
-    card = card.replace('{2}', uid);
+    card = card.replace('{2}', link);
     card = card.replace('{3}', obj.title);
     card = card.replace('{4}', uid);
     card = card.replace('{6}', (favoriteSelected) ? "" : "outline");
@@ -853,7 +858,8 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
         
         const holder = $("#ads");
         $.each(snapshot.val(), function(uid, obj) {
-            
+            const onErr = function(snapshot) {};
+                
             // This IF test if farms are enableb on this search or not
             if (term != "mylistNoFarms" || (term == "mylistNoFarms" && obj.category != 'fazendas')) {
                 lastAdUIDReceived = uid;
@@ -868,7 +874,7 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
                         }else {
                             ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, false, enableCheckboxOnCards)); 
                         }
-                    }, null, null);
+                    }, onErr, onErr);
             }
         });
     };
