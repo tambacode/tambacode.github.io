@@ -120,6 +120,22 @@ const db_getOrderByChildContainsLimitToLast = function(path, orderByChild, conta
         });
 };
 
+const db_getEqualToIndex = function(path, equalTo, onSucess, onNullValue, onError) {
+    db.ref(path).orderByKey()
+                .equalTo(equalTo)
+                .once('value')
+        .then(function(snapshot) {
+            if (snapshot.val() == null)
+            {
+                onNullValue(snapshot);
+            } else {
+                onSucess(snapshot);
+            }
+        }).catch(function(error) {
+            onError(error);
+        });
+};
+
 const db_getEqualToLimitToLast = function(path, orderByChild, equalTo, limitToLast, onSucess, onNullValue, onError) {
     db.ref(path).orderByChild(orderByChild)
                 .equalTo(equalTo)

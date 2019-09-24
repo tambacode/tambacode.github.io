@@ -2,9 +2,9 @@ html
     
     include templates/head
       
-        //- Required Core Stylesheet
-        link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css")
-        link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css")
+    //- Required Core Stylesheet
+    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css")
+    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css")
 
     body
         include templates/sideBar
@@ -49,10 +49,10 @@ html
                             i.map.marker.alternate.icon
                             .content#address
                     h2.ui.orange.header
-                        #price| 
+                        #price.notFarm | 
                         .sub.header#description
-                    .ui.dividing.header
-                    .ui.two.column.padded.grid
+                    .ui.dividing.header.notFarm
+                    .ui.two.column.padded.grid.notFarm
                         .column
                             .ui.raised.segment
                                 a.ui.orange.ribbon.label Categoria
@@ -71,11 +71,17 @@ html
                                 a#urlad(href="" target="_blank")  site.
                         #youtubeVideo.ui.embed
                         h3.ui.dividing.header
-                    h1.ui.header
-                        #name| 
-                        .sub.header
-                            i.map.marker.alternate.icon
-                            .content#district
+                    div
+                        h3.ui.header
+                        #adevents.ui.segment
+                            h4 Anúncio pertencente à:
+                            h1.ui.header
+                                #name| 
+                                .sub.header
+                                    i.map.marker.alternate.icon
+                                    .content#district
+                            #farmCard.sharedAds.ui.grid
+                                .sixteen.wide.column(style="margin-top: 0;")
                     .button.fluid.ui.orange.button(id='SendMessage' onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner, 'ad_detail.html');")
                         | Enviar Mensagem
                     button.fluid.ui.orange.button(id='EditAd' onclick="ad_RedirectForEditAd();")

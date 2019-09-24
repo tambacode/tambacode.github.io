@@ -37,9 +37,9 @@
     <script src="js/ui.js"></script>
     <script src="js/messages.js"></script>
     <script src="js/sharedAd.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css"/>
   </head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css"/>
   <body>
     <div class="ui left sidebar vertical menu"><a href="index.html" class="item">Home<i class="home icon Large"></i></a><a id="PerfilButton" onClick="user_OpenProfile();" class="item hidden">Meu Perfil<i class="user circle icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list.html');" class="item">Meus Anúncios<i class="shopping bag icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_favorites.html');" class="item">Favoritos<i class="heart icon Large"></i></a><a onClick="messages_GoTo();" class="item">Mensagens<i class="comment icon Large"></i></a><a id="LogoutButton" onClick="auth_LogoffUser();" class="item hidden">Sair<i class="sign-out icon Large"></i></a><a id="LoginButton" onClick="auth_RequireLoggingToAccess('index.html');" class="item hidden">Login<i class="sign-in icon Large"></i></a></div>
     <div class="ui right sidebar vertical menu">
@@ -200,11 +200,11 @@
             </div>
           </h1>
           <h2 class="ui orange header">
-            <div id="price"> </div>
+            <div id="price" class="notFarm">| </div>
             <div id="description" class="sub header"></div>
           </h2>
-          <div class="ui dividing header"></div>
-          <div class="ui two column padded grid">
+          <div class="ui dividing header notFarm"></div>
+          <div class="ui two column padded grid notFarm">
             <div class="column">
               <div class="ui raised segment"><a class="ui orange ribbon label">Categoria</a>
                 <label id="category"></label>
@@ -228,12 +228,21 @@
             <div id="youtubeVideo" class="ui embed"></div>
             <h3 class="ui dividing header"></h3>
           </div>
-          <h1 class="ui header">
-            <div id="name"> </div>
-            <div class="sub header"><i class="map marker alternate icon"></i>
-              <div id="district" class="content"></div>
+          <div>
+            <h3 class="ui header"></h3>
+            <div id="adevents" class="ui segment">
+              <h4>Anúncio pertencente à:</h4>
+              <h1 class="ui header">
+                <div id="name"> </div>
+                <div class="sub header"><i class="map marker alternate icon"></i>
+                  <div id="district" class="content"></div>
+                </div>
+              </h1>
+              <div id="farmCard" class="sharedAds ui grid">
+                <div style="margin-top: 0;" class="sixteen wide column"></div>
+              </div>
             </div>
-          </h1>
+          </div>
           <div id="SendMessage" onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner, 'ad_detail.html');" class="button fluid ui orange button">Enviar Mensagem</div>
           <button id="EditAd" onclick="ad_RedirectForEditAd();" class="fluid ui orange button">Editar Anúncio</button>
         </div>

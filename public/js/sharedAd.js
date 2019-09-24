@@ -377,6 +377,22 @@ const ads_SearchAd = function() {
     }
 };
 
+const ad_GetCardByUid = function(holder, uid) {
+    var onSucess = function(snapshot) {
+        $.each(snapshot.val(), function(uid, obj) {
+            db_get("ads_images", function(snapshot) {
+                const imgsRef = snapshot.val();
+                const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
+                
+                ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, false, false)); 
+            }, null, null);
+        });
+    };
+
+    const onError = function(err) { };
+    db_getEqualToIndex('ad', uid, onSucess, onError, onError);
+}
+
 const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelected, showCheckbox) {
     const addImage = '<div class="four wide column product_image"><a href="ad_detail.html?uid={0}"><img src="{1}" class="ui tiny rounded image list"></a></div>';
     const addInfo  = '<div class="twelve wide column product_info"><a href="ad_detail.html?uid={2}"><h4 id="title">{3}</h4></a>{9}<h3 id="price">{7}</h3><span id="info">{8}</span><div style="width: 100%;" class="ui divider"></div></div>';
@@ -675,8 +691,12 @@ const ad_FillDetailPage = function(adUID) {
 
         ad_AddLastViewedAd(Date.now(), adUID);
 
-        if (val.category === 'fazendas'){
+        if (val.category === 'fazendas') {
             ad_SetFarmFields();
+        } else {
+            if (val.ad_parent) {
+                ad_GetCardByUid($('#farmCard'), val.ad_parent);
+            }
         }
 
         if (!edit) {
@@ -795,10 +815,8 @@ const ad_ValuesIntoDetail = function(val, icounter) {
         db_get('/users/'+val.user, 
             function(snapshot) {
                 const valUser = snapshot.val();
-                console.log(valUser);
                 $("#name").text(valUser.name);
                 $("#district").text(valUser.district);
-                console.log(valUser.district);
                 //$("#district").text(valUser.district + ", " + valUser.city);
                 $("#email").text(valUser.email);
                 $("#phone").text(valUser.phone);
