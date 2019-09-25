@@ -238,14 +238,23 @@
                   <div id="district" class="content"></div>
                 </div>
               </h1>
-              <div id="farmCard" class="sharedAds ui grid">
+              <div id="farmCard" class="sharedAds ui grid notFarm">
+                <div style="margin-top: 0;" class="sixteen wide column"></div>
+              </div>
+            </div>
+          </div>
+          <div class="isFarm hidden">
+            <h3 class="ui header"></h3>
+            <div id="adevents" class="ui segment">
+              <h4>Anúncios desta fazenda:</h4>
+              <div id="farmChildren" class="sharedAds ui grid">
                 <div style="margin-top: 0;" class="sixteen wide column"></div>
               </div>
             </div>
           </div>
           <div id="SendMessage" onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner, 'ad_detail.html');" class="button fluid ui orange button">Enviar Mensagem</div>
           <button id="EditAd" onclick="ad_RedirectForEditAd();" class="fluid ui orange button">Editar Anúncio</button>
-        </div>
+        </div><br/>
       </div>
     </div>
   </body>

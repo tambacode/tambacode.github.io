@@ -684,6 +684,7 @@ const ad_addSliderVideo = function(ivideo){
 
 const ad_SetFarmFields = function() {
     $('.notFarm').addClass('hidden');
+    $('.isFarm').removeClass('hidden');
 };
 
 const ad_FillDetailPage = function(adUID) {
@@ -698,6 +699,7 @@ const ad_FillDetailPage = function(adUID) {
 
         if (val.category === 'fazendas') {
             ad_SetFarmFields();
+            ad_LoadAdsListOnDiv('EqualToLimitToLast', $('#farmChildren'), 'ad_parent', snapshot.key, 100);
         } else {
             if (val.ad_parent) {
                 ad_GetCardByUid($('#farmCard'), val.ad_parent);
@@ -844,6 +846,35 @@ const ad_ValuesIntoDetail = function(val, icounter) {
 const ad_ErrorFunction = function(error) {
     misc_DisplayErrorMessage('Erro ao exibir anÃºncio', 'Favor tentar mais tarde');
 };
+
+const ad_LoadAdsListOnDiv = function(searchType, holder, orderByChild, orderByChildValue, limitToLast) {
+    var onSucess = function(snapshot) {
+        misc_RemoveLoader();
+        
+        $.each(snapshot.val(), function(uid, obj) {
+            const onErr = function(snapshot) {};
+                
+            db_get("ads_images", function(snapshotImage) {
+                const imgsRef = snapshotImage.val();
+                const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
+                
+                ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, false, false)); 
+            }, onErr, onErr);
+        });
+    };
+
+    const onError = function(snapshot) {
+        if (misc_RemoveLoader()) {
+            holder.append(misc_GetErrorMsg(true));
+        }
+    };
+
+    if (searchType == 'ChildContainsLimitToLast') {
+        db_getOrderByChildContainsLimitToLast("ad", orderByChild, orderByChildValue, limitToLast, onSucess, onError, onError);
+    } else if (searchType == 'EqualToLimitToLast') {
+        db_getEqualToLimitToLast("ad", orderByChild, orderByChildValue, limitToLast, onSucess, onError, onError);
+    }
+}
 
 /////////////////////////////////  AD DETAIL /////////////////////////////////
 /////////////////////////////////  AD LIST   /////////////////////////////////

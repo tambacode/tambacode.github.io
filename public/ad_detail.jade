@@ -80,12 +80,19 @@ html
                                 .sub.header
                                     i.map.marker.alternate.icon
                                     .content#district
-                            #farmCard.sharedAds.ui.grid
+                            #farmCard.sharedAds.ui.grid.notFarm
+                                .sixteen.wide.column(style="margin-top: 0;")
+                    div.isFarm.hidden
+                        h3.ui.header
+                        #adevents.ui.segment
+                            h4 Anúncios desta fazenda:
+                            #farmChildren.sharedAds.ui.grid
                                 .sixteen.wide.column(style="margin-top: 0;")
                     .button.fluid.ui.orange.button(id='SendMessage' onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner, 'ad_detail.html');")
                         | Enviar Mensagem
                     button.fluid.ui.orange.button(id='EditAd' onclick="ad_RedirectForEditAd();")
                         | Editar Anúncio
+                br
             include templates/footer
     script(src="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.min.js")
     script.
