@@ -38,13 +38,18 @@ const ad_checkPopupType = function(){
 };
 
 const ad_selectedType = function(id){
-    $('#' + id)
-        .prop('checked', 'true')
-        .prop('disabled', false);
+    if (id == 'farm') {
+        ad_SetFarmFields();
+    }
+
+    $('#' + id).prop('checked', 'true').prop('disabled', false);
+
     if (id === 'events') { 
         $('.field.events').removeClass('hidden');
     }
+    
     ad_GetCategory();
+
     $('.ui.modal').modal('hide');
 };
 
