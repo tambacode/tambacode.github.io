@@ -25,7 +25,7 @@ const db_set = function(path, postData) {
 };
 
 //https://firebase.google.com/docs/database/web/read-and-write
-const db_update = function(path, callback) {
+const db_update = function(path, postData, callback) {
     db.ref(path).update(postData,
         function (error){
             if (error === null)
@@ -108,6 +108,39 @@ const db_getOrderByChildContainsLimitToLast = function(path, orderByChild, conta
                 .startAt(containsString)
                 .endAt(containsString + "\uf8ff")
                 .limitToLast(limitToLast).once('value')
+        .then(function(snapshot) {
+            if (snapshot.val() == null)
+            {
+                onNullValue(snapshot);
+            } else {
+                onSucess(snapshot);
+            }
+        }).catch(function(error) {
+            onError(error);
+        });
+};
+
+const db_getEqualToIndex = function(path, equalTo, onSucess, onNullValue, onError) {
+    db.ref(path).orderByKey()
+                .equalTo(equalTo)
+                .once('value')
+        .then(function(snapshot) {
+            if (snapshot.val() == null)
+            {
+                onNullValue(snapshot);
+            } else {
+                onSucess(snapshot);
+            }
+        }).catch(function(error) {
+            onError(error);
+        });
+};
+
+const db_getEqualToLimitToLast = function(path, orderByChild, equalTo, limitToLast, onSucess, onNullValue, onError) {
+    db.ref(path).orderByChild(orderByChild)
+                .equalTo(equalTo)
+                .limitToLast(limitToLast)
+                .once('value')
         .then(function(snapshot) {
             if (snapshot.val() == null)
             {
@@ -309,7 +342,7 @@ const db_updateUserInfo = function() {
     var complement = document.getElementById('complement').value;
     var city = document.getElementById('city').innerText;
     var state = document.getElementById('state').innerText;
-    var pictureRotate = misc_GetImageRotation($('#imageuploaded')).deg;;
+    var pictureRotate = misc_GetImageRotation($('#imageuploaded')).deg;
     
     var dataToInsert = {
         name: name,
@@ -326,16 +359,9 @@ const db_updateUserInfo = function() {
         pictureRotate: pictureRotate
     };
     
-    db_update(path,dataToInsert,misc_GoToPage("user_info.html"));
-
+    db_update(path, dataToInsert, misc_GoToPage("user_info.html"));
 };
 
-const doneSuccess = function(url){
-    misc_waitImageLoadReady($('#imageuploaded'), url, function() {
-        //$('#user_image').dimmer('hide');
-        ad_Register_RemoveLoadingIconFromImage($('#fileInput'));
-    });
-}
 
 const db_updateUserImage = function(url){
     var path = '/users/' + localStorage.getItem('auth_UserUID');
@@ -345,7 +371,16 @@ const db_updateUserImage = function(url){
         pictureRotate: 0
     }
 
-    db_update(path,dataToInsert, doneSuccess(url));
+    const doneSuccess = function(url){
+        /*misc_waitImageLoadReady($('#imageuploaded'), url, function() {
+            //$('#user_image').dimmer('hide');
+            ad_Register_RemoveLoadingIconFromImage($('#fileInput'));
+        });*/
+        ad_Register_RemoveLoadingIconFromImage($('#fileInput'));
+        db_updateUserInfo();
+    }
+
+    db_update(path, dataToInsert, doneSuccess(url));
 }
 
 /*
@@ -386,5 +421,10 @@ const db_saveUserImage = function(){
 
     var file = document.getElementById('fileInput').files[0];
 
-    db_saveImage(image_path, file, db_updateUserImage);
+    if (file) {
+        ad_Register_SetImageLoading($('#fileInput'));
+        db_saveImage(image_path, file, db_updateUserImage);
+    } else {
+        db_updateUserInfo();
+    }
 }

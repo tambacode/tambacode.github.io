@@ -232,7 +232,7 @@ const message_StartChatWithProductOwner = function() {
     const path = 'ad/' + adUID + '/user';
 
     var onSucess = function(snapshot) {
-        const ownerUID = snapshot.val()
+        const ownerUID = snapshot.val();
         message_StartChat(ownerUID, currentUID, adUID);
     };
 
@@ -249,6 +249,7 @@ const message_StartChat = function(ownerUID, currentUID, adUID) {
 
     // Create message in messages_last_info
     var createMessageLastInfo = function(messageUID, ad_uid, ad_title, ad_image) {
+        console.log(4);
         const msgLastInfoPath = 'messages_last_info/' + messageUID;
         
         const dataToInsert = {
@@ -274,7 +275,7 @@ const message_StartChat = function(ownerUID, currentUID, adUID) {
         newMsgPath = newMsgPath + messageUID;
 
         const adTitle = snapshot.val().title;
-        const adImage = $("#image").attr("src");
+        const adImage = ad_GetFirstImageFromAdSlider();
 
         const dataToInsert = {
             "ad_uid": adUID,
@@ -282,7 +283,7 @@ const message_StartChat = function(ownerUID, currentUID, adUID) {
             "ad_image": adImage,
             "msgs": ""
         };
-
+        
         // Save message
         db_set(newMsgPath, dataToInsert);
         createMessageLastInfo(messageUID, adUID, adTitle, adImage);

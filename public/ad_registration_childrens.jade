@@ -1,0 +1,40 @@
+html
+    include templates/head
+
+    body
+        include templates/sideBar
+        include templates/filterSideBar
+        .pusher
+            include templates/header
+            .bottomFloating
+                button.ui.orange.button(onclick="ads_SaveChildrenAds();")
+                    i.icon.plus                        
+                    | Salvar anúncios filhos
+            #all
+                br
+                #ads.sharedAds.ui.grid
+                    .sharedAdsHeader
+                        .ui.equal.width.centered.padded.grid
+                            .green.row
+                                .colunm
+                                    h4.ui.white.header
+                                        .content
+                                            | Selecione os anúncios que você gostaria de ligar à Fazenda
+                    include templates/loader
+                br
+                br
+            include templates/footer
+        script.
+            ad_List_ListAdsByUser("mylistNoFarms", true);
+            const ads_SaveChildrenAds = function() {
+                const adRef = rootRef.child('ad');
+                const adParentUID = misc_GetUrlParam('uid');
+                const nextStep = misc_GetUrlParam('nextStep');
+
+                $.each($('[name="checkAd"]'), function(index, obj) {
+                    const adParent = ($(obj).prop("checked") ? adParentUID : '');
+                    ad_SetAdParent(adRef, obj.value, adParent);
+                });
+
+                misc_GoToPage(nextStep + '.html?uid=' + adParentUID);
+            };

@@ -176,39 +176,42 @@
           </div>
         </div>
       </div>
-      <div id="all">
-        <div class="vertical-center">
-          <div class="ui padded sixteen column centered grid">
-            <div class="wide column row">
-              <div class="ui orange card login">
-                <div class="content">
-                  <div class="ui grid">
-                    <div class="orange column row">
-                      <div class="column"></div>
-                      <div class="left aligned ten wide column">
-                        <div class="ui white header">Entrar usando</div>
-                      </div>
-                      <!--.right.aligned.four.wide.column
-                      .ui.icon
-                          i.icon.user.circle.large
-                      -->
-                    </div>
-                    <div class="ui padded column row grid">
-                      <div class="sixteen wide column centered">
-                        <button onClick="auth_LoginFacebook();" class="large ui facebook button"><i class="facebook icon"></i>Entrar com o Facebook</button>
-                      </div>
-                      <div class="sixteen wide column">
-                        <button onClick="auth_LoginTwitter();" class="large ui twitter button"><i class="twitter icon"></i>Entrar com o Twitter&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
-                      </div>
-                      <div class="sixteen wide column">Ao prosseguir você concorda com as <a href="privacy_policy.html">Políticas de Privacidade</a> e <a href="terms_of_service.html">Termos de Responsabilidade</a> da Shared.Farm</div>
-                    </div>
-                  </div>
+      <div class="bottomFloating">
+        <button onclick="ads_SaveChildrenAds();" class="ui orange button"><i class="icon plus">                       </i>Salvar anúncios filhos</button>
+      </div>
+      <div id="all"><br/>
+        <div id="ads" class="sharedAds ui grid">
+          <div class="sharedAdsHeader">
+            <div class="ui equal width centered padded grid">
+              <div class="green row">
+                <div class="colunm">
+                  <h4 class="ui white header">
+                    <div class="content">Selecione os anúncios que você gostaria de ligar à Fazenda</div>
+                  </h4>
                 </div>
               </div>
             </div>
           </div>
+          <div id="loader" class="sixteen wide column row">
+            <div class="ui active centered inline loader"></div>
+          </div>
         </div><br/><br/>
       </div>
     </div>
+    <script>
+      ad_List_ListAdsByUser("mylistNoFarms", true);
+      const ads_SaveChildrenAds = function() {
+          const adRef = rootRef.child('ad');
+          const adParentUID = misc_GetUrlParam('uid');
+          const nextStep = misc_GetUrlParam('nextStep');
+      
+          $.each($('[name="checkAd"]'), function(index, obj) {
+              const adParent = ($(obj).prop("checked") ? adParentUID : '');
+              ad_SetAdParent(adRef, obj.value, adParent);
+          });
+      
+          misc_GoToPage(nextStep + '.html?uid=' + adParentUID);
+      };
+    </script>
   </body>
 </html>

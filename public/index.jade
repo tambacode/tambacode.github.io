@@ -1,17 +1,7 @@
 html
-    head
-        title Shared.Farm
-        
-        meta(charset='utf-8')
-        meta(name='viewport', content='width=device-width, initial-scale=1')
-        meta(http-equiv="X-UA-Compatible" content="ie=edge")
-        link( rel="manifest" crossorigin="use-credentials" href="%PUBLIC_URL%/manifest.json")
-        
-        //- CSS
-        include templates/styles
-        
-        //- Script
-        include templates/scripts
+    
+    include templates/head
+
     body
         include templates/sideBar
         include templates/filterSideBar
@@ -29,6 +19,16 @@ html
                                         i.inverted.star.outline.icon
                                         .content
                                             | Novidades
+                    include templates/loader
+                #adsFarm.sharedAds.ui.grid
+                    .sharedAdsHeader
+                        .ui.equal.width.centered.padded.grid
+                            .green.row
+                                .colunm
+                                    h4.ui.white.header
+                                        i.inverted.star.outline.icon
+                                        .content
+                                            | Fazendas
                     include templates/loader
                 #adsProducts.sharedAds.ui.grid
                     .sharedAdsHeader
@@ -90,7 +90,17 @@ html
             include templates/footer
         script.
             const qtdAdsToListByType = 3;
+            if('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                .then(function(registration) {
+                    console.log('Service Worker Registered');
+                });
+                navigator.serviceWorker.ready.then(function(registration) {
+                    console.log('Service Worker Ready');
+                });
+            }
             ads_List_ListLastAdsOnDiv($('#adsLast'), qtdAdsToListByType, 'ad', 'timestamp', null);
+            ads_List_ListLastAdsOnDiv($('#adsFarm'), qtdAdsToListByType, 'ad', 'category', 'fazendas');
             ads_List_ListLastAdsOnDiv($('#adsProducts'), qtdAdsToListByType, 'ad', 'category', 'produtos');
             ads_List_ListLastAdsOnDiv($('#adsServices'), qtdAdsToListByType, 'ad', 'category', 'servicos');
             ads_List_ListLastAdsOnDiv($('#adsEvents'), qtdAdsToListByType, 'ad', 'category', 'eventos');

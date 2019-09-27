@@ -1,21 +1,11 @@
 html
-    head
-        title Shared.Farm
-        
-        meta(charset='utf-8')
-        meta(name='viewport', content='width=device-width, initial-scale=1')
-        meta(http-equiv="X-UA-Compatible" content="ie=edge")
-        link( rel="manifest" href="manifest.json")
-        
-        //- Required Core Stylesheet
-        link(rel="stylesheet" href="semanticUI/node_modules/@glidejs/glide/dist/css/glide.core.min.css")
-        script(src="semanticUI/node_modules/@glidejs/glide/dist/glide.min.js")
+    
+    include templates/head
+      
+    //- Required Core Stylesheet
+    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css")
+    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css")
 
-        //- CSS
-        include templates/styles
-        
-        //- Script
-        include templates/scripts
     body
         include templates/sideBar
         include templates/filterSideBar
@@ -25,7 +15,33 @@ html
                 br
                 include templates/loader
                 .ui.container(style="display:none")
-                    .ui.fluid.centered.small.image
+                    //- .ui.fluid.centered.small.image
+                        img#image(src="")
+                    .ui.fluid.centered.rounded.medium.image
+                        #intro.slider.glide.glide--ltr.glide--carousel.glide--swipeable
+                            .slider__track.glide__track(data-glide-el="track")
+                                ul.slider__slides.glide__slides#sliderImages
+                                    //-li.slider__slides.glide__slides
+                                        img#image(src="")
+                                    //-li.slider__slides.glide__slides
+                                        img#image2(src="")
+                                    //-li.slider__slides.glide__slides
+                                        img#image3(src="")
+                                    //-li.slider__slides.glide__slides
+                                        img#image4(src="")                     
+                            //-div(data-glide-el="controls")
+                                button.slider__arrow.slider__arrow--prev.glide__arrow.glide__arrow--prev(data-glide-dir="<")
+                                    svg(xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24")
+                                        path(d="M0 12l10.975 11 2.848-2.828-6.176-6.176H24v-3.992H7.646l6.176-6.176L10.975 1 0 12z")
+                                button.slider__arrow.slider__arrow--next.glide__arrow.glide__arrow--next(data-glide-dir=">")
+                                    svg(xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24")
+                                        path(d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z")
+                            div.slider__bullets.glide__bullets#bulletImages(data-glide-el="controls[nav]")
+                                //-button.slider__bullet.glide__bullet(data-glide-dir="=0")
+                                //-button.slider__bullet.glide__bullet(data-glide-dir="=1")
+                                //-button.slider__bullet.glide__bullet(data-glide-dir="=2")    
+                                //-button.slider__bullet.glide__bullet(data-glide-dir="=3")
+                    //-.ui.fluid.centered.small.image
                         img#image(src="")
                     h1.ui.header
                         #title| 
@@ -33,10 +49,10 @@ html
                             i.map.marker.alternate.icon
                             .content#address
                     h2.ui.orange.header
-                        #price| 
+                        #price.notFarm | 
                         .sub.header#description
-                    .ui.dividing.header
-                    .ui.two.column.padded.grid
+                    .ui.dividing.header.notFarm
+                    .ui.two.column.padded.grid.notFarm
                         .column
                             .ui.raised.segment
                                 a.ui.orange.ribbon.label Categoria
@@ -46,15 +62,38 @@ html
                                 a.ui.orange.ribbon.label Subcategoria
                                 label#subcategory
                     h3.ui.dividing.header
-                    h1.ui.header
-                        #name| 
-                        .sub.header
-                            i.map.marker.alternate.icon
-                            .content#district
-                    .button.fluid.ui.orange.button(id='SendMessage' onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner(), 'ad_detail.html');")
+                    #hiddendiv.hidden
+                        h3.ui.header
+                        #adevents.ui.segment
+                            h4 Data do evento:
+                                label#datead
+                            h4 Para mais detalhes, acessar o
+                                a#urlad(href="" target="_blank")  site.
+                        #youtubeVideo.ui.embed
+                        h3.ui.dividing.header
+                    div
+                        h3.ui.header
+                        #adevents.ui.segment
+                            h4 Anúncio pertencente à:
+                            h1.ui.header
+                                #name| 
+                                .sub.header
+                                    i.map.marker.alternate.icon
+                                    .content#district
+                            #farmCard.sharedAds.ui.grid.notFarm
+                                .sixteen.wide.column(style="margin-top: 0;")
+                    div.isFarm.hidden
+                        h3.ui.header
+                        #adevents.ui.segment
+                            h4 Anúncios desta fazenda:
+                            #farmChildren.sharedAds.ui.grid
+                                .sixteen.wide.column(style="margin-top: 0;")
+                    .button.fluid.ui.orange.button(id='SendMessage' onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner, 'ad_detail.html');")
                         | Enviar Mensagem
                     button.fluid.ui.orange.button(id='EditAd' onclick="ad_RedirectForEditAd();")
                         | Editar Anúncio
+                br
             include templates/footer
+    script(src="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.min.js")
     script.
-        ad_FillDetailPage(misc_GetUrlParam('uid')); 
+        ad_FillDetailPage(misc_GetUrlParam('uid'));

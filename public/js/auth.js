@@ -16,11 +16,11 @@ var auth_RequireLoggingToAccess = function(url) {
     }
 };
 
-var auth_RequireLoggingToAccessFunction = function(fun_metod, url) {
+var auth_RequireLoggingToAccessFunction = function(action, url) {
     const adUID = misc_GetUrlParam('uid');
 
     if (localStorage.getItem('auth_UserOnline')) {
-        fun_metod;
+        action();
     } else if(url == 'ad_detail.html'){
         misc_GoToPage('login.html?redirectUrl=' + url + '?uid=' + adUID);
     }else {

@@ -1,17 +1,7 @@
 html
-    head
-        title Shared.Farm - Cadastro de Anúncio
-        
-        meta(charset='utf-8')
-        meta(name='viewport', content='width=device-width, initial-scale=1')
-        meta(http-equiv="X-UA-Compatible" content="ie=edge")
-        link( rel="manifest" href="manifest.json")
-        
-        //- CSS
-        include templates/styles
-        
-        //- Script
-        include templates/scripts  
+    
+    include templates/head
+    
     body
 
         include templates/sideBar
@@ -34,6 +24,10 @@ html
                             .inline.fields
                                 .field
                                     .ui.radio.orange.checkbox
+                                        input(type='radio' name='category' id='farm' value="fazendas" disabled)
+                                        label Fazenda
+                                .field
+                                    .ui.radio.orange.checkbox
                                         input(type='radio' name='category' id='products' value="produtos" disabled)
                                         label Produtos
                                 .field
@@ -44,7 +38,7 @@ html
                                     .ui.radio.orange.checkbox
                                         input(type='radio' name='category' id='events' value="eventos" disabled)
                                         label Eventos
-                        .field
+                        .field.notFarm
                             .ui.grid
                                 .nine.wide.column
                                     .field
@@ -58,32 +52,24 @@ html
                                         input(type='text' name='price' id='price' minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," required="required" onclick='$(this).maskMoney();')
                         .field
                             label Imagem
-                            .ui.padded.centered.grid#ImagesGrid
-                                //-.five.wide.column.row
-                                    .ui.active.inverted.dimmer
-                                        .ui.text.loader Carregando
-                                    img.ui.tiny.image(src="imgs/black.png")
-                                    input#image1(type='file', value='upload', style="display: none;")
-                                //-.five.wide.column.row
-                                    .ui.active.inverted.dimmer
-                                        i.plus.big.click.icon(onclick="console.log('11');")
-                                    img.ui.tiny.image(src="imgs/black.png")
-                                    input#image2(type='file', value='upload', style="display: none;")
-                                //-.five.wide.column.row
-                                    img.ui.tiny.image(src="imgs/black.png")
-                            //-p#uploadMsg.red.hide
-                            //-input#fileInput(type='file', value='upload', name='fileInput[]')
-                            //-progress#uploader(value="0" max="100") 0%   
-                            //-img#imgpreview(style="width: 500px")                                                  
+                            .ui.padded.centered.grid#ImagesGrid                                             
                         .field.hidden.events
                             label Data do evento
-                            input(type='date' name='datead' id='datead')
+                            .ui.left.icon.small.input
+                                i.calendar.icon                                
+                                input(type='date' name='datead' id='datead')
                         .field.hidden.events
                             label Site do evento
-                            input(type='text' name='sitead' id='sitead' maxlength="200" placeholder='Site de divulgação do evento')
+                            .ui.labeled.small.input
+                                .ui.label
+                                    | http://
+                                input(type='text' name='sitead' id='sitead' maxlength="200" placeholder='www.yoursite.com')
                         .field.hidden.events
-                            label Url do evento
-                            input(type='text' name='urlad' id='urlad' maxlength="200" placeholder='http://www.xyz.com/video')
+                            label Youtube link ID do evento
+                            .ui.labeled.small.input
+                                .ui.label
+                                    | youtube.com/watch?v=
+                                input(type='text' name='urlad' id='urlad' maxlength="200" placeholder='{ID}')
                         .field
                             .ui.grid
                                 .six.wide.column
@@ -160,6 +146,10 @@ html
                                                     .ui.icon
                                                         i.icon.user.circle.large
                                             .ui.padded.column.row.grid
+                                                .sixteen.wide.column.centered
+                                                    button.big.ui.button(value="farm" onClick="ad_selectedType(this.value);")
+                                                        i.warehouse.icon
+                                                        | Fazenda
                                                 .sixteen.wide.column.centered
                                                     button.big.ui.button(value="products" onClick="ad_selectedType(this.value);")
                                                         i.cubes.icon

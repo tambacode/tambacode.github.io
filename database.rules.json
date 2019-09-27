@@ -9,7 +9,7 @@
     "ad": {
       ".read": true,
       ".write": true,
-      ".indexOn": ["title", "timestamp", "category"]
+      ".indexOn": ["title", "timestamp", "category", "user"]
     },
     "messages": {
       ".read": true,
@@ -24,6 +24,20 @@
       ".write": true,
     },
     "users_messages": {
+      ".read": true,
+      ".write": true, 
+    },
+    "user_last_viewed_ads": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "users_favorites": {
+      ".read": true,
+      ".write": true, 
+    },
+    "user_ad": {
       ".read": true,
       ".write": true, 
     }

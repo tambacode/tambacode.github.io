@@ -68,13 +68,16 @@ const user_openFileDialog = function(){
   $('#fileInput').click();
 }
 
+
 const user_previewImage = function(evt){
   if (evt.target.files[0].size > 5242880){
     misc_DisplayErrorMessage("Tamanho da imagem","Imagem maior de 5MB");
     return;
   }
   ad_Register_SetImageLoading($('#fileInput'));
-  db_saveUserImage();
+  misc_SetImageRotation($('#imageuploaded'), 0);
+  misc_imagePreview(evt, $('#imageuploaded'), ad_Register_RemoveLoadingIconFromImage($('#fileInput')));
+  //db_saveUserImage();
 }
 
 const user_RotateImage = function(imageId){
@@ -136,7 +139,9 @@ const user_initComponent = function(){
         }*/
       }, onSuccess: function(event){
                         event.preventDefault();
-                        db_updateUserInfo();
+                        $("#btnsave").addClass("loading");
+                        //db_updateUserInfo();
+                        db_saveUserImage();
                     }
     });
 }
