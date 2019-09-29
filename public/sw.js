@@ -28,22 +28,25 @@ self.addEventListener('activate', function(event) {
 
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
-    .then(response => {
-      if (response) {
-        return response;
+    fetch(event.request).then(responseUrl => {
+      if (responseUrl.status === 404) {
+        return caches.match('/404.html');
       }
-      return fetch(event.request).then(response => {
-        if (response.status === 404) {
-          return caches.match('/404.html');
-        }
-        return caches.open(cacheName).then(cache => {
-          cache.put(event.request.url, response.clone());
-          return response;
-        });
+      return caches.open(cacheName)
+        .then(cache => {
+          cache.put(event.request.url, responseUrl.clone());
+          return responseUrl;
       });
-    }).catch(error => {
-      return caches.match('/offline.html');
+    })
+    .catch(error => {
+      caches.match(event.request)
+      .then(response => {
+        if (response) {
+          return response;
+        } else {
+          return caches.match('/offline.html');
+        }
+      });
     })
   );
 });
