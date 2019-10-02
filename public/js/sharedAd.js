@@ -142,6 +142,7 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
         
         auth_RequireLoggingToAccess(pageToRedirect);
     } else if(flagUpdate == 'yes') {
+        ad_Register_SaveImagePathToDB(key, ad_CurrentlyAddedImages);
         db_update(path, dataToInsert, auth_RequireLoggingToAccess(pageToRedirect));
     }
 };
@@ -151,10 +152,12 @@ const ad_Register_SaveImagePathToDB = function(adUID, imagesArray) {
     var adImagesRef = db.ref(path);
 
     for (var i = 0; i < imagesArray.length; i++) {
-        const imageKey = db_GetNewPushKey(path)
-        adImagesRef.child(imageKey).set(imagesArray[i]);
+        const imageKey = (imagesArray[i].key) ? (imagesArray[i].key) : (db_GetNewPushKey(path));
+        const imageUrl = (imagesArray[i].key) ? (imagesArray[i].url) : (imagesArray[i]);
+        adImagesRef.child(imageKey).set(imageUrl);
     }
 };
+
 
 var db_InsertAdRegistrationOnUsers = function(key){
     var path = 'user_ad/' + localStorage.getItem('auth_UserUID') + '/ad/' + key;
@@ -335,8 +338,10 @@ const ad_fillfieldforEdit = function(){
             //var val = snapshot.val();
 
             snapshot.forEach(function(childSnapshot) {
-                var item = childSnapshot.val();
-                item.key = childSnapshot.key;
+                var item = {
+                    url : childSnapshot.val(),
+                    key : childSnapshot.key
+                };
 
                 ad_CurrentlyAddedImages.push(item);
 
@@ -350,7 +355,7 @@ const ad_fillfieldforEdit = function(){
 
                 $("#ImagesGrid").append(imageCard);
                 
-                $('#' + inputId).parent().find('img').attr('src', item);
+                $('#' + inputId).parent().find('img').attr('src', item.url);
 
                 ad_Register_RemoveLoadingIconFromImage('#' + inputId);
 
@@ -782,7 +787,7 @@ const ad_ValuesIntoDetail = function(val, icounter) {
         if(val.category === 'produtos'){
             products.checked = true;
             id = "products";
-        } else if (val.category === 'serviÃ§os'){
+        } else if (val.category === 'servicos'){
             services.checked = true;
             id = "services";
         } else if (val.category === 'fazendas'){
@@ -820,7 +825,7 @@ const ad_ValuesIntoDetail = function(val, icounter) {
         if (val.category === "eventos"){
             ad_addSliderVideo(val.event_url);
             datead.innerText = val.event_date;
-            $("#urlad").prop("href", val.event_site);
+            $("#urlad").prop("href", "http://" + val.event_site);
             $('#hiddendiv').removeClass('hidden');
         }
 
