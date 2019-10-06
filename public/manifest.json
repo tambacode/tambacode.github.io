@@ -4,17 +4,17 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://shared-farm-dev.firebaseapp.com/imgs/icons/square128px.png",
+      "src": "/imgs/Icons/square128px.png",
       "type": "image/png",
       "sizes": "128x128"
     },
     {
-      "src": "https://shared-farm-dev.firebaseapp.com/imgs/icons/square256px.png",
+      "src": "/imgs/Icons/square256px.png",
       "type": "image/png",
       "sizes": "256x256"
     },
     {
-      "src": "https://shared-farm-dev.firebaseapp.com/imgs/icons/square512px.png",
+      "src": "/imgs/Icons/square512px.png",
       "type": "image/png",
       "sizes": "512x512"
     }
