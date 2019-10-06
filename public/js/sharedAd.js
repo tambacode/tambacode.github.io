@@ -840,11 +840,12 @@ const ad_ValuesIntoDetail = function(val, icounter) {
                 ad_showFields();
                 ad_InitGlide(icounter);
             }
-            , null
-            , null
+            , ad_ErrorFunction
+            , ad_ErrorFunction
         );
+
         
-        if (firebase.auth().currentUser.uid == val.user) {
+        if ((firebase.auth().currentUser)&&(firebase.auth().currentUser.uid == val.user)) {
             document.getElementById("EditAd").style.visibility = "visible";
         } else {
             document.getElementById("SendMessage").style.visibility = "visible";
