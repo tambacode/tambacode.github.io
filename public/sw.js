@@ -30,23 +30,17 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     fetch(event.request).then(responseUrl => {
       if (responseUrl.status === 404) {
-        return caches.match('/404.html');
+        return caches.match('./notfound.html');
       }
       return caches.open(cacheName)
         .then(cache => {
-          cache.put(event.request.url, responseUrl.clone());
+          cache.put(event.request, responseUrl.clone());
           return responseUrl;
       });
     })
     .catch(error => {
-      caches.match(event.request)
-      .then(response => {
-        if (response) {
-          return response;
-        } else {
-          return caches.match('/offline.html');
-        }
-      });
+      //caches.match(event.request.url);
+      return caches.match('./offline.html');
     })
   );
 });

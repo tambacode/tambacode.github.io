@@ -22,6 +22,7 @@
   "start_url": "/index.html",
   "background_color": "#f2711c",
   "display": "standalone",
+  "scope": "https://shared-farm-dev.firebaseapp.com/",
   "splash_pages": null,
   "theme_color": "#f2711c"
 }
