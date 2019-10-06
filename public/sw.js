@@ -1,7 +1,9 @@
 const cacheVersion = "0.2";
 const cacheName = `sharefarm-${cacheVersion}`;
 const cachedFiles = [
-  "./index.html"
+  "./index.html",
+  "./offline.html",
+  "./notfound.html"
 ];
 self.addEventListener('install', e => {
   e.waitUntil(
