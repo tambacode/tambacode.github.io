@@ -1,4 +1,4 @@
-const cacheVersion = "0.2";
+const cacheVersion = "0.3";
 const cacheName = `sharefarm-${cacheVersion}`;
 const cachedFiles = [
   "./index.html",
@@ -30,18 +30,21 @@ self.addEventListener('activate', function(event) {
 
 self.addEventListener('fetch', event => {
   event.respondWith(
-    fetch(event.request).then(responseUrl => {
-      if (responseUrl.status === 404) {
-        return caches.match('./notfound.html');
+    caches.match(event.request)
+    .then(response => {
+      if (response) {
+        return response;
       }
-      return caches.open(cacheName)
-        .then(cache => {
-          cache.put(event.request, responseUrl.clone());
-          return responseUrl;
+      return fetch(event.request).then(response => {
+        if (response.status === 404) {
+          return caches.match('./notfound.html');
+        }
+        return caches.open(cacheName).then(cache => {
+          cache.put(event.request.url, response.clone());
+          return response;
+        });
       });
-    })
-    .catch(error => {
-      //caches.match(event.request.url);
+    }).catch(error => {
       return caches.match('./offline.html');
     })
   );
