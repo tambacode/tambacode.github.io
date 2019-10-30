@@ -1,4 +1,4 @@
-const cacheVersion = "0.4";
+const cacheVersion = "0.41";
 const cacheName = `sharefarm-${cacheVersion}`;
 const cachedFiles = [
     "./imgs/noConnection_Icon.jpg",
@@ -15,7 +15,7 @@ const cachedFiles = [
     "./ad_search.html",
     "./index.html",
     "./messages.html",
-    "./notfound.html"
+    "./notfound.html",
     "./offline.html",
     "./privacy_policy.html",
     "./terms_of_service.html",
