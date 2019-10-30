@@ -67,8 +67,6 @@ const sw_Save = function() {
     const pageName = sw_GetPageName();
     const pageBody = $("#all").html();
 
-    console.log("sw_Save");
-    console.log(pageName);
     sessionStorage.setItem(pageName, pageBody);
 }
 
