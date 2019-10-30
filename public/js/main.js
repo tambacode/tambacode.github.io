@@ -1,5 +1,8 @@
 window.fb = {};
 
+var pageReadyDesired = 0;
+var pageReadyCount = 0;
+
 fb.firebaseConfig = {
     apiKey: "AIzaSyD1aOg-QStOG5VB-imai9JF68h9Qq2q8So",
     authDomain: "shared-farm-dev.firebaseapp.com",
@@ -10,13 +13,100 @@ fb.firebaseConfig = {
     appId: "1:619465723035:web:4dac067dc0eb3abf"
   };
 
-firebase.initializeApp(fb.firebaseConfig);
+if (navigator.onLine) {
+    firebase.initializeApp(fb.firebaseConfig);
+}
 
 ////////////////// USER //////////////////
 const user_OpenProfile = function() {
 	auth_RequireLoggingToAccess('user_info.html');
 };
 ////////////////// USER //////////////////
+
+////////////////// SW //////////////////
+const sw_Register = function() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+        .then(function(registration) {
+            //console.log('Service Worker Registered');
+        });
+        navigator.serviceWorker.ready.then(function(registration) {
+            //console.log('Service Worker Ready');
+        });
+    }
+};
+
+const misc_UpdatePageReady = function() {
+    pageReadyCount++;
+    
+    if (pageReadyCount >= pageReadyDesired)
+    {
+        sw_SavePage();
+    }
+};
+
+var schedulePageSave = null;
+const misc_SchedulePageSave = function(delay) {
+    if (delay == false) {
+        delay = 1000;
+    }
+
+    if (schedulePageSave != null) {
+        clearTimeout(schedulePageSave);
+    }
+    
+    schedulePageSave = setTimeout(sw_SavePage, delay);
+};
+
+const sw_SavePage = function() {
+    sessionStorage.setItem("gofarmer_OFFLINE", false);
+    setTimeout(sw_Save, 500);
+};
+
+const sw_Save = function() {
+    const pageName = sw_GetPageName();
+    const pageBody = $("#all").html();
+
+    console.log("sw_Save");
+    console.log(pageName);
+    sessionStorage.setItem(pageName, pageBody);
+}
+
+const sw_SetLastPageState = function() {
+    if (sessionStorage.getItem("gofarmer_OFFLINE") == "true") {
+        return; 
+    }
+
+    const pageName = sw_GetPageName();
+    const pageBody = sessionStorage.getItem(pageName);
+    
+    sessionStorage.setItem("gofarmer_OFFLINE", true);
+    $("#all").html(pageBody);
+
+    sw_SetEnableButtons();
+}
+
+const sw_SetEnableButtons = function() {
+    $("a").attr("href", "#").attr("disabled", true);
+    $(".pusher :button").attr("disabled", true);
+    $(".pusher img").attr("src", "imgs/noConnection_Icon.jpg");
+    $("i").removeClass("link").attr("disabled", true);
+    $("div .button").addClass("disabled").attr("onclick", "");
+    $("[type='text']").attr("disabled", true);
+}
+
+const sw_GetPageName = function(pathName) {
+  var sPath = window.location.pathname;
+
+    if (pathName == true) {
+        sPath = window.location.href;
+    }
+
+  var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
+
+  return sPage;
+}
+////////////////// SW //////////////////
 
 const misc_GoToHome = function() {
     auth_RequireLoggingToAccess('index.html');

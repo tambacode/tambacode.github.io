@@ -30,4 +30,10 @@ html
                 br
             include templates/footer
         script.
-            ads_List_ListAdsByTerm();
+            if (navigator.onLine) {
+                sw_Register();
+
+                ads_List_ListAdsByTerm();
+            } else {
+                sw_SetLastPageState();
+            }

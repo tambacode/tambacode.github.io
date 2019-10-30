@@ -96,4 +96,10 @@ html
             include templates/footer
     script(src="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.min.js")
     script.
-        ad_FillDetailPage(misc_GetUrlParam('uid'));
+        if (navigator.onLine) {
+            sw_Register();
+
+            ad_FillDetailPage(misc_GetUrlParam('uid'));
+        } else {
+            sw_SetLastPageState();
+        }

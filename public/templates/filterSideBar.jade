@@ -52,34 +52,36 @@
                     button.green.ui.button(id='btnApplyFilter', onclick="ads_ApplyFilter();") Aplicar Filtro
 script.
     // Get values
-    const fields = ads_GetFilterFields(true);
+    if (navigator.onLine) {
+        const fields = ads_GetFilterFields(true);
 
-    const filterSideBar_InitFields = function() {
-        // Set Values
-        if (fields['searchTerm']) { $('#filter_term').val(fields['searchTerm']); }
-        if (fields['category']) {
-            $("#filter_" + fields['category']).prop("checked", true);
+        const filterSideBar_InitFields = function() {
+            // Set Values
+            if (fields['searchTerm']) { $('#filter_term').val(fields['searchTerm']); }
+            if (fields['category']) {
+                $("#filter_" + fields['category']).prop("checked", true);
 
-            if (fields['category'] == 'servicos') {
-                ad_InitDropDownWithServices($('#filter_Subcategory'), true);
-            } else if (fields['category'] == 'eventos') {
-                ad_InitDropDownWithEvents($('#filter_Subcategory'), true);
+                if (fields['category'] == 'servicos') {
+                    ad_InitDropDownWithServices($('#filter_Subcategory'), true);
+                } else if (fields['category'] == 'eventos') {
+                    ad_InitDropDownWithEvents($('#filter_Subcategory'), true);
+                }
             }
+            
+            if (fields['state']) { $('#filter_state').dropdown('set selected', fields['state']); }
+            // City field below
+
+            if (fields['subcategory']) { $('#filter_Subcategory').dropdown('set selected', fields['subcategory']); }
+
+            if (fields['minprice']) { $('#filter_minprice').val(fields['minprice']); }
+            if (fields['maxprice']) { $('#filter_maxprice').val(fields['maxprice']); }
+        };
+
+        const filterSideBase_InitCity = function() {
+            if (fields['city']) { $('#filter_city').dropdown('set selected', fields['city']); }
         }
-        
-        if (fields['state']) { $('#filter_state').dropdown('set selected', fields['state']); }
-        // City field below
 
-        if (fields['subcategory']) { $('#filter_Subcategory').dropdown('set selected', fields['subcategory']); }
-
-        if (fields['minprice']) { $('#filter_minprice').val(fields['minprice']); }
-        if (fields['maxprice']) { $('#filter_maxprice').val(fields['maxprice']); }
-    };
-
-    const filterSideBase_InitCity = function() {
-        if (fields['city']) { $('#filter_city').dropdown('set selected', fields['city']); }
+        ad_InitDropDownWithProducts($('#filter_Subcategory'), true);
+        misc_InitDropdownWithStates($('#filter_state'), $('#filter_city'), true, filterSideBase_InitCity);
+        filterSideBar_InitFields();
     }
-
-    ad_InitDropDownWithProducts($('#filter_Subcategory'), true);
-    misc_InitDropdownWithStates($('#filter_state'), $('#filter_city'), true, filterSideBase_InitCity);
-    filterSideBar_InitFields();

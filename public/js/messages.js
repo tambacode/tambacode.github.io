@@ -5,6 +5,11 @@ const messages_GoTo = function() {
 
 const messages_DisplayMessageList = function() {
     const path = localStorage.getItem('auth_UserUID');
+
+    if (path == null) {
+        messages_GoTo();
+    }
+
     const tableOne = rootRef.child('users_messages');
     const msgsLastInfoRef = rootRef.child('messages_last_info');
 
@@ -43,6 +48,8 @@ const messages_DisplayMessageList = function() {
             timestampList[val.timestamp] = messages.append(messages_GetMessageCard(snapshot.key, val.ad_image, val.ad_title, val.content, val.timestamp));
         }
 
+        misc_SchedulePageSave();
+
         bodyRef.animate({ scrollTop: $(document).height() }, 0);
     };
 
@@ -73,12 +80,21 @@ const messages_GetMessageCard = function(uid, img, title, description, timestamp
 ///////////////////////////////// MESSAGES LIST PAGE /////////////////////////////////
 
 ///////////////////////////////// CHAT DETAIL  /////////////////////////////////
-const msgUID = misc_GetUrlParam('uid');
-const messagePath = 'messages/' + msgUID + '/msgs';
+var msgUID, messagePath = null;
+
+if (navigator.onLine) {
+    msgUID = misc_GetUrlParam('uid');
+    messagePath = 'messages/' + msgUID + '/msgs';
+}
 
 var lastChatDetailTimestamp = new Date(0);
 
 const message_DisplayMessages = function() {
+    if (localStorage.getItem('auth_UserUID') == null)
+    {
+        auth_RequireLoggingToAccess(sw_GetPageName(true));
+    }
+
     var onSucess = function(snapshot) {
         misc_RemoveLoader();
         
@@ -86,6 +102,8 @@ const message_DisplayMessages = function() {
             message_NewMessageReceived(timestamp, value);
         });
         
+        sw_SavePage();
+
         $("html, body").animate({ scrollTop: $(document).height() }, 10);
         message_ListenToNewMessages(lastChatDetailTimestamp.getTime(), messagePath);
     };

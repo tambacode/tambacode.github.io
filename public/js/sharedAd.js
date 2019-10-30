@@ -524,6 +524,7 @@ const ads_List_ListAdsByTerm = function() {
                 cardAdded = true;
 
                 ads_AddAdToDiv(snapshot, uid, obj, holder);
+                misc_SchedulePageSave(2000);
             }
         });
 
@@ -565,13 +566,20 @@ const ads_List_ListInnerJoinAdsOnDiv = function(div, qtdAdsToList, table, innerJ
             misc_RemoveLoader(div);
             ads_AddAdToDiv(snapshot, snapshot.key, snapshot.val(), div);
         }
+
+        misc_UpdatePageReady();
     };
 
     const onError = function(snapshot) {
         if (div) { div.remove(); }
+        misc_UpdatePageReady();
     };
 
-    db_getInnerJoinLimitToLast(tableOne, path, tableTwo, onSucess, onError, onError, true, qtdAdsToList);
+    if (path != null)  {
+        db_getInnerJoinLimitToLast(tableOne, path, tableTwo, onSucess, onError, onError, true, qtdAdsToList);
+    } else {
+        onError(null);
+    }
 };
 
 const ads_List_ListLastAdsOnDiv = function(div, limitToLast, table, fieldToOrder, fieldTestValue) {
@@ -590,10 +598,13 @@ const ads_List_ListLastAdsOnDiv = function(div, limitToLast, table, fieldToOrder
         if (!cardAdded) {
             div.remove();
         }
+
+        misc_UpdatePageReady();
     };
 
     const onError = function(snapshot) {
         div.remove();
+        misc_UpdatePageReady();
     };
 
     if (!fieldTestValue) {
@@ -851,6 +862,7 @@ const ad_ValuesIntoDetail = function(val, icounter) {
             document.getElementById("SendMessage").style.visibility = "visible";
         }
 
+        misc_SchedulePageSave(1000);
     }
 };
 
@@ -870,6 +882,7 @@ const ad_LoadAdsListOnDiv = function(searchType, holder, orderByChild, orderByCh
                 const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
                 
                 ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, false, false)); 
+                misc_SchedulePageSave(1000);
             }, onErr, onErr);
         });
     };
@@ -889,9 +902,11 @@ const ad_LoadAdsListOnDiv = function(searchType, holder, orderByChild, orderByCh
 
 /////////////////////////////////  AD DETAIL /////////////////////////////////
 /////////////////////////////////  AD LIST   /////////////////////////////////
-
 const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
     const getUser = localStorage.getItem('auth_UserUID');
+
+    if (!getUser) { misc_GoToHome(); }
+
     const firstCall = (lastAdUIDReceived == null);
     const path = "users_favorites/" + getUser;
 
@@ -906,6 +921,8 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
             if (term != "mylistNoFarms" || (term == "mylistNoFarms" && obj.category != 'fazendas')) {
                 lastAdUIDReceived = uid;
                 
+                pageReadyDesired++;
+
                 db_get("ads_images",
                     function(snapshot) {
                         const imgsRef = snapshot.val();
@@ -913,8 +930,10 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
                         
                         if (term == "myfavs") {
                             ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, true, enableCheckboxOnCards)); 
+                            misc_UpdatePageReady();
                         }else {
                             ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, false, enableCheckboxOnCards)); 
+                            misc_UpdatePageReady();
                         }
                     }, onErr, onErr);
             }

@@ -1,7 +1,11 @@
-﻿var db = firebase.database();
-var db_storage = firebase.storage()
-var rootRef = db.ref();
-var rootStorageRef = db_storage.ref();
+﻿var db, db_storage, rootRef, rootStorageRef = null;
+
+if (navigator.onLine) {
+    db = firebase.database();
+    db_storage = firebase.storage()
+    rootRef = db.ref();
+    rootStorageRef = db_storage.ref();
+}
 
 //  Use to get a new key when inserting a new data on DB
 //  path (string): 'SharedFarm/Users'
@@ -277,19 +281,23 @@ const db_getUserToEdit = function() {
 };
 
 const db_getUserInfo = function() {
-    var path = '/users/' + localStorage.getItem('auth_UserUID');
+    const usedID = localStorage.getItem('auth_UserUID');
+
+    if (usedID == null) {
+        user_OpenProfile();
+    }
+
+    const path = '/users/' + usedID;
+
+    var Finish = function() {
+        user_showFields();
+        misc_RemoveLoader();
+        misc_SchedulePageSave();
+    };
 
     var onSuccess = function(snapshot) {
-
         var temp_info = "";
 
-        if (snapshot.val().profile_picture_link !== undefined) {
-            misc_SetImageRotation($('#imageuploaded'), snapshot.val().pictureRotate);
-            misc_waitImageLoadReady($('#imageuploaded'), snapshot.val().profile_picture_link, function(){
-                user_showFields();
-                misc_RemoveLoader();                
-            });
-        }
         $("#name").text(snapshot.val().name);
         $("#email").text(snapshot.val().email);
         
@@ -310,14 +318,25 @@ const db_getUserInfo = function() {
         (snapshot.val().state !== undefined) ? temp_info += " - " + snapshot.val().state : temp_info;
         $("#cep_city_state").text(temp_info);
 
+        if (snapshot.val().profile_picture_link !== undefined) {
+            console.log(snapshot.val().profile_picture_link);
+            misc_SetImageRotation($('#imageuploaded'), snapshot.val().pictureRotate);
+            misc_waitImageLoadReady($('#imageuploaded'), snapshot.val().profile_picture_link, function(){
+                Finish();
+            });
+        } else {
+            Finish();
+        }
     };
 
     var onNullValue = function(snapshot) {
+        console.log("onNullValue");
         user_showFields();
         misc_RemoveLoader();
     };
 
     var onError = function(snapshot) {
+        console.log("onError");
         user_showFields();
         misc_RemoveLoader();
     };
