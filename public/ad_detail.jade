@@ -51,6 +51,16 @@ html
                     h2.ui.orange.header
                         #price.notFarm | 
                         .sub.header#description
+                    .ui.dividing.header.isFarm
+
+                    //-- Map area
+                    .html.ui.top.attached.segment.hidden.isFarm
+                        br
+                        br
+                        #map.ui
+                        .ui.top.attached.label Mapa da fazenda
+
+                    //-- Category and sub category area
                     .ui.dividing.header.notFarm
                     .ui.two.column.padded.grid.notFarm
                         .column
@@ -62,6 +72,8 @@ html
                                 a.ui.orange.ribbon.label Subcategoria
                                 label#subcategory
                     h3.ui.dividing.header
+
+                    //-- Event data area
                     #hiddendiv.hidden
                         h3.ui.header
                         #adevents.ui.segment
@@ -71,6 +83,8 @@ html
                                 a#urlad(href="" target="_blank")  site.
                         #youtubeVideo.ui.embed
                         h3.ui.dividing.header
+
+                    //-- Ad owner area
                     div
                         h3.ui.header
                         #adevents.ui.segment
@@ -82,19 +96,29 @@ html
                                     .content#district
                             #farmCard.sharedAds.ui.grid.notFarm
                                 .sixteen.wide.column(style="margin-top: 0;")
+                    
+                    //-- Child Farm Ads area
                     div.isFarm.hidden
                         h3.ui.header
                         #adevents.ui.segment
                             h4 Anúncios desta fazenda:
                             #farmChildren.sharedAds.ui.grid
                                 .sixteen.wide.column(style="margin-top: 0;")
+                    
+                    //-- Buttons area
                     .button.fluid.ui.orange.button(id='SendMessage' onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner, 'ad_detail.html');")
                         | Enviar Mensagem
                     button.fluid.ui.orange.button(id='EditAd' onclick="ad_RedirectForEditAd();")
                         | Editar Anúncio
                 br
             include templates/footer
+    style.
+        #map {
+            height: 330px;
+            width: 300px;
+        }
     script(src="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.min.js")
+    script async defer (src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxpL8r2ySRM9-nUEIw7o89QwSbMPtHhO0&callback=initMap")
     script.
         if (navigator.onLine) {
             sw_Register();
@@ -102,4 +126,24 @@ html
             ad_FillDetailPage(misc_GetUrlParam('uid'));
         } else {
             sw_SetLastPageState();
+        }
+
+        // Map init
+        {
+            var map;
+            var src = 'https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/farm_klms%2FSidia%20Tower.kml?alt=media&token=97dd9783-df7a-4750-8881-0b97079b5112';
+
+            function initMap() {
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: new google.maps.LatLng(-19.257753, 146.823688),
+                    zoom: 2,
+                    mapTypeId: 'terrain'
+                });
+
+                var kmlLayer = new google.maps.KmlLayer(src, {
+                    suppressInfoWindows: true,
+                    preserveViewport: false,
+                    map: map
+                });
+            }
         }
