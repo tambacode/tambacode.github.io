@@ -190,14 +190,18 @@
             </div>
           </div>
         </div><br/>
-        <div id="noData" class="ui padded grid">
+        <div id="noData" class="ui padded grid hidden">
           <div class="column">
             <div class="ui segment">
               <div class="sub header">Nenhum pedido de acesso atualmente</div>
             </div>
           </div>
         </div>
-        <div id="ads" class="sharedAds ui grid"></div><br/><br/>
+        <div id="ads" class="sharedAds ui grid">
+          <div id="loader" class="sixteen wide column row">
+            <div class="ui active centered inline loader"></div>
+          </div>
+        </div><br/><br/>
       </div>
     </div>
     <script>

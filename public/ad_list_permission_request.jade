@@ -18,12 +18,13 @@ html
                             .sub.header
                                 | Dando acesso a um anúncio significa que outro usuário poderá exibi-lo em uma de suas fazendas.
                 br
-                #noData.ui.padded.grid
+                #noData.ui.padded.grid.hidden
                     .column
                         .ui.segment
                             .sub.header
                                 | Nenhum pedido de acesso atualmente
                 #ads.sharedAds.ui.grid
+                    include templates/loader
                 br
                 br
             include templates/footer

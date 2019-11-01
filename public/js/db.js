@@ -190,7 +190,7 @@ var db_getInnerJoin = function(table1, pathInTableOne, table2, onSucess, onNullV
                 {
                     onNullValue(snapshot);
                 } else {
-                    onSucess(snapshot);
+                    onSucess(snapshot, snap);
                 }
             }).catch(function(error) {
                 onError(error);

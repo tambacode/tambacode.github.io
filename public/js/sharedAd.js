@@ -462,12 +462,13 @@ const ad_GetCardByUid = function(holder, uid) {
     db_getEqualToIndex('ad', uid, onSucess, onError, onError);
 }
 
-const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelected, showCheckbox, showAcceptOption) {
-    const addImage = '<div class="four wide column product_image"><a href="{0}"><img src="{1}" class="ui tiny rounded image list"></a></div>';
-    const addInfo  = '<div class="twelve wide column product_info"><a href="{2}"><h4 id="title">{3}</h4></a>{9}<h3 id="price">{7}</h3><span id="info">{8}</span><div style="width: 100%;" class="ui divider"></div></div>';
+const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelected, showCheckbox, showAcceptOptionId, requesterName) {
+    const addImage = '<div adId="{11}" class="four wide column product_image"><a href="{0}"><img src="{1}" class="ui tiny rounded image list"></a></div>';
+    const addInfo  = '<div adId="{11}" class="twelve wide column product_info"><a href="{2}"><h4 id="title">{3}</h4></a>{9}<h3 id="price">{7}</h3><span id="info">{8}</span>{10}<div style="width: 100%;" class="ui divider"></div></div>';
 
     var link = 'ad_detail.html?uid=' + uid;
     var card = addImage + addInfo;
+    var const10Value = '';
 
     if (showCheckbox) {
         // IF SHOWCHECKBOX disable links
@@ -484,6 +485,16 @@ const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelec
         card = card.replace('{5}', (showFavoriteButton) ? "heart" : "");
     }
 
+    if (showAcceptOptionId) {
+        const methodCallParams = "'" + uid + "', " + "'" + showAcceptOptionId + "'";
+        const acceptOption = '<div id="' + showAcceptOptionId + '"  class="accessRequestContent"><p>Liberar acesso à {0}?</p><div class="ui buttons"><button class="ui green icon button"><i class="icon thumbs up" onclick="ad_AccessRequestAccept({1});"></i></button><div class="or" data-text="ou"></div><button class="ui red icon button" onclick="ad_AccessRequestDeny({2});"><i class="icon thumbs down"></i></button></div></div>';
+
+        const10Value = acceptOption;
+        const10Value = const10Value.replace('{0}', requesterName);
+        const10Value = const10Value.replace('{1}', methodCallParams);
+        const10Value = const10Value.replace('{2}', methodCallParams);
+    }
+
     card = card.replace('{0}', link);
     card = card.replace('{1}', image);
     card = card.replace('{2}', link);
@@ -492,6 +503,9 @@ const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelec
     card = card.replace('{6}', (favoriteSelected) ? "" : "outline");
     card = card.replace('{7}', (obj.category != 'fazendas') ? misc_GetPrice(obj.price) : "&nbsp;");
     card = card.replace('{8}', misc_GetStringWithMaxCharacthers(obj.description, 40));
+    card = card.replace('{10}', const10Value);
+    card = card.replace('{11}', uid);
+    card = card.replace('{11}', uid);
 
     return card;
 };
@@ -1038,19 +1052,54 @@ const ad_List_ListAdsAccessRequest = function() {
 
     if (!getUser) { misc_GoToHome(); }
 
-    var onSucess = function(snapshot) {
+    var onSucess = function(snapshot, snap) {
         misc_RemoveLoader();
-        $("#noData").remove();
         
+        const adUid = snap.key;
+        const adRequestersList = snap.val();
+
+        const searchUserInfo = function(randomUid, requesterID, cardData) {
+            const onUserInfoErr = function(snapshot) {
+                console.log(snapshot);
+                misc_DisplayErrorMessage("Tente novamente!", "Erro ao consultar as informações do solicitante.")
+            };
+
+            const onUserInfoSuccess = function(userInfoSnapshot) {
+                const requesterName = userInfoSnapshot.val();
+                ad_List_AddCardToList(cardData.holder, ad_GetAdCard(cardData.uid, cardData.image, cardData.obj, cardData.showFavoriteButton, cardData.favoriteSelected, cardData.showCheckbox, cardData.showAcceptOptionId, requesterName)); 
+            };
+
+            const userInfoPath = "users/" + requesterID + "/name";
+            db_get(userInfoPath, onUserInfoSuccess, onUserInfoErr, onUserInfoErr);
+        };
+
         uid = snapshot.key;
         obj = snapshot.val();
-        const onErr = function(snapshot) { };
+        
+        const onErr = function(snapshot) {
+            misc_DisplayErrorMessage("Tente novamente!", "Erro consultar a imagem de algum produto.")
+        };
+
         db_get("ads_images",
             function(snapshot) {
                 const imgsRef = snapshot.val();
                 const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
                 
-                ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, false, false, true)); 
+                const cardData = {
+                    holder: holder,
+                    uid: uid,
+                    image: imgURL,
+                    obj: obj,
+                    showFavoriteButton: false,
+                    favoriteSelected: false,
+                    showCheckbox: false,
+                    showAcceptOptionId: true
+                }
+
+                $.each(adRequestersList, function(uid, obj) {
+                    searchUserInfo(uid, obj, cardData);
+                });
+
                 sw_SavePage();
             }
             ,onErr
@@ -1059,14 +1108,12 @@ const ad_List_ListAdsAccessRequest = function() {
     };
 
     const onError = function(snapshot) {
-        console.log(snapshot);
         if (misc_RemoveLoader()) {
-            $("#ads").append(misc_GetErrorMsg(true));
+            misc_DisplayErrorMessage("Tente novamente!", "Erro ao executar a consulta.")
         }
     };
 
     const onNull = function(snapshot) {
-        console.log(snapshot);
         if (misc_RemoveLoader()) {
             $("#ads").append(misc_GetNullValueMsg(true));
         }
@@ -1075,6 +1122,14 @@ const ad_List_ListAdsAccessRequest = function() {
     const tableOne = rootRef.child("ad_accessOnFarmRequest");
     const tableTwo = rootRef.child("ad");
     db_getInnerJoin(tableOne, getUser, tableTwo, onSucess, onNull, onError, false);
+};
+
+const ad_AccessRequestAccept = function(uid, randomUid) {
+    console.log(uid + ' ad_AccessRequestAccept ' + randomUid);
+};
+
+const ad_AccessRequestDeny = function(uid, randomUid) {
+    console.log(uid + ' ad_AccessRequestDeny ' + randomUid);
 };
 /////////////////////////////////  AD ACESS LIST   /////////////////////////////////
 
