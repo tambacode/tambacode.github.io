@@ -40,6 +40,10 @@
     "user_ad": {
       ".read": true,
       ".write": true, 
+    },
+    "ad_accessOnFarmRequest": {
+      ".read": true,
+      ".write": true, 
     }
   }
 }

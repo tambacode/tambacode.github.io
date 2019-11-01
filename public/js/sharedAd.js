@@ -314,12 +314,69 @@ const ad_Register_AddNewImage = function() {
 };
 
 ///////////////////////////////// ADS UPDATE /////////////////////////////////
-const ad_RedirectForEditAd = function(){
+const ad_RedirectForEditAd = function() {
     //Get Uid of Ad
     const adUID = misc_GetUrlParam('uid');
     //Redirect user to edit page
     misc_GoToPage("ad_registration.html?isitforEdit=1&uid=" + adUID);
-}
+};
+
+const ad_RequestAdAccessOnFarm = function() {
+    const userID = localStorage.getItem('auth_UserUID');
+
+    if (userID) {
+        $("#RequestAdAccessOnFarm").addClass("disabled");
+
+        const adUID = misc_GetUrlParam('uid');
+        const path = 'ad/' + adUID + '/user';
+
+        var onError = function(snapshot) {
+            console.log(snapshot);
+            misc_DisplayErrorMessage('Erro ao enviar o pedido', 'Algo aconteceu, tente novamente mais tarde.');
+            $("#RequestAdAccessOnFarm").removeClass("disabled");
+        };
+
+        var onSucess = function(snapshot) {
+            const ownerUID = snapshot.val();
+            ad_SendRequestAdAccessOnFarm(ownerUID, userID, adUID, onError);
+        };
+
+        db_get(path, onSucess, onError, onError);
+    } else {
+        misc_DisplayErrorMessage('Usuário não logado', 'Por favor faça o login para realizar essa ação.');
+    }
+};
+
+const ad_SendRequestAdAccessOnFarm = function(ownerUID, userID, adUID, onError) {
+    const path = 'ad_accessOnFarmRequest/' + ownerUID + '/' + adUID;
+
+    var doActionOfSending = function() {
+        rootRef.child('ad_accessOnFarmRequest').child(ownerUID).child(adUID).push(userID);  
+        misc_DisplaySuccessMessage("Pedido enviado com sucesso!", "Aguarde o anúnciante responder.");
+    };
+
+    var onSucess = function(snapshot) {
+        var alreadySentRequest = false;
+        
+        snapshot.forEach(function(val) {
+            if (val.val() == userID) {
+                alreadySentRequest = true;
+            }
+        });
+
+        if (!alreadySentRequest) {
+            doActionOfSending();
+        } else {
+            misc_DisplayErrorMessage('Pedido duplicado', 'Você já enviou uma solicitação para esse anúncio!');
+        }
+    };
+
+    var onNullValue = function(snapshot) {
+        doActionOfSending();
+    };
+
+    db_get(path, onSucess, onNullValue, onError);
+};
 
 //Fill all filds
 const ad_fillfieldforEdit = function(){
@@ -360,8 +417,8 @@ const ad_fillfieldforEdit = function(){
                 ad_Register_RemoveLoadingIconFromImage('#' + inputId);
 
                 ad_QtdRegisterImages = ad_QtdRegisterImages + 1;
-                
             });
+
             ad_showFields();
             //$('#divloader').remove();
         };
@@ -713,6 +770,11 @@ const ad_FillDetailPage = function(adUID) {
     const user = localStorage.getItem('auth_UserUID');
     var adPath = 'ad/' + adUID;
 
+    var hideAdAccessOnFarm = function() {
+        console.log("hideAdAccessOnFarm");
+        $("#RequestAdAccessOnFarm").addClass("hidden");
+    };
+
     var onSucess = function(snapshot) {
         var val = snapshot.val();
 
@@ -724,7 +786,12 @@ const ad_FillDetailPage = function(adUID) {
         } else {
             if (val.ad_parent) {
                 ad_GetCardByUid($('#farmCard'), val.ad_parent);
+                hideAdAccessOnFarm();
             }
+        }
+
+        if (val.user == user) {
+            hideAdAccessOnFarm();
         }
 
         if (!edit) {
@@ -749,7 +816,7 @@ const ad_FillDetailPage = function(adUID) {
             );
 
             if (val.user == user) {
-                document.getElementById("SendMessage").style.visibility = "hidden";
+                $("#SendMessage").addClass("hidden");
             }
 
         } else {
@@ -759,8 +826,8 @@ const ad_FillDetailPage = function(adUID) {
 
     db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
 
-    if(!edit){
-        document.getElementById("EditAd").style.visibility = "hidden";
+    if (!edit) {
+        $("#EditAd").addClass("hidden");
     }
 };
 

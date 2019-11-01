@@ -19,8 +19,12 @@
 				"pictureRotate":"e.g. 90 to be used to rotate image",
 				"push_notification_key" : "notification_key",
 				"ads_id": {
-					"uid_1": "uid_1",
-					"uid_2": "uid_2"
+					"uid_1": {
+						"owner": true
+					},
+					"uid_2": {
+						"owner": false
+					}
 				},
 				"tokens": {
 					"facebook": "facebook_token",
@@ -56,7 +60,7 @@
 		},
 		"ad": {
 			"uid_1": {
-				"users_uid": "users_uid",
+				"user": "users_uid",
 				"ad_parent": "ad_uid_6",
 				"title": "Titulo do produto",
 				"description": "Descricao do produto ou serviço",
@@ -85,6 +89,14 @@
 			"user_uid": {
 				"timestamp_number": "ad_uid",
 				"timestamp_number": "ad_uid",
+			}
+		},
+		"ad_accessOnFarmRequest": {
+			"user_uid": {
+				"ad_uid_1": {
+					"random_uid": "requesterID_1",
+					"random_uid2": "requesterID_2",
+				}
 			}
 		}
 	}
