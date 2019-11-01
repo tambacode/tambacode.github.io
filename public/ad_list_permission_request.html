@@ -1,6 +1,6 @@
 
 <html>
-  <title>Shared.Farm - Detalhe do anúncio</title>
+  <title>Shared.Farm - Requesições de acesso a um anúncio</title>
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
@@ -41,8 +41,6 @@
   <link rel="dns-prefetch" href="/offline.html"/>
   <link rel="dns-prefetch" href="/notfound.html"/>
   <link rel="dns-prefetch" href="/imgs/noConnection_Icon.jpg"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css"/>
   <body>
     <div class="ui left sidebar vertical menu"><a href="index.html" class="item">Home<i class="home icon Large"></i></a><a id="PerfilButton" onClick="user_OpenProfile();" class="item hidden">Meu Perfil<i class="user circle icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list.html');" class="item">Meus Anúncios<i class="shopping bag icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_permission_request.html');" class="item">Pedidos de acesso a anúncio<i class="handshake icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_favorites.html');" class="item">Favoritos<i class="heart icon Large"></i></a><a onClick="messages_GoTo();" class="item">Mensagens<i class="comment icon Large"></i></a><a id="LogoutButton" onClick="auth_LogoffUser();" class="item hidden">Sair<i class="sign-out icon Large"></i></a><a id="LoginButton" onClick="auth_RequireLoggingToAccess('index.html');" class="item hidden">Login<i class="sign-in icon Large"></i></a></div>
     <div class="ui right sidebar vertical menu">
@@ -183,127 +181,34 @@
           </div>
         </div>
       </div>
-      <div id="all"><br/>
-        <div id="loader" class="sixteen wide column row">
-          <div class="ui active centered inline loader"></div>
-        </div>
-        <div style="display:none" class="ui container">
-          <div class="ui fluid centered rounded medium image">
-            <div id="intro" class="slider glide glide--ltr glide--carousel glide--swipeable">
-              <div data-glide-el="track" class="slider__track glide__track">
-                <ul id="sliderImages" class="slider__slides glide__slides">
-                </ul>
-              </div>
-              <div id="bulletImages" data-glide-el="controls[nav]" class="slider__bullets glide__bullets">
-              </div>
+      <div id="all">
+        <div class="ui padded grid">
+          <div class="column">
+            <div class="ui segment">
+              <div class="sub header">Aqui você poderá visualizar os pedidos de link a um anúncio seu.</div><br/>
+              <div class="sub header">Dando acesso a um anúncio significa que outro usuário poderá exibi-lo em uma de suas fazendas.</div>
             </div>
           </div>
-          <h1 class="ui header">
-            <div id="title"> </div>
-            <div class="sub header"><i class="map marker alternate icon"></i>
-              <div id="address" class="content"></div>
-            </div>
-          </h1>
-          <h2 class="ui orange header">
-            <div id="price" class="notFarm">| </div>
-            <div id="description" class="sub header"></div>
-          </h2>
-          <div class="ui dividing header isFarm"></div>
-          <div class="html ui top attached segment hidden isFarm"><br/><br/>
-            <div id="map" class="ui"></div>
-            <div class="ui top attached label">Mapa da fazenda</div>
-          </div>
-          <div class="ui dividing header notFarm"></div>
-          <div class="ui two column padded grid notFarm">
-            <div class="column">
-              <div class="ui raised segment"><a class="ui orange ribbon label">Categoria</a>
-                <label id="category"></label>
-              </div>
-            </div>
-            <div class="column">
-              <div class="ui raised segment"><a class="ui orange ribbon label">Subcategoria</a>
-                <label id="subcategory"></label>
-              </div>
-            </div>
-          </div>
-          <h3 class="ui dividing header"></h3>
-          <div id="hiddendiv" class="hidden">
-            <h3 class="ui header"></h3>
-            <div id="adevents" class="ui segment">
-              <h4>Data do evento:
-                <label id="datead"></label>
-              </h4>
-              <h4>Para mais detalhes, acessar o<a id="urlad" href="" target="_blank"> site.</a></h4>
-            </div>
-            <div id="youtubeVideo" class="ui embed"></div>
-            <h3 class="ui dividing header"></h3>
-          </div>
-          <div>
-            <h3 class="ui header"></h3>
-            <div id="adevents" class="ui segment">
-              <h4>Anúncio pertencente à:</h4>
-              <h1 class="ui header">
-                <div id="name"> </div>
-                <div class="sub header"><i class="map marker alternate icon"></i>
-                  <div id="district" class="content"></div>
-                </div>
-              </h1>
-              <div id="farmCard" class="sharedAds ui grid notFarm">
-                <div style="margin-top: 0;" class="sixteen wide column"></div>
-              </div>
-            </div>
-          </div>
-          <div class="isFarm hidden">
-            <h3 class="ui header"></h3>
-            <div id="adevents" class="ui segment">
-              <h4>Anúncios desta fazenda:</h4>
-              <div id="farmChildren" class="sharedAds ui grid">
-                <div style="margin-top: 0;" class="sixteen wide column"></div>
-              </div>
-            </div>
-          </div>
-          <div id="SendMessage" onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner, 'ad_detail.html');" class="button fluid ui orange button">Enviar Mensagem</div>
-          <div id="EditAd" onclick="ad_RedirectForEditAd();" class="button fluid ui orange button">Editar Anúncio</div>
-          <div id="RequestAdAccessOnFarm" onclick="auth_RequireLoggingToAccessFunction(ad_RequestAdAccessOnFarm, 'ad_detail.html');" class="button fluid ui orange button">Pedir permissão para linkar anúncio a suas fazenda</div>
         </div><br/>
+        <div id="noData" class="ui padded grid">
+          <div class="column">
+            <div class="ui segment">
+              <div class="sub header">Nenhum pedido de acesso atualmente</div>
+            </div>
+          </div>
+        </div>
+        <div id="ads" class="sharedAds ui grid"></div><br/><br/>
       </div>
     </div>
+    <script>
+      if (navigator.onLine) {
+          pageReadyDesired = 0;
+          sw_Register();
+      
+          ad_List_ListAdsAccessRequest();
+      } else {
+          sw_SetLastPageState();
+      }
+    </script>
   </body>
-  <style>
-    #map {
-        height: 330px;
-        width: 300px;
-    }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.min.js"></script>
-  <script async="async" defer="defer" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxpL8r2ySRM9-nUEIw7o89QwSbMPtHhO0&amp;callback=initMap"></script>
-  <script>
-    if (navigator.onLine) {
-        sw_Register();
-    
-        // Map init
-        {
-            var map;
-            var src = 'https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/farm_klms%2FSidia%20Tower.kml?alt=media&token=97dd9783-df7a-4750-8881-0b97079b5112';
-    
-            function initMap() {
-                map = new google.maps.Map(document.getElementById('map'), {
-                    center: new google.maps.LatLng(-19.257753, 146.823688),
-                    zoom: 2,
-                    mapTypeId: 'terrain'
-                });
-    
-                var kmlLayer = new google.maps.KmlLayer(src, {
-                    suppressInfoWindows: true,
-                    preserveViewport: false,
-                    map: map
-                });
-            }
-        }
-    
-        ad_FillDetailPage(misc_GetUrlParam('uid'));
-    } else {
-        sw_SetLastPageState();
-    }
-  </script>
 </html>

@@ -1,5 +1,5 @@
 html
-    
+    title Shared.Farm - Detalhe do anúncio
     include templates/head
       
     //- Required Core Stylesheet
@@ -120,32 +120,32 @@ html
             width: 300px;
         }
     script(src="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.min.js")
-    script async defer (src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxpL8r2ySRM9-nUEIw7o89QwSbMPtHhO0&callback=initMap")
+    script(async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxpL8r2ySRM9-nUEIw7o89QwSbMPtHhO0&callback=initMap")
     script.
         if (navigator.onLine) {
             sw_Register();
 
+            // Map init
+            {
+                var map;
+                var src = 'https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/farm_klms%2FSidia%20Tower.kml?alt=media&token=97dd9783-df7a-4750-8881-0b97079b5112';
+
+                function initMap() {
+                    map = new google.maps.Map(document.getElementById('map'), {
+                        center: new google.maps.LatLng(-19.257753, 146.823688),
+                        zoom: 2,
+                        mapTypeId: 'terrain'
+                    });
+
+                    var kmlLayer = new google.maps.KmlLayer(src, {
+                        suppressInfoWindows: true,
+                        preserveViewport: false,
+                        map: map
+                    });
+                }
+            }
+
             ad_FillDetailPage(misc_GetUrlParam('uid'));
         } else {
             sw_SetLastPageState();
-        }
-
-        // Map init
-        {
-            var map;
-            var src = 'https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/farm_klms%2FSidia%20Tower.kml?alt=media&token=97dd9783-df7a-4750-8881-0b97079b5112';
-
-            function initMap() {
-                map = new google.maps.Map(document.getElementById('map'), {
-                    center: new google.maps.LatLng(-19.257753, 146.823688),
-                    zoom: 2,
-                    mapTypeId: 'terrain'
-                });
-
-                var kmlLayer = new google.maps.KmlLayer(src, {
-                    suppressInfoWindows: true,
-                    preserveViewport: false,
-                    map: map
-                });
-            }
         }

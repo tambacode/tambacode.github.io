@@ -462,7 +462,7 @@ const ad_GetCardByUid = function(holder, uid) {
     db_getEqualToIndex('ad', uid, onSucess, onError, onError);
 }
 
-const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelected, showCheckbox) {
+const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelected, showCheckbox, showAcceptOption) {
     const addImage = '<div class="four wide column product_image"><a href="{0}"><img src="{1}" class="ui tiny rounded image list"></a></div>';
     const addInfo  = '<div class="twelve wide column product_info"><a href="{2}"><h4 id="title">{3}</h4></a>{9}<h3 id="price">{7}</h3><span id="info">{8}</span><div style="width: 100%;" class="ui divider"></div></div>';
 
@@ -771,7 +771,6 @@ const ad_FillDetailPage = function(adUID) {
     var adPath = 'ad/' + adUID;
 
     var hideAdAccessOnFarm = function() {
-        console.log("hideAdAccessOnFarm");
         $("#RequestAdAccessOnFarm").addClass("hidden");
     };
 
@@ -783,6 +782,7 @@ const ad_FillDetailPage = function(adUID) {
         if (val.category === 'fazendas') {
             ad_SetFarmFields();
             ad_LoadAdsListOnDiv('EqualToLimitToLast', $('#farmChildren'), 'ad_parent', snapshot.key, 100);
+            hideAdAccessOnFarm();
         } else {
             if (val.ad_parent) {
                 ad_GetCardByUid($('#farmCard'), val.ad_parent);
@@ -975,8 +975,7 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
     if (!getUser) { misc_GoToHome(); }
 
     const firstCall = (lastAdUIDReceived == null);
-    const path = "users_favorites/" + getUser;
-
+    
     var onSucess = function(snapshot) {
         misc_RemoveLoader();
         
@@ -1018,7 +1017,11 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
         if (term == "mylist" || term == "mylistNoFarms") {
             db_getOrderByChildContainsLimitToLast("ad", "user", getUser, 50, onSucess, onError, onError);
         } else if(term == "myfavs") {
+            var path = "users_favorites/" + getUser;
             db_get(path, onSucess, null, null);
+        } else if(term == "accessRequest") {
+            var path = "ad_accessOnFarmRequest/" + getUser;
+            db_getOrderByChildContainsLimitToLast(path, "user", getUser, 50, onSucess, onError, onError);
         }     
         
         //db_get("ad", onSucess, onError, onError);
@@ -1026,8 +1029,54 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
         console.log("ADD PAGINATION HERE");
     }
 };
-
 /////////////////////////////////  AD LIST   /////////////////////////////////
+
+/////////////////////////////////  AD ACESS LIST   /////////////////////////////////
+const ad_List_ListAdsAccessRequest = function() {
+    const holder = $("#ads");
+    const getUser = localStorage.getItem('auth_UserUID');
+
+    if (!getUser) { misc_GoToHome(); }
+
+    var onSucess = function(snapshot) {
+        misc_RemoveLoader();
+        $("#noData").remove();
+        
+        uid = snapshot.key;
+        obj = snapshot.val();
+        const onErr = function(snapshot) { };
+        db_get("ads_images",
+            function(snapshot) {
+                const imgsRef = snapshot.val();
+                const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
+                
+                ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, false, false, true)); 
+                sw_SavePage();
+            }
+            ,onErr
+            ,onErr
+        );
+    };
+
+    const onError = function(snapshot) {
+        console.log(snapshot);
+        if (misc_RemoveLoader()) {
+            $("#ads").append(misc_GetErrorMsg(true));
+        }
+    };
+
+    const onNull = function(snapshot) {
+        console.log(snapshot);
+        if (misc_RemoveLoader()) {
+            $("#ads").append(misc_GetNullValueMsg(true));
+        }
+    };
+
+    const tableOne = rootRef.child("ad_accessOnFarmRequest");
+    const tableTwo = rootRef.child("ad");
+    db_getInnerJoin(tableOne, getUser, tableTwo, onSucess, onNull, onError, false);
+};
+/////////////////////////////////  AD ACESS LIST   /////////////////////////////////
 
 /////////////////////////////////  AD DELETE   /////////////////////////////////
 const ad_delete = function(){
