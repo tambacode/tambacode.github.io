@@ -94,6 +94,14 @@
 					"random_uid2": "requesterID_2",
 				}
 			}
+		},
+		"user_ad": {
+			"user_uid": {
+				"ad": {
+					"ad_uid_1": "ad_uid_1",
+					"ad_uid_2": "ad_uid_2",
+				}
+			}
 		}
 	}
 }

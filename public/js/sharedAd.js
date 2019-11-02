@@ -462,9 +462,9 @@ const ad_GetCardByUid = function(holder, uid) {
     db_getEqualToIndex('ad', uid, onSucess, onError, onError);
 }
 
-const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelected, showCheckbox, showAcceptOptionId, requesterName) {
-    const addImage = '<div adId="{11}" class="four wide column product_image"><a href="{0}"><img src="{1}" class="ui tiny rounded image list"></a></div>';
-    const addInfo  = '<div adId="{11}" class="twelve wide column product_info"><a href="{2}"><h4 id="title">{3}</h4></a>{9}<h3 id="price">{7}</h3><span id="info">{8}</span>{10}<div style="width: 100%;" class="ui divider"></div></div>';
+const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelected, showCheckbox, requestInfo) {
+    const addImage = '<div adId="{11}" {12} class="four wide column product_image"><a href="{0}"><img src="{1}" class="ui tiny rounded image list"></a></div>';
+    const addInfo  = '<div adId="{11}" {12} class="twelve wide column product_info"><a href="{2}"><h4 id="title">{3}</h4></a>{9}<h3 id="price">{7}</h3><span id="info">{8}</span>{10}<div style="width: 100%;" class="ui divider"></div></div>';
 
     var link = 'ad_detail.html?uid=' + uid;
     var card = addImage + addInfo;
@@ -485,14 +485,23 @@ const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelec
         card = card.replace('{5}', (showFavoriteButton) ? "heart" : "");
     }
 
-    if (showAcceptOptionId) {
-        const methodCallParams = "'" + uid + "', " + "'" + showAcceptOptionId + "'";
-        const acceptOption = '<div id="' + showAcceptOptionId + '"  class="accessRequestContent"><p>Liberar acesso à {0}?</p><div class="ui buttons"><button class="ui green icon button"><i class="icon thumbs up" onclick="ad_AccessRequestAccept({1});"></i></button><div class="or" data-text="ou"></div><button class="ui red icon button" onclick="ad_AccessRequestDeny({2});"><i class="icon thumbs down"></i></button></div></div>';
+    if (requestInfo) {
+        const methodCallParams = "this, '" + uid + "', " + "'" + requestInfo.requesterID + "','" + requestInfo.randomUid + "'";
+        const acceptOption = '<div class="accessRequestContent"><p>Liberar acesso à {0}?</p><div class="ui buttons"><button {13} class="ui green icon button"><i class="icon thumbs up" onclick="ad_AccessRequestAccept({1});"></i></button><div class="or" data-text="ou"></div><button {14} class="ui red icon button" onclick="ad_AccessRequestDeny({2});"><i class="icon thumbs down"></i></button></div></div>';
 
         const10Value = acceptOption;
-        const10Value = const10Value.replace('{0}', requesterName);
+        const10Value = const10Value.replace('{0}', requestInfo.requesterName);
         const10Value = const10Value.replace('{1}', methodCallParams);
         const10Value = const10Value.replace('{2}', methodCallParams);
+        
+        // SET BUTTON ID
+        const btnID = 'buttonID="' + Math.random() + '"';
+        card = card.replace('{12}', btnID);
+        card = card.replace('{12}', btnID);
+        const10Value = const10Value.replace('{13}', btnID);
+        const10Value = const10Value.replace('{14}', btnID);
+    } else {
+        card = card.replace('{12}', '');
     }
 
     card = card.replace('{0}', link);
@@ -840,7 +849,7 @@ const ad_FillDetailPage = function(adUID) {
 
     db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
 
-    if (!edit) {
+    if (edit) {
         $("#EditAd").addClass("hidden");
     }
 };
@@ -991,10 +1000,12 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
     const firstCall = (lastAdUIDReceived == null);
     
     var onSucess = function(snapshot) {
-        misc_RemoveLoader();
+        var snapKey = snapshot.key;
+        var snapVal = snapshot.val();
         
+        misc_RemoveLoader();
         const holder = $("#ads");
-        $.each(snapshot.val(), function(uid, obj) {
+        const loadProduct = function(uid, obj) {
             const onErr = function(snapshot) {};
                 
             // This IF test if farms are enableb on this search or not
@@ -1017,7 +1028,15 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
                         }
                     }, onErr, onErr);
             }
-        });
+        }
+        
+        if (term == "myfavs") {
+            $.each(snapVal, function(uid, obj) {
+                loadProduct(uid, obj);
+            });
+        } else {
+            loadProduct(snapKey, snapVal);
+        }
     };
 
     const onError = function(snapshot) {
@@ -1029,16 +1048,16 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
     if (firstCall) {
         //TODO: Change "title" to "timestamp", when this field is added to database, so we can order the ads list by their creation date.
         if (term == "mylist" || term == "mylistNoFarms") {
-            db_getOrderByChildContainsLimitToLast("ad", "user", getUser, 50, onSucess, onError, onError);
+            //db_getOrderByChildContainsLimitToLast("ad", "user", getUser, 50, onSucess, onError, onError);
+            const pathInTableOne = "" + getUser + "/ad";
+            const tableOne = rootRef.child("user_ad");
+            const tableTwo = rootRef.child("ad");
+
+            db_getInnerJoin(tableOne, pathInTableOne, tableTwo, onSucess, onError, onError);
         } else if(term == "myfavs") {
             var path = "users_favorites/" + getUser;
             db_get(path, onSucess, null, null);
-        } else if(term == "accessRequest") {
-            var path = "ad_accessOnFarmRequest/" + getUser;
-            db_getOrderByChildContainsLimitToLast(path, "user", getUser, 50, onSucess, onError, onError);
-        }     
-        
-        //db_get("ad", onSucess, onError, onError);
+        }
     } else {
         console.log("ADD PAGINATION HERE");
     }
@@ -1051,7 +1070,7 @@ const ad_List_ListAdsAccessRequest = function() {
     const getUser = localStorage.getItem('auth_UserUID');
 
     if (!getUser) { misc_GoToHome(); }
-
+    
     var onSucess = function(snapshot, snap) {
         misc_RemoveLoader();
         
@@ -1065,8 +1084,13 @@ const ad_List_ListAdsAccessRequest = function() {
             };
 
             const onUserInfoSuccess = function(userInfoSnapshot) {
-                const requesterName = userInfoSnapshot.val();
-                ad_List_AddCardToList(cardData.holder, ad_GetAdCard(cardData.uid, cardData.image, cardData.obj, cardData.showFavoriteButton, cardData.favoriteSelected, cardData.showCheckbox, cardData.showAcceptOptionId, requesterName)); 
+                const requestInfo = {
+                    requesterID: requesterID,
+                    requesterName: userInfoSnapshot.val(),
+                    randomUid: randomUid,
+                }
+
+                ad_List_AddCardToList(cardData.holder, ad_GetAdCard(cardData.uid, cardData.image, cardData.obj, cardData.showFavoriteButton, cardData.favoriteSelected, cardData.showCheckbox, requestInfo)); 
             };
 
             const userInfoPath = "users/" + requesterID + "/name";
@@ -1077,6 +1101,7 @@ const ad_List_ListAdsAccessRequest = function() {
         obj = snapshot.val();
         
         const onErr = function(snapshot) {
+            console.log(snapshot);
             misc_DisplayErrorMessage("Tente novamente!", "Erro consultar a imagem de algum produto.")
         };
 
@@ -1092,8 +1117,7 @@ const ad_List_ListAdsAccessRequest = function() {
                     obj: obj,
                     showFavoriteButton: false,
                     favoriteSelected: false,
-                    showCheckbox: false,
-                    showAcceptOptionId: true
+                    showCheckbox: false
                 }
 
                 $.each(adRequestersList, function(uid, obj) {
@@ -1112,7 +1136,7 @@ const ad_List_ListAdsAccessRequest = function() {
             misc_DisplayErrorMessage("Tente novamente!", "Erro ao executar a consulta.")
         }
     };
-
+    
     const onNull = function(snapshot) {
         if (misc_RemoveLoader()) {
             $("#ads").append(misc_GetNullValueMsg(true));
@@ -1121,15 +1145,34 @@ const ad_List_ListAdsAccessRequest = function() {
 
     const tableOne = rootRef.child("ad_accessOnFarmRequest");
     const tableTwo = rootRef.child("ad");
-    db_getInnerJoin(tableOne, getUser, tableTwo, onSucess, onNull, onError, false);
+    db_getInnerJoin(tableOne, getUser, tableTwo, onSucess, onNull, onError);
 };
 
-const ad_AccessRequestAccept = function(uid, randomUid) {
-    console.log(uid + ' ad_AccessRequestAccept ' + randomUid);
+const ad_AccessRequestAccept = function(event, uid, requesterId, randomUid) {
+    // Remove all ads with same ID from page
+    $('[adid="-LlPLpgrO9hcOs9URHIZ"]').remove();
+    
+    // Remove all requests for this AD from DB
+    const userId = localStorage.getItem('auth_UserUID');
+    rootRef.child('ad_accessOnFarmRequest').child(userId).child(uid).set(null);
+
+    // Set AD into user table
+    rootRef.child('user_ad').child(requesterId).child('ad').child(uid).set(uid);
+    
+    // Display success message
+    misc_DisplaySuccessMessage("Pedido aceito com sucesso!", "Agora o solicitante poderá usar este anúncio.")
 };
 
-const ad_AccessRequestDeny = function(uid, randomUid) {
-    console.log(uid + ' ad_AccessRequestDeny ' + randomUid);
+const ad_AccessRequestDeny = function(event, uid, requesterId, randomUid) {
+    // Remove card from page
+    $('[buttonID="'+ event.getAttribute('buttonid') + '"]').remove();
+    
+    // Remove only one request from DB
+    const userId = localStorage.getItem('auth_UserUID');
+    rootRef.child('ad_accessOnFarmRequest').child(userId).child(uid).child(randomUid).set(null);
+
+    // Dispaly success message
+    misc_DisplaySuccessMessage("Pedido recusado com sucesso!", "O solicitante não terá acesso a este anúncio.")
 };
 /////////////////////////////////  AD ACESS LIST   /////////////////////////////////
 

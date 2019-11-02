@@ -175,17 +175,21 @@ const db_getInnerJoinorderByValue = function(table1, pathInTableOne, table2, onS
     });
 }
 
+var scheduleInnerJoin = null;
 var db_getInnerJoin = function(table1, pathInTableOne, table2, onSucess, onNullValue, onError, useValueToSearchOnChild) {
     table1.child(pathInTableOne).on('child_added', snap => {
         let lastInfoRef;
         if (useValueToSearchOnChild) {
+            console.log(snap.val());
             lastInfoRef = table2.child(snap.val());
         } else {
+            console.log(snap.key);
             lastInfoRef = table2.child(snap.key);
         }
         
         lastInfoRef.once('value')
             .then(function(snapshot) {
+                clearTimeout(scheduleInnerJoin);
                 if (snapshot.val() == null)
                 {
                     onNullValue(snapshot);
@@ -193,9 +197,12 @@ var db_getInnerJoin = function(table1, pathInTableOne, table2, onSucess, onNullV
                     onSucess(snapshot, snap);
                 }
             }).catch(function(error) {
+                clearTimeout(scheduleInnerJoin);
                 onError(error);
             });
     });
+
+    scheduleInnerJoin = setTimeout(onNullValue, 2000);
 };
 
 const db_getInnerJoinLimitToLast = function(table1, pathInTableOne, table2, onSucess, onNullValue, onError, useValueToSearchOnChild, limitToLast) {
