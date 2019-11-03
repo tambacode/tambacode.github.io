@@ -175,8 +175,8 @@ const ad_InitDropDownWithServices = function(dropDownField, adAny) {
     }
 
     values.push({ name : 'Agricultor', value : 'Agricultor' });
-    values.push({ name : 'ManutenÃ§Ã£o de MaquinÃ¡rio', value : 'ManutenÃ§Ã£o de MaquinÃ¡rio' });
-    values.push({ name : 'MÃ©dico VeterinÃ¡rio', value : 'MÃ©dico VeterinÃ¡rio' });
+    values.push({ name : 'Manutenção de Maquinário', value : 'Manutenção de Maquinário' });
+    values.push({ name : 'Médico Veterinário', value : 'Médico Veterinário' });
     values.push({ name : 'Caseiro', value : 'Caseiro' });
 
     dropDownField.dropdown({ values: values });
@@ -192,11 +192,11 @@ const ad_InitDropDownWithProducts = function(dropDownField, adAny) {
         values.push({ name: 'Cereais', value: 'Cereais', selected: true });
     }
 
-    values.push({ name : 'OrgÃ¢nicos', value : 'OrgÃ¢nicos' });
-    values.push({ name : 'ProteÃ­na', value : 'ProteÃ­na' });
+    values.push({ name : 'Orgânicos', value : 'Orgânicos' });
+    values.push({ name : 'Proteí­na', value : 'Proteí­na' });
     values.push({ name : 'Vegetais', value : 'Vegetais' });
     values.push({ name : 'Frutas', value : 'Frutas' });
-    values.push({ name : 'LaticÃ­nios', value : 'LaticÃ­nios' });
+    values.push({ name : 'Laticí­nios', value : 'Laticí­nios' });
     values.push({ name : 'Flores e Plantas', value : 'Flores e Plantas' });
     
     dropDownField.dropdown({ values: values });
@@ -212,7 +212,7 @@ const ad_InitDropDownWithEvents = function(dropDownField, adAny) {
         values.push({ name: 'Colaborativo', value: 'Colaborativo', selected: true });
     }
 
-    values.push({ name : 'NÃ£o-colaborativo', value : 'NÃ£o-colaborativo' });
+    values.push({ name : 'Não-colaborativo', value : 'Não-colaborativo' });
     
     dropDownField.dropdown({ values: values });
 };
@@ -957,7 +957,7 @@ const ad_ValuesIntoDetail = function(val, icounter) {
 };
 
 const ad_ErrorFunction = function(error) {
-    misc_DisplayErrorMessage('Erro ao exibir anÃºncio', 'Favor tentar mais tarde');
+    misc_DisplayErrorMessage('Erro ao exibir anúncio', 'Favor tentar mais tarde');
 };
 
 const ad_LoadAdsListOnDiv = function(searchType, holder, orderByChild, orderByChildValue, limitToLast) {
