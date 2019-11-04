@@ -72,7 +72,6 @@ html
                                 a.ui.orange.ribbon.label Subcategoria
                                 label#subcategory
                     h3.ui.dividing.header
-
                     //-- Event data area
                     #hiddendiv.hidden
                         h3.ui.header
@@ -112,6 +111,14 @@ html
                         | Editar Anúncio
                     .button.fluid.ui.orange.button(id='RequestAdAccessOnFarm' onclick="auth_RequireLoggingToAccessFunction(ad_RequestAdAccessOnFarm, 'ad_detail.html');")
                         | Pedir permissão para linkar anúncio a suas fazenda
+                    .ui.divider
+                    .two.ui.buttons
+                        .ui.facebook.button(id='shareFacebook' onclick="ad_Share('facebook');")
+                            i.facebook.icon
+                            | Compartilhar
+                        .ui.twitter.button(id='shareTwitter' onclick="ad_Share('twitter');")
+                            i.twitter.icon
+                            | Compartilhar
                 br
             include templates/footer
     style.

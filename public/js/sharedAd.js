@@ -1201,3 +1201,19 @@ const ad_delete = function(){
     db_get("ads_images/" + adUID, onSucess, null, null);
 };
 /////////////////////////////////  AD DELETE   /////////////////////////////////
+
+/////////////////////////////////  AD SHARE   /////////////////////////////////
+const ad_Share = function(social_network) {
+    if (social_network == 'facebook') {
+        url = 'https://www.facebook.com/sharer.php?display=popup&u=' + window.location.href;
+        options = 'toolbar=0,status=0,resizable=1,width=626,height=436';
+        window.open(url,'sharer',options);
+    }
+
+    if (social_network == 'twitter') {
+        url = 'https://twitter.com/share?url' + window.location.href;
+        options = 'toolbar=0,status=0,resizable=1,width=626,height=436';
+        window.open(url,'sharer',options);
+    }
+};
+/////////////////////////////////  AD SHARE   /////////////////////////////////
