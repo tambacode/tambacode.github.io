@@ -7,6 +7,7 @@ const ad_initComponent = function() {
             event.preventDefault();
         }
     });
+    $('#findkmlfile').change(ad_SetKmlFileName);
 }
 
 const ad_showFields = function() {
@@ -52,6 +53,17 @@ const ad_selectedType = function(id){
 
     $('.ui.modal').modal('hide');
 };
+
+const ad_openFileDialog = function(){
+  $('#findkmlfile').click();
+}
+
+const ad_SetKmlFileName = function(evt){
+
+    $("#kmlfile").val(evt.target.files[0].name);
+
+}
+
 
 const db_InsertAdRegistration = function(flagUpdate, adUID) {
     // Test if there is any image being uploaded
@@ -133,6 +145,7 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
         dataToInsert.event_url = event_url;
     } else if (category === "fazendas") {
         pageToRedirect = 'ad_registration_childrens.html?uid=' + key + '&nextStep=ad_detail';
+        db_saveKmlFile(key);
     }
 
     if (!flagUpdate) {
@@ -157,7 +170,6 @@ const ad_Register_SaveImagePathToDB = function(adUID, imagesArray) {
         adImagesRef.child(imageKey).set(imageUrl);
     }
 };
-
 
 var db_InsertAdRegistrationOnUsers = function(key){
     var path = 'user_ad/' + localStorage.getItem('auth_UserUID') + '/ad/' + key;
@@ -787,6 +799,21 @@ const ad_SetFarmFields = function() {
     $('.isFarm').removeClass('hidden');
 };
 
+const db_GetKmlInfoFromAd = function(adUID){
+    const path = "ads_kmlfile/" + adUID;
+
+    const onFake = function(){
+        return;
+    };
+
+    var urlFromDb = db_get(path + "/name", onFake, onFake, onFake);
+
+    if (urlFromDb)
+        $("#kmlfile").val(urlFromDb);
+    else
+        $("#kmlfile").val("");
+}
+
 const ad_FillDetailPage = function(adUID) {
     const edit = misc_GetUrlParam('isitforEdit');
     const user = localStorage.getItem('auth_UserUID');
@@ -803,6 +830,7 @@ const ad_FillDetailPage = function(adUID) {
 
         if (val.category === 'fazendas') {
             ad_SetFarmFields();
+            db_GetKmlInfoFromAd(adUID);
             ad_LoadAdsListOnDiv('EqualToLimitToLast', $('#farmChildren'), 'ad_parent', snapshot.key, 100);
             hideAdAccessOnFarm();
         } else {
@@ -1195,6 +1223,29 @@ const ad_delete = function(){
     db_get("ads_images/" + adUID, onSucess, null, null);
 };
 /////////////////////////////////  AD DELETE   /////////////////////////////////
+function ad_InitMap() {
+    var file_path = 'ads_kmlfile/' + misc_GetUrlParam('uid') + "/url";
+
+    const onFake = function(){
+        return;
+    };
+    var srcKml = db_get(file_path, onFake, onFake, onFake);
+    
+    if (srcKml)
+        srcKml = 'https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/farm_klms%2FSidia%20Tower.kml?alt=media&token=97dd9783-df7a-4750-8881-0b97079b5112';
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+        center: new google.maps.LatLng(-19.257753, 146.823688),
+        zoom: 2,
+        mapTypeId: 'terrain'
+    });
+
+    var kmlLayer = new google.maps.KmlLayer(srcKml, {
+        suppressInfoWindows: true,
+        preserveViewport: false,
+        map: map
+    });
+};
 
 /////////////////////////////////  AD SHARE   /////////////////////////////////
 const ad_Share = function(social_network) {

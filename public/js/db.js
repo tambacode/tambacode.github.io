@@ -404,15 +404,41 @@ const db_updateUserImage = function(url){
     db_update(path, dataToInsert, doneSuccess(url));
 }
 
+const db_saveKmlInfoToAd = function(url){
+    const path = "ads_kmlfile/" + localStorage.getItem('adUID');
+    var file = document.getElementById('findkmlfile').files[0];
+
+    var dataToSave = {
+        name : file.name,
+        url : url
+    };
+
+    const onFake = function(){
+        return;
+    };
+
+    var urlFromDb = db_get(path + "/url", onFake, onFake, onFake);
+
+    const doneSuccess = function(){
+        localStorage.removeItem('adUID');
+        return;
+    }
+    if (urlFromDb)
+        db_update(path, dataToSave, doneSuccess());
+    else
+        db_set(path, dataToSave, doneSuccess());
+}
+
+
 /*
 Params: Function to update files to storage
 path: storage path from root on e.g. users_image/
 file: array from input type=file e.g. document.getElementById('fileInput').files[0];
 callback: function to be executed when uploaded is success to get url of uploaded file
 */
-const db_saveImage = function(path, file, callback) {
+const db_SaveFileToStorage = function(path, file, callback) {
     //This function add imagens on data base
-    const name = path + "_" + file.name;
+    const name = path;
     const metadata = {
         contentType: file.type
     };
@@ -444,8 +470,21 @@ const db_saveUserImage = function(){
 
     if (file) {
         ad_Register_SetImageLoading($('#fileInput'));
-        db_saveImage(image_path, file, db_updateUserImage);
+        db_SaveFileToStorage(image_path, file, db_updateUserImage);
     } else {
         db_updateUserInfo();
+    }
+}
+
+
+const db_saveKmlFile = function(adUID){
+
+    var file_path = 'farm_kml/' + adUID;
+    var file = document.getElementById('findkmlfile').files[0];
+
+    localStorage.setItem('adUID', url);
+
+    if (file) {
+        db_SaveFileToStorage(file_path, file, db_saveKmlInfoToAd);
     }
 }

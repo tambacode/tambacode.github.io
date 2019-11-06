@@ -51,13 +51,24 @@ html
                                     .field.required
                                         label Preço R$
                                         input(type='text' name='price' id='price' minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," required="required" onclick='$(this).maskMoney();')
-                        .field
+                        //-- Image area
+                        .field.required
                             label Imagem
-                            .ui.padded.centered.grid#ImagesGrid                                             
+                            .ui.padded.centered.grid#ImagesGrid
+
+                        //-- Maps area                                          
+                        .field.required.hidden.isFarm
+                            label Selecione o arquivo KML
+                            .ui.right.action.icon.input
+                                i.inverted.circular.upload.link.icon(onclick="ad_openFileDialog()")
+                                input(id="findkmlfile" type="file"  accept=".kml" style="display: none;")
+                                input(type="text" id="kmlfile" placeholder="caminho para o arquivo KML" disabled)
+                                
+                        //-- Events fields area
                         .field.hidden.events
                             label Data do evento
                             .ui.left.icon.small.input
-                                i.calendar.icon                                
+                                i.calendar.icon
                                 input(type='date' name='datead' id='datead')
                         .field.hidden.events
                             label Site do evento
@@ -71,6 +82,8 @@ html
                                 .ui.label
                                     | youtube.com/watch?v=
                                 input(type='text' name='urlad' id='urlad' maxlength="200" placeholder='{ID}')
+                        
+                        //-- Personal info area
                         .field
                             .ui.grid
                                 .six.wide.column

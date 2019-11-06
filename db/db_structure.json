@@ -75,6 +75,11 @@
         		"timestamp": "1563646315703"
 			}
 		},
+		"ads_kmlfile" : {
+			"ad_uid" : {
+				url : "kml file url"
+			}
+		},
 		"ad_images": {
 			"ad_uid_-LlP6HtKyfEVRBdFaAb6": {
 				"-LlP6HtKyfEVRBdFaAb6": "https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/ads_images%2F-LlP6CYEiOz13fDD8i7-?alt=media&token=972aec08-30f1-4709-9e1a-48c7bf5a9a19",
