@@ -61,8 +61,8 @@ html
                             label Selecione o arquivo KML
                             .ui.right.action.icon.input
                                 i.inverted.circular.upload.link.icon(onclick="ad_openFileDialog()")
-                                input(id="findkmlfile" type="file"  accept=".kml" style="display: none;")
-                                input(type="text" id="kmlfile" placeholder="caminho para o arquivo KML" disabled)
+                                input(id="findkmlfile" type="file"  accept=".kml, .kmz" style="display: none;")
+                                input(type="text" id="kmlfile" placeholder="caminho para o arquivo KML"  required="required" disabled)
                                 
                         //-- Events fields area
                         .field.hidden.events

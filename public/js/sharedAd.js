@@ -54,6 +54,9 @@ const ad_selectedType = function(id){
     $('.ui.modal').modal('hide');
 };
 
+
+//-- ADS KML REG --//
+
 const ad_openFileDialog = function(){
   $('#findkmlfile').click();
 }
@@ -64,6 +67,22 @@ const ad_SetKmlFileName = function(evt){
 
 }
 
+const db_GetKmlInfoFromAd = function(adUID){
+    const path = "/ads_kmlfile/" + adUID + "/name";
+
+    const onFake = function(){
+        $("#kmlfile").val("");
+        return;
+    };
+
+    const onSuccess = function(snapshot){
+        var urlFromDb = snapshot.val();
+        $("#kmlfile").val(urlFromDb);            
+    };
+    db_get(path, onSuccess, onFake, onFake);
+}
+
+//---------------------//
 
 const db_InsertAdRegistration = function(flagUpdate, adUID) {
     // Test if there is any image being uploaded
@@ -145,18 +164,24 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
         dataToInsert.event_url = event_url;
     } else if (category === "fazendas") {
         pageToRedirect = 'ad_registration_childrens.html?uid=' + key + '&nextStep=ad_detail';
-        db_saveKmlFile(key);
     }
 
     if (!flagUpdate) {
         ad_Register_SaveImagePathToDB(key, ad_CurrentlyAddedImages);
         db_set(path, dataToInsert);
         db_InsertAdRegistrationOnUsers(key);
-        
-        auth_RequireLoggingToAccess(pageToRedirect);
     } else if(flagUpdate == 'yes') {
         ad_Register_SaveImagePathToDB(key, ad_CurrentlyAddedImages);
-        db_update(path, dataToInsert, auth_RequireLoggingToAccess(pageToRedirect));
+        db_update(path, dataToInsert, );
+    }
+
+    if (category === "fazendas") {
+        db_saveKmlFile(key).then((msg) => {
+            console.log(msg);
+            auth_RequireLoggingToAccess(pageToRedirect);
+        });
+    } else {
+        auth_RequireLoggingToAccess(pageToRedirect);
     }
 };
 
@@ -799,20 +824,6 @@ const ad_SetFarmFields = function() {
     $('.isFarm').removeClass('hidden');
 };
 
-const db_GetKmlInfoFromAd = function(adUID){
-    const path = "ads_kmlfile/" + adUID;
-
-    const onFake = function(){
-        return;
-    };
-
-    var urlFromDb = db_get(path + "/name", onFake, onFake, onFake);
-
-    if (urlFromDb)
-        $("#kmlfile").val(urlFromDb);
-    else
-        $("#kmlfile").val("");
-}
 
 const ad_FillDetailPage = function(adUID) {
     const edit = misc_GetUrlParam('isitforEdit');
@@ -1014,6 +1025,37 @@ const ad_LoadAdsListOnDiv = function(searchType, holder, orderByChild, orderByCh
     }
 }
 
+// Function to init Google Maps API. This needs to be like function ad_InitMap() standard
+function ad_InitMap() {
+    var file_path = '/ads_kmlfile/' + misc_GetUrlParam('uid') + '/url';
+    var srcKml = "";
+
+    const onFake = function(){
+        return;
+    };
+
+    const onSuccess = function(snapshot){
+        srcKml = snapshot.val();
+        console.log(srcKml);
+    
+        if (srcKml)
+            srcKml = 'https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/farm_klms%2FSidia%20Tower.kml?alt=media&token=97dd9783-df7a-4750-8881-0b97079b5112';
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: new google.maps.LatLng(-19.257753, 146.823688),
+            zoom: 2,
+            mapTypeId: 'terrain'
+        });
+
+        var kmlLayer = new google.maps.KmlLayer(srcKml, {
+            suppressInfoWindows: true,
+            preserveViewport: false,
+            map: map
+        });
+    };
+    db_get(file_path, onSuccess, onFake, onFake);
+};
+
 /////////////////////////////////  AD DETAIL /////////////////////////////////
 /////////////////////////////////  AD LIST   /////////////////////////////////
 const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
@@ -1197,7 +1239,6 @@ const ad_AccessRequestDeny = function(event, uid, requesterId, randomUid) {
     misc_DisplaySuccessMessage("Pedido recusado com sucesso!", "O solicitante não terá acesso a este anúncio.")
 };
 /////////////////////////////////  AD ACESS LIST   /////////////////////////////////
-
 /////////////////////////////////  AD DELETE   /////////////////////////////////
 const ad_delete = function(){
     const adUID = misc_GetUrlParam('uid');
@@ -1223,30 +1264,6 @@ const ad_delete = function(){
     db_get("ads_images/" + adUID, onSucess, null, null);
 };
 /////////////////////////////////  AD DELETE   /////////////////////////////////
-function ad_InitMap() {
-    var file_path = 'ads_kmlfile/' + misc_GetUrlParam('uid') + "/url";
-
-    const onFake = function(){
-        return;
-    };
-    var srcKml = db_get(file_path, onFake, onFake, onFake);
-    
-    if (srcKml)
-        srcKml = 'https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/farm_klms%2FSidia%20Tower.kml?alt=media&token=97dd9783-df7a-4750-8881-0b97079b5112';
-
-    var map = new google.maps.Map(document.getElementById('map'), {
-        center: new google.maps.LatLng(-19.257753, 146.823688),
-        zoom: 2,
-        mapTypeId: 'terrain'
-    });
-
-    var kmlLayer = new google.maps.KmlLayer(srcKml, {
-        suppressInfoWindows: true,
-        preserveViewport: false,
-        map: map
-    });
-};
-
 /////////////////////////////////  AD SHARE   /////////////////////////////////
 const ad_Share = function(social_network) {
     if (social_network == 'facebook') {

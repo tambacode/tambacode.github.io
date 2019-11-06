@@ -405,28 +405,30 @@ const db_updateUserImage = function(url){
 }
 
 const db_saveKmlInfoToAd = function(url){
-    const path = "ads_kmlfile/" + localStorage.getItem('adUID');
-    var file = document.getElementById('findkmlfile').files[0];
+    return new Promise((resolve) => {
+        const path = "/ads_kmlfile/" + localStorage.getItem('adUID');
+        var file = document.getElementById('findkmlfile').files[0];
 
-    var dataToSave = {
-        name : file.name,
-        url : url
-    };
+        var dataToSave = {
+            name : file.name,
+            url : url
+        };
 
-    const onFake = function(){
-        return;
-    };
+        const commonAction = function(){
+            localStorage.removeItem('adUID');
+            resolve("doneSuccess on update ADS REG");
+        };
 
-    var urlFromDb = db_get(path + "/url", onFake, onFake, onFake);
+        const onNull = function(){
+            db_set(path, dataToSave,commonAction());            
+        };
 
-    const doneSuccess = function(){
-        localStorage.removeItem('adUID');
-        return;
-    }
-    if (urlFromDb)
-        db_update(path, dataToSave, doneSuccess());
-    else
-        db_set(path, dataToSave, doneSuccess());
+        const onSuccess = function(snapshot){
+            var urlFromDb = snapshot.val();
+            db_update(path, dataToSave, commonAction());    
+        };
+        db_get(path + "/url", onSuccess, onNull, onNull);
+    });
 }
 
 
@@ -436,55 +438,65 @@ path: storage path from root on e.g. users_image/
 file: array from input type=file e.g. document.getElementById('fileInput').files[0];
 callback: function to be executed when uploaded is success to get url of uploaded file
 */
-const db_SaveFileToStorage = function(path, file, callback) {
-    //This function add imagens on data base
-    const name = path;
-    const metadata = {
-        contentType: file.type
-    };
+const db_SaveFileToStorage = function(path, file) {
+    return new Promise((resolve) => {
+        //This function add imagens on data base
+        const name = path;
+        const metadata = {
+            contentType: file.type
+        };
+        var urlSaved = "";
 
-    // Create a storage ref
-    var storageRef = db_storage.ref(name);
-    // Upload file
-    var task = storageRef.put(file, metadata);
+        // Create a storage ref
+        var storageRef = db_storage.ref(name);
+        // Upload file
+        var task = storageRef.put(file, metadata);
 
-    // Update progress bar
-    task.on('state_changed',
-        function progress(snapshot) {
-            var perc = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        },
-        function error(err) {
-            misc_DisplayErrorMessage("Upload imagem","Image Upload Error: " + err);
-        },
-        function complete() {  
-             // Upload completed successfully, now we can get the download URL
-            task.snapshot.ref.getDownloadURL().then(callback);
-        }
-    );
+        // Update progress bar
+        task.on('state_changed',
+            function progress(snapshot) {
+                var perc = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            },
+            function error(err) {
+                misc_DisplayErrorMessage("Upload imagem","Image Upload Error: " + err);
+            },
+            function complete() {  
+                 // Upload completed successfully, now we can get the download URL
+                task.snapshot.ref.getDownloadURL().then((url) => {
+                    console.log("could save to Storage and getDownloadURL");
+                    resolve(url);
+                });
+            }
+        );            
+    });
 }
 
-const db_saveUserImage = function(){
+const db_saveUserImage = async function(){
     var image_path = 'users_images/' + localStorage.getItem('auth_UserUID');
 
     var file = document.getElementById('fileInput').files[0];
 
     if (file) {
         ad_Register_SetImageLoading($('#fileInput'));
-        db_SaveFileToStorage(image_path, file, db_updateUserImage);
+        let sUrl = await db_SaveFileToStorage(image_path, file);
+        db_updateUserImage(sUrl);
     } else {
         db_updateUserInfo();
     }
 }
 
 
-const db_saveKmlFile = function(adUID){
-
+const db_saveKmlFile = async function(adUID){
     var file_path = 'farm_kml/' + adUID;
     var file = document.getElementById('findkmlfile').files[0];
 
-    localStorage.setItem('adUID', url);
+    localStorage.setItem('adUID', adUID);
 
     if (file) {
-        db_SaveFileToStorage(file_path, file, db_saveKmlInfoToAd);
+        let sUrl = await db_SaveFileToStorage(file_path, file);
+        let sWaitSave = await db_saveKmlInfoToAd(sUrl);
+        return new Promise ((resolve) => {
+            resolve(sWaitSave);
+        });
     }
 }
