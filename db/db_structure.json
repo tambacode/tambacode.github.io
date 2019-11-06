@@ -77,6 +77,7 @@
 		},
 		"ads_kmlfile" : {
 			"ad_uid" : {
+				name : "file name"
 				url : "kml file url"
 			}
 		},
