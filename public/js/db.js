@@ -180,10 +180,8 @@ var db_getInnerJoin = function(table1, pathInTableOne, table2, onSucess, onNullV
     table1.child(pathInTableOne).on('child_added', snap => {
         let lastInfoRef;
         if (useValueToSearchOnChild) {
-            console.log(snap.val());
             lastInfoRef = table2.child(snap.val());
         } else {
-            console.log(snap.key);
             lastInfoRef = table2.child(snap.key);
         }
         
@@ -326,7 +324,6 @@ const db_getUserInfo = function() {
         $("#cep_city_state").text(temp_info);
 
         if (snapshot.val().profile_picture_link !== undefined) {
-            console.log(snapshot.val().profile_picture_link);
             misc_SetImageRotation($('#imageuploaded'), snapshot.val().pictureRotate);
             misc_waitImageLoadReady($('#imageuploaded'), snapshot.val().profile_picture_link, function(){
                 Finish();
@@ -337,13 +334,11 @@ const db_getUserInfo = function() {
     };
 
     var onNullValue = function(snapshot) {
-        console.log("onNullValue");
         user_showFields();
         misc_RemoveLoader();
     };
 
     var onError = function(snapshot) {
-        console.log("onError");
         user_showFields();
         misc_RemoveLoader();
     };

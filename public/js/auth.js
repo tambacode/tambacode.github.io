@@ -1,9 +1,13 @@
+window.preventAuthInit = false;
+
 var auth_Init = function() {
     firebase.auth().onAuthStateChanged(firebaseUser => {
-        if (firebaseUser) {
-            auth_LogOnUser(firebaseUser);
-        } else {
-            auth_UserLoggedOut();
+        if (window.preventAuthInit == false) {
+            if (firebaseUser) {
+                auth_LogOnUser(firebaseUser);
+            } else {
+                auth_UserLoggedOut();
+            }
         }
     });
 }
@@ -29,6 +33,7 @@ var auth_RequireLoggingToAccessFunction = function(action, url) {
 };
 
 var auth_RequestLogin = function(provider, providerName) {
+    window.preventAuthInit = true;
     firebase.auth().useDeviceLanguage();
     
     firebase.auth().signInWithPopup(provider)
@@ -50,6 +55,9 @@ var auth_LoginSuccessful = function(result, providerName) {
         uid = result.user.uid;
         providerToken = result.credential.accessToken;
     } else if (providerName == 'twitter') {
+        uid = result.user.uid;
+        providerToken = result.credential.accessToken;
+    } else if (providerName == 'google') {
         uid = result.user.uid;
         providerToken = result.credential.accessToken;
     }
@@ -75,6 +83,8 @@ var auth_LoginFailed = function(error, providerName) {
 };
 
 var auth_LogOnUser = function(firebaseUser) {
+    window.preventAuthInit = false;
+    
     localStorage.setItem('auth_UserOnline', true);
     localStorage.setItem('auth_UserUID', firebaseUser.uid);
     
@@ -123,6 +133,15 @@ var auth_LoginFacebook = function() {
     });
 
     auth_RequestLogin(provider, 'facebook');
+};
+
+var auth_LoginGoogle = function() {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({
+      'display': 'popup'
+    });
+
+    auth_RequestLogin(provider, 'google');
 };
 
 var auth_LoginTwitter = function() {

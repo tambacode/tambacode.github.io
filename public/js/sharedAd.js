@@ -331,7 +331,6 @@ const ad_RequestAdAccessOnFarm = function() {
         const path = 'ad/' + adUID + '/user';
 
         var onError = function(snapshot) {
-            console.log(snapshot);
             misc_DisplayErrorMessage('Erro ao enviar o pedido', 'Algo aconteceu, tente novamente mais tarde.');
             $("#RequestAdAccessOnFarm").removeClass("disabled");
         };
@@ -623,7 +622,7 @@ const ads_List_ListAdsByTerm = function() {
     if (firstCall) {
         db_get("ad", onSucess, onError, onError);
     } else {
-        console.log("ADD PAGINATION HERE");
+        //console.log("ADD PAGINATION HERE");
     }
 };
 
@@ -815,6 +814,7 @@ const ad_FillDetailPage = function(adUID) {
 
         if (val.user == user) {
             hideAdAccessOnFarm();
+            $("#EditAd").removeClass("hidden");
         }
 
         if (!edit) {
@@ -848,10 +848,6 @@ const ad_FillDetailPage = function(adUID) {
     };
 
     db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
-
-    if (edit) {
-        $("#EditAd").addClass("hidden");
-    }
 };
 
 const ad_InitGlide = function(icounter){
@@ -1059,7 +1055,7 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
             db_get(path, onSucess, null, null);
         }
     } else {
-        console.log("ADD PAGINATION HERE");
+        //console.log("ADD PAGINATION HERE");
     }
 };
 /////////////////////////////////  AD LIST   /////////////////////////////////
@@ -1079,7 +1075,6 @@ const ad_List_ListAdsAccessRequest = function() {
 
         const searchUserInfo = function(randomUid, requesterID, cardData) {
             const onUserInfoErr = function(snapshot) {
-                console.log(snapshot);
                 misc_DisplayErrorMessage("Tente novamente!", "Erro ao consultar as informações do solicitante.")
             };
 
@@ -1101,7 +1096,6 @@ const ad_List_ListAdsAccessRequest = function() {
         obj = snapshot.val();
         
         const onErr = function(snapshot) {
-            console.log(snapshot);
             misc_DisplayErrorMessage("Tente novamente!", "Erro consultar a imagem de algum produto.")
         };
 
