@@ -1038,7 +1038,7 @@ function ad_InitMap() {
         srcKml = snapshot.val();
         console.log(srcKml);
     
-        if (srcKml)
+        if (!srcKml)
             srcKml = 'https://developers.google.com/maps/documentation/javascript/examples/kml/westcampus.kml';
 
         var map = new google.maps.Map(document.getElementById('map'), {
