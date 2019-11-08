@@ -1039,7 +1039,7 @@ function ad_InitMap() {
         console.log(srcKml);
     
         if (srcKml)
-            srcKml = 'https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/farm_klms%2FSidia%20Tower.kml?alt=media&token=97dd9783-df7a-4750-8881-0b97079b5112';
+            srcKml = 'https://developers.google.com/maps/documentation/javascript/examples/kml/westcampus.kml';
 
         var map = new google.maps.Map(document.getElementById('map'), {
             center: new google.maps.LatLng(-19.257753, 146.823688),
