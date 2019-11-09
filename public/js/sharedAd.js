@@ -1279,3 +1279,37 @@ const ad_Share = function(social_network) {
     }
 };
 /////////////////////////////////  AD SHARE   /////////////////////////////////
+/////////////////////////////////  Ads Classes ////////////////////////////////
+
+//Command pattern to determine insert, update or delete ad
+class Ad_Action {
+  //constructor() {
+  //  this._action = action;
+  //}
+  insert() {
+    return db_InsertAdRegistration();
+  }
+  update() {
+    return ad_update();
+  }
+  delete() {
+    return ad_delete();
+  }
+}
+
+class Command {
+  constructor(subject) {
+    this._subject = subject;
+    this.commandsExecuted = [];
+  }
+  execute(command) {
+    this.commandsExecuted.push(command);
+    return this._subject[command]();
+  }
+}
+const ad_Action = function(element){
+    const action = new Command(new Ad_Action());
+    action.execute(element.getAttribute('name'));
+}
+
+/////////////////////////////////  Ads Classes ////////////////////////////////

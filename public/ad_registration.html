@@ -329,16 +329,16 @@
               <div id="ad_add" class="ui padded column row grid">
                 <div class="two wide column centered"></div>
                 <div class="ten wide column centered">
-                  <div id="InsertAdRegistrationButton" onclick="db_InsertAdRegistration();" class="ui fluid green submit button"><i class="save icon"></i>Cadastrar</div>
+                  <div id="InsertAdRegistrationButton" name="insert" onclick="ad_Action(this);" class="ui fluid green submit button"><i class="save icon"></i>Cadastrar</div>
                 </div>
                 <div class="two wide column centered"></div>
               </div>
               <div id="ad_edit" class="ui padded column row grid hidden">
                 <div class="eight wide column centered">
-                  <div id="updateButton" onclick="ad_update();" class="ui fluid green submit button"><i class="save outline icon"></i>Salvar</div>
+                  <div id="updateButton" name="update" onclick="ad_Action(this);" class="ui fluid green submit button"><i class="save outline icon"></i>Salvar</div>
                 </div>
                 <div class="eight wide column">
-                  <div id="deleteButton" onclick="ad_delete();" class="ui fluid green submit button"><i class="trash alternate icon"></i>Excluir</div>
+                  <div id="deleteButton" name="delete" onclick="ad_Action(this);" class="ui fluid green submit button"><i class="trash alternate icon"></i>Excluir</div>
                 </div>
               </div>
             </div>

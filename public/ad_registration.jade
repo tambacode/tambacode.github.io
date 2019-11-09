@@ -132,17 +132,17 @@ html
                             .ui.padded.column.row.grid#ad_add
                                 .two.wide.column.centered
                                 .ten.wide.column.centered
-                                    .ui.fluid.green.submit.button#InsertAdRegistrationButton(onclick='db_InsertAdRegistration();')
+                                    .ui.fluid.green.submit.button#InsertAdRegistrationButton(name="insert" onclick='ad_Action(this);')
                                         i.save.icon
                                         |Cadastrar
                                 .two.wide.column.centered
                             .ui.padded.column.row.grid.hidden#ad_edit
                                 .eight.wide.column.centered
-                                    .ui.fluid.green.submit.button#updateButton(onclick='ad_update();')
+                                    .ui.fluid.green.submit.button#updateButton(name="update" onclick='ad_Action(this);')
                                         i.save.outline.icon
                                         |Salvar
                                 .eight.wide.column
-                                    .ui.fluid.green.submit.button#deleteButton(onclick='ad_delete();')
+                                    .ui.fluid.green.submit.button#deleteButton(name="delete" onclick='ad_Action(this);')
                                         i.trash.alternate.icon
                                         |Excluir
                 .ui.modal(id='ad_type_modal')
