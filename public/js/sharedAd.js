@@ -23,7 +23,11 @@ const ad_initComponent = function() {
             },
             onSuccess: function(event){
                 event.preventDefault();
+                ad_ExecuteLoaderButton("add");
                 ad_ExecuteFormAction(adFormAction);   
+            },
+            onError: function(event){
+                ad_ExecuteLoaderButton("remove");
             }
         });
     $('#findkmlfile').change(ad_SetKmlFileName);
@@ -50,6 +54,10 @@ const ad_ValidateFields = function(id){
               }]
             });
     }
+}
+
+const ad_UpdateLoaderFromButton = function(){
+
 }
 
 const ad_showFields = function() {
@@ -148,11 +156,13 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
 
     if (ad_UploadingImage > 0) {
         misc_DisplayErrorMessage('Imagem carregando', 'Favor aguardar todas as imagens finalizarem o upload');
+        ad_ExecuteLoaderButton("remove");
         return;
     }
 
     if (ad_CurrentlyAddedImages.length == 0) {
         misc_DisplayErrorMessage('Nenhuma imagem', 'Favor adicionar ao menos uma imagem para efetuar o cadastro do anÃºncio.');
+        ad_ExecuteLoaderButton("remove");
         return;
     }
 
@@ -1336,6 +1346,19 @@ const ad_Share = function(social_network) {
 /////////////////////////////////  Ads Classes ////////////////////////////////
 
 //Command pattern to determine insert, update or delete ad
+class Ad_LoaderButton{
+    add(){
+        $(".field .ui.button").each(function(){
+            $(this).addClass("loading");
+        });        
+    }
+    remove(){
+        $(".field .ui.button").each(function(){
+            $(this).removeClass("loading");
+        });
+    }
+}
+
 class Ad_Action {
   //constructor() {
   //  this._action = action;
@@ -1361,6 +1384,12 @@ class Command {
     return this._subject[command]();
   }
 }
+
+const ad_ExecuteLoaderButton = function(loader){
+    const action = new Command(new Ad_LoaderButton());
+    action.execute(loader);
+}
+
 const ad_ExecuteFormAction = function(){
     const action = new Command(new Ad_Action());
     action.execute(adFormAction);
