@@ -1,28 +1,28 @@
 {
-  "short_name": "SharedFarm",
-  "name": "Shared.Farm",
+  "short_name": "gofarmer",
+  "name": "gofarmer",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/imgs/Icons/square128px.png",
+      "src": "/imgs/Icons/gofarmer128.png",
       "type": "image/png",
       "sizes": "128x128"
     },
     {
-      "src": "/imgs/Icons/square256px.png",
+      "src": "/imgs/Icons/gofarmer256.png",
       "type": "image/png",
       "sizes": "256x256"
     },
     {
-      "src": "/imgs/Icons/square512px.png",
+      "src": "/imgs/Icons/gofarmer512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
   "start_url": "/index.html",
-  "background_color": "#f2711c",
+  "background_color": "#ffffff",
   "display": "standalone",
   "scope": "https://shared-farm-dev.firebaseapp.com/",
   "splash_pages": null,
-  "theme_color": "#f2711c"
+  "theme_color": "#ffffff"
 }
