@@ -479,9 +479,9 @@ const db_saveUserImage = async function(){
     if (file) {
         ad_Register_SetImageLoading($('#fileInput'));
         let sUrl = await db_SaveFileToStorage(image_path, file);
-        db_updateUserImage(sUrl);
+        let sWaitSave = await db_updateUserImage(sUrl);
     } else {
-        db_updateUserInfo();
+        let sWaitSave = await db_updateUserInfo();
     }
 }
 
