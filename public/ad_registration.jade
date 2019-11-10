@@ -13,7 +13,7 @@ html
                 br                
                 include templates/loader
                 .ui.container(style="display:none")                    
-                    form.ui.form.ad_register#InsertAdRegistration
+                    form.ui.form.ad_register#InsertAdRegistration(method="post")
                         .field.required
                             label Título
                             input(type='text' name='title' id='title' maxlength="50" placeholder='Título do anúncio' required="required")
@@ -57,15 +57,15 @@ html
                             .ui.padded.centered.grid#ImagesGrid
 
                         //-- Maps area                                          
-                        .field.required.hidden.isFarm
+                        .field.hidden.isFarm
                             label Selecione o arquivo KML
                             .ui.right.action.icon.input
-                                i.inverted.circular.upload.link.icon(onclick="ad_openFileDialog()")
+                                i.inverted.gray.circular.upload.link.icon(onclick="ad_openFileDialog()")
                                 input(id="findkmlfile" type="file"  accept=".kml, .kmz" style="display: none;")
-                                input(type="text" id="kmlfile" placeholder="caminho para o arquivo KML"  required="required" disabled)
+                                input(type="text" id="kmlfile" placeholder="Nome do arquivo KML")
                                 
                         //-- Events fields area
-                        .field.hidden.events
+                        .field.required.hidden.events
                             label Data do evento
                             .ui.left.icon.small.input
                                 i.calendar.icon
@@ -132,20 +132,22 @@ html
                             .ui.padded.column.row.grid#ad_add
                                 .two.wide.column.centered
                                 .ten.wide.column.centered
-                                    .ui.fluid.green.submit.button#InsertAdRegistrationButton(name="insert" onclick='ad_Action(this);')
+                                    .ui.fluid.green.submit.button#InsertAdRegistrationButton(value="insert" onclick="ad_getFormAction(this);")
                                         i.save.icon
                                         |Cadastrar
                                 .two.wide.column.centered
                             .ui.padded.column.row.grid.hidden#ad_edit
                                 .eight.wide.column.centered
-                                    .ui.fluid.green.submit.button#updateButton(name="update" onclick='ad_Action(this);')
+                                    .ui.fluid.green.submit.button#updateButton(value="update" onclick="ad_getFormAction(this);")
                                         i.save.outline.icon
                                         |Salvar
                                 .eight.wide.column
-                                    .ui.fluid.green.submit.button#deleteButton(name="delete" onclick='ad_Action(this);')
+                                    .ui.fluid.green.submit.button#deleteButton(value="delete" onclick="ad_getFormAction(this);")
                                         i.trash.alternate.icon
                                         |Excluir
-                .ui.modal(id='ad_type_modal')
+                        .field
+                            .ui.error.message
+                .ui.small.basic.modal(id='ad_type_modal')
                     .vertical-center
                         .ui.padded.sixteen.column.centered.grid
                             .wide.column.row
@@ -161,25 +163,24 @@ html
                                                         i.icon.user.circle.large
                                             .ui.padded.column.row.grid
                                                 .sixteen.wide.column.centered
-                                                    button.big.ui.button(value="farm" onClick="ad_selectedType(this.value);")
+                                                    button.big.ui.red.button(value="farm" onClick="ad_selectedType(this.value);")
                                                         i.warehouse.icon
                                                         | Fazenda
                                                 .sixteen.wide.column.centered
-                                                    button.big.ui.button(value="products" onClick="ad_selectedType(this.value);")
+                                                    button.big.ui.blue.button(value="products" onClick="ad_selectedType(this.value);")
                                                         i.cubes.icon
                                                         | Produtos
                                                 .sixteen.wide.column
-                                                    button.big.ui.button(value="services" onClick="ad_selectedType(this.value);")
+                                                    button.big.ui.twitter.button(value="services" onClick="ad_selectedType(this.value);")
                                                         i.cogs.icon
                                                         | Serviços
                                                 .sixteen.wide.column.centered
-                                                    button.big.ui.button(value="events" onClick="ad_selectedType(this.value);")
+                                                    button.big.ui.yellow.button(value="events" onClick="ad_selectedType(this.value);")
                                                         i.calendar.outline.icon
                                                         | Eventos
             include templates/footer
           
         script.
-            ad_initComponent();
             ad_Register_AddNewImage();
             ad_GetCategory();
             misc_InitDropdownWithStates($("#statead"), $("#cityad"));

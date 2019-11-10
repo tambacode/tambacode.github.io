@@ -1,13 +1,55 @@
 /* This file is dedicate to store all logic part about ad_registration interface */
 
+var adFormAction = "";
+
 const ad_initComponent = function() {
     $('form.ad_register')
         .form({
-        onSuccess: function(event){
-            event.preventDefault();
-        }
-    });
+            fields: {
+                title: {
+                  identifier: 'title',
+                  rules: [{
+                    type: 'empty',
+                    prompt: 'Preencha o título do anúncio!'
+                  }]
+                },
+                description: {
+                  identifier: 'description',
+                  rules: [{
+                    type: 'empty',
+                    prompt: 'Descreva detalhes do anúncio!'
+                  }]
+                }
+            },
+            onSuccess: function(event){
+                event.preventDefault();
+                ad_ExecuteFormAction(adFormAction);   
+            }
+        });
     $('#findkmlfile').change(ad_SetKmlFileName);
+}
+
+const ad_ValidateFields = function(id){
+    ad_initComponent();
+
+    if (( id == "products")||( id == "services")||(id == "events")){
+        $('form.ad_register')
+            .form('add rule', 'price',{
+              rules: [{
+                type: 'empty',
+                prompt: 'Favor preencher o preço!'
+              }]
+            });
+    }
+    if (id == "events"){
+        $('form.ad_register')
+            .form('add rule', 'datead',{
+              rules: [{
+                type: 'regExp[/^[0-9]{4}[-]{1}[0-9]{2}[-]{1}[0-9]{2}$/g]',
+                prompt: 'Favor selecionar uma data!'
+              }]
+            });
+    }
 }
 
 const ad_showFields = function() {
@@ -50,6 +92,7 @@ const ad_selectedType = function(id){
     }
     
     ad_GetCategory();
+    ad_ValidateFields(id);
 
     $('.ui.modal').modal('hide');
 };
@@ -84,6 +127,22 @@ const db_GetKmlInfoFromAd = function(adUID){
 
 //---------------------//
 
+const ad_GetSelectedCaterogy = function(){
+
+    var category = "";
+
+    if (products.checked == true) {
+        category = products.value;
+    } else if (services.checked == true) {
+        category = services.value;
+    } else if (farm.checked == true) {
+        category = farm.value;
+    } else {
+        category = events.value;
+    }
+    return category;
+}
+
 const db_InsertAdRegistration = function(flagUpdate, adUID) {
     // Test if there is any image being uploaded
 
@@ -110,15 +169,8 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
     var title = document.getElementById('title').value;
     var description = document.getElementById('description').value;
 
-    if (products.checked == true) {
-        var category = products.value;
-    } else if (services.checked == true) {
-        var category = services.value;
-    } else if (farm.checked == true) {
-        var category = farm.value;
-    } else {
-        var category = events.value;
-    }
+    var category = ad_GetSelectedCaterogy();
+
     const subcategory = document.getElementById('subcategory').innerText;
 
     var price = document.getElementById('price').value;
@@ -816,7 +868,7 @@ const ad_addSliderVideo = function(ivideo){
         source      : 'youtube',
         //placeholder : '/images/bear-waving.jpg',
         id          : ivideo        
-    });
+    }).removeClass('hidden');
 };
 
 const ad_SetFarmFields = function() {
@@ -959,10 +1011,12 @@ const ad_ValuesIntoDetail = function(val, icounter) {
         category.innerText = val.category;
         subcategory.innerText = val.subcategory;
         if (val.category === "eventos"){
-            ad_addSliderVideo(val.event_url);
-            datead.innerText = val.event_date;
-            $("#urlad").prop("href", "http://" + val.event_site);
-            $('#hiddendiv').removeClass('hidden');
+            datead.innerText = val.event_date;            
+            (val.event_site) ? ($("#urlad").prop("href", "http://" + val.event_site)) : (undefined);
+            (val.event_url) ? (ad_addSliderVideo(val.event_url)) : (undefined);
+            $('#adevents').each(function() {
+                $(this).removeClass('hidden');
+            });
         }
 
         db_get('/users/'+val.user, 
@@ -1307,9 +1361,13 @@ class Command {
     return this._subject[command]();
   }
 }
-const ad_Action = function(element){
+const ad_ExecuteFormAction = function(){
     const action = new Command(new Ad_Action());
-    action.execute(element.getAttribute('name'));
+    action.execute(adFormAction);
+}
+
+const ad_getFormAction = function(obj){
+    adFormAction = obj.getAttribute('value');
 }
 
 /////////////////////////////////  Ads Classes ////////////////////////////////

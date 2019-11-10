@@ -186,7 +186,7 @@
           <div class="ui active centered inline loader"></div>
         </div>
         <div style="display:none" class="ui container">                   
-          <form id="InsertAdRegistration" class="ui form ad_register">
+          <form id="InsertAdRegistration" method="post" class="ui form ad_register">
             <div class="field required">
               <label>Título</label>
               <input type="text" name="title" id="title" maxlength="50" placeholder="Título do anúncio" required="required"/>
@@ -246,14 +246,14 @@
               <label>Imagem</label>
               <div id="ImagesGrid" class="ui padded centered grid"></div>
             </div>
-            <div class="field required hidden isFarm">
+            <div class="field hidden isFarm">
               <label>Selecione o arquivo KML</label>
-              <div class="ui right action icon input"><i onclick="ad_openFileDialog()" class="inverted circular upload link icon"></i>
+              <div class="ui right action icon input"><i onclick="ad_openFileDialog()" class="inverted gray circular upload link icon"></i>
                 <input id="findkmlfile" type="file" accept=".kml, .kmz" style="display: none;"/>
-                <input type="text" id="kmlfile" placeholder="caminho para o arquivo KML" required="required" disabled="disabled"/>
+                <input type="text" id="kmlfile" placeholder="Nome do arquivo KML"/>
               </div>
             </div>
-            <div class="field hidden events">
+            <div class="field required hidden events">
               <label>Data do evento</label>
               <div class="ui left icon small input"><i class="calendar icon"></i>
                 <input type="date" name="datead" id="datead"/>
@@ -329,22 +329,25 @@
               <div id="ad_add" class="ui padded column row grid">
                 <div class="two wide column centered"></div>
                 <div class="ten wide column centered">
-                  <div id="InsertAdRegistrationButton" name="insert" onclick="ad_Action(this);" class="ui fluid green submit button"><i class="save icon"></i>Cadastrar</div>
+                  <div id="InsertAdRegistrationButton" value="insert" onclick="ad_getFormAction(this);" class="ui fluid green submit button"><i class="save icon"></i>Cadastrar</div>
                 </div>
                 <div class="two wide column centered"></div>
               </div>
               <div id="ad_edit" class="ui padded column row grid hidden">
                 <div class="eight wide column centered">
-                  <div id="updateButton" name="update" onclick="ad_Action(this);" class="ui fluid green submit button"><i class="save outline icon"></i>Salvar</div>
+                  <div id="updateButton" value="update" onclick="ad_getFormAction(this);" class="ui fluid green submit button"><i class="save outline icon"></i>Salvar</div>
                 </div>
                 <div class="eight wide column">
-                  <div id="deleteButton" name="delete" onclick="ad_Action(this);" class="ui fluid green submit button"><i class="trash alternate icon"></i>Excluir</div>
+                  <div id="deleteButton" value="delete" onclick="ad_getFormAction(this);" class="ui fluid green submit button"><i class="trash alternate icon"></i>Excluir</div>
                 </div>
               </div>
             </div>
+            <div class="field">
+              <div class="ui error message"></div>
+            </div>
           </form>
         </div>
-        <div id="ad_type_modal" class="ui modal">
+        <div id="ad_type_modal" class="ui small basic modal">
           <div class="vertical-center">
             <div class="ui padded sixteen column centered grid">
               <div class="wide column row">
@@ -363,16 +366,16 @@
                       </div>
                       <div class="ui padded column row grid">
                         <div class="sixteen wide column centered">
-                          <button value="farm" onClick="ad_selectedType(this.value);" class="big ui button"><i class="warehouse icon"></i>Fazenda</button>
+                          <button value="farm" onClick="ad_selectedType(this.value);" class="big ui red button"><i class="warehouse icon"></i>Fazenda</button>
                         </div>
                         <div class="sixteen wide column centered">
-                          <button value="products" onClick="ad_selectedType(this.value);" class="big ui button"><i class="cubes icon"></i>Produtos</button>
+                          <button value="products" onClick="ad_selectedType(this.value);" class="big ui blue button"><i class="cubes icon"></i>Produtos</button>
                         </div>
                         <div class="sixteen wide column">
-                          <button value="services" onClick="ad_selectedType(this.value);" class="big ui button"><i class="cogs icon"></i>Serviços</button>
+                          <button value="services" onClick="ad_selectedType(this.value);" class="big ui twitter button"><i class="cogs icon"></i>Serviços</button>
                         </div>
                         <div class="sixteen wide column centered">
-                          <button value="events" onClick="ad_selectedType(this.value);" class="big ui button"><i class="calendar outline icon"></i>Eventos</button>
+                          <button value="events" onClick="ad_selectedType(this.value);" class="big ui yellow button"><i class="calendar outline icon"></i>Eventos</button>
                         </div>
                       </div>
                     </div>
@@ -385,7 +388,6 @@
       </div>
     </div>
     <script>
-      ad_initComponent();
       ad_Register_AddNewImage();
       ad_GetCategory();
       misc_InitDropdownWithStates($("#statead"), $("#cityad"));
