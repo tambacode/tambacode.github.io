@@ -1,9 +1,9 @@
 
 <html>
+  <title>Shared.Farm - Detalhe do anúncio</title>
   <head>
-    <title>Shared.Farm</title>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <meta name="theme-color" content="#f2711c"/>
     <meta name="mobile-web-app-capable" content="yes"/>
@@ -13,10 +13,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
     <link rel="manifest" crossorigin="use-credentials" href="manifest.json"/>
     <link rel="canonical" href="http://localhost:5000//"/>
-    <link rel="icon" sizes="128x128" href="/imgs/icons/square128px.png"/>
-    <link rel="icon" sizes="256x256" href="/imgs/icons/square256px.png"/>
-    <link rel="icon" sizes="512x512" href="/imgs/icons/square512px.png"/>
-    <link rel="apple-touch-icon" href="/imgs/icons/square128px.png"/>
+    <link rel="icon" sizes="128x128" href="/imgs/Icons/gofarmer128.png"/>
+    <link rel="icon" sizes="256x256" href="/imgs/Icons/gofarmer256.png"/>
+    <link rel="icon" sizes="512x512" href="/imgs/Icons/gofarmer512.png"/>
+    <link rel="apple-touch-icon" href="/imgs/Icons/gofarmer128.png"/>
     <link rel="stylesheet" type="text/css" href="semanticUI/semantic.css"/>
     <link rel="stylesheet" type="text/css" href="semanticUI/components/Semantic-UI-Alert.css"/>
     <link rel="stylesheet" type="text/css" href="css/webapp.css"/>
@@ -38,10 +38,13 @@
     <script src="js/messages.js"></script>
     <script src="js/sharedAd.js"></script>
   </head>
+  <link rel="dns-prefetch" href="/offline.html"/>
+  <link rel="dns-prefetch" href="/notfound.html"/>
+  <link rel="dns-prefetch" href="/imgs/noConnection_Icon.jpg"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css"/>
   <body>
-    <div class="ui left sidebar vertical menu"><a href="index.html" class="item">Home<i class="home icon Large"></i></a><a id="PerfilButton" onClick="user_OpenProfile();" class="item hidden">Meu Perfil<i class="user circle icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list.html');" class="item">Meus Anúncios<i class="shopping bag icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_favorites.html');" class="item">Favoritos<i class="heart icon Large"></i></a><a onClick="messages_GoTo();" class="item">Mensagens<i class="comment icon Large"></i></a><a id="LogoutButton" onClick="auth_LogoffUser();" class="item hidden">Sair<i class="sign-out icon Large"></i></a><a id="LoginButton" onClick="auth_RequireLoggingToAccess('index.html');" class="item hidden">Login<i class="sign-in icon Large"></i></a></div>
+    <div class="ui left sidebar vertical menu"><a href="index.html" class="item">Home<i class="home icon Large"></i></a><a id="PerfilButton" onClick="user_OpenProfile();" class="item hidden">Meu Perfil<i class="user circle icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list.html');" class="item">Meus Anúncios<i class="shopping bag icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_permission_request.html');" class="item">Pedidos de acesso a anúncio<i class="handshake icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_favorites.html');" class="item">Favoritos<i class="heart icon Large"></i></a><a onClick="messages_GoTo();" class="item">Mensagens<i class="comment icon Large"></i></a><a id="LogoutButton" onClick="auth_LogoffUser();" class="item hidden">Sair<i class="sign-out icon Large"></i></a><a id="LoginButton" onClick="auth_RequireLoggingToAccess('index.html');" class="item hidden">Login<i class="sign-in icon Large"></i></a></div>
     <div class="ui right sidebar vertical menu">
       <div class="ui padded grid">
         <div class="ui wide column">
@@ -120,44 +123,46 @@
     </div>
     <script>
       // Get values
-      const fields = ads_GetFilterFields(true);
+      if (navigator.onLine) {
+          const fields = ads_GetFilterFields(true);
       
-      const filterSideBar_InitFields = function() {
-          // Set Values
-          if (fields['searchTerm']) { $('#filter_term').val(fields['searchTerm']); }
-          if (fields['category']) {
-              $("#filter_" + fields['category']).prop("checked", true);
+          const filterSideBar_InitFields = function() {
+              // Set Values
+              if (fields['searchTerm']) { $('#filter_term').val(fields['searchTerm']); }
+              if (fields['category']) {
+                  $("#filter_" + fields['category']).prop("checked", true);
       
-              if (fields['category'] == 'servicos') {
-                  ad_InitDropDownWithServices($('#filter_Subcategory'), true);
-              } else if (fields['category'] == 'eventos') {
-                  ad_InitDropDownWithEvents($('#filter_Subcategory'), true);
+                  if (fields['category'] == 'servicos') {
+                      ad_InitDropDownWithServices($('#filter_Subcategory'), true);
+                  } else if (fields['category'] == 'eventos') {
+                      ad_InitDropDownWithEvents($('#filter_Subcategory'), true);
+                  }
               }
+              
+              if (fields['state']) { $('#filter_state').dropdown('set selected', fields['state']); }
+              // City field below
+      
+              if (fields['subcategory']) { $('#filter_Subcategory').dropdown('set selected', fields['subcategory']); }
+      
+              if (fields['minprice']) { $('#filter_minprice').val(fields['minprice']); }
+              if (fields['maxprice']) { $('#filter_maxprice').val(fields['maxprice']); }
+          };
+      
+          const filterSideBase_InitCity = function() {
+              if (fields['city']) { $('#filter_city').dropdown('set selected', fields['city']); }
           }
-          
-          if (fields['state']) { $('#filter_state').dropdown('set selected', fields['state']); }
-          // City field below
       
-          if (fields['subcategory']) { $('#filter_Subcategory').dropdown('set selected', fields['subcategory']); }
-      
-          if (fields['minprice']) { $('#filter_minprice').val(fields['minprice']); }
-          if (fields['maxprice']) { $('#filter_maxprice').val(fields['maxprice']); }
-      };
-      
-      const filterSideBase_InitCity = function() {
-          if (fields['city']) { $('#filter_city').dropdown('set selected', fields['city']); }
+          ad_InitDropDownWithProducts($('#filter_Subcategory'), true);
+          misc_InitDropdownWithStates($('#filter_state'), $('#filter_city'), true, filterSideBase_InitCity);
+          filterSideBar_InitFields();
       }
-      
-      ad_InitDropDownWithProducts($('#filter_Subcategory'), true);
-      misc_InitDropdownWithStates($('#filter_state'), $('#filter_city'), true, filterSideBase_InitCity);
-      filterSideBar_InitFields();
     </script>
     <div class="pusher">
       <div id="menu" class="ui sf_header">
         <div class="ui padded grid">
-          <div class="orange row">
+          <div class="green row">
             <div class="three wide column">
-              <button onclick="ui_openSidebar();" class="ui icon button orange"><i class="icon list large"></i></button>
+              <button id="menuButton" onclick="ui_openSidebar();" class="ui icon button green"><i class="icon list large"></i></button>
             </div>
             <div class="ten wide column">
               <div class="ui search">
@@ -168,7 +173,7 @@
               </div>
             </div>
             <div id="header_right" class="right aligned three wide column">                   
-              <button onclick="ui_openFilterSidebar();" class="ui icon button orange"><i class="icon filter circle large"></i></button>
+              <button onclick="ui_openFilterSidebar();" class="ui icon button green"><i class="icon filter circle large"></i></button>
             </div>
             <script>
               //ui_headerRightAction();
@@ -199,33 +204,38 @@
               <div id="address" class="content"></div>
             </div>
           </h1>
-          <h2 class="ui orange header">
+          <h2 class="ui green header">
             <div id="price" class="notFarm">| </div>
             <div id="description" class="sub header"></div>
           </h2>
+          <div class="ui dividing header isFarm"></div>
+          <div class="html ui top attached segment hidden isFarm"><br/><br/>
+            <div id="map" class="ui"></div>
+            <div class="ui top attached label">Mapa da fazenda</div>
+          </div>
           <div class="ui dividing header notFarm"></div>
           <div class="ui two column padded grid notFarm">
             <div class="column">
-              <div class="ui raised segment"><a class="ui orange ribbon label">Categoria</a>
+              <div class="ui raised segment"><a class="ui green ribbon label">Categoria</a>
                 <label id="category"></label>
               </div>
             </div>
             <div class="column">
-              <div class="ui raised segment"><a class="ui orange ribbon label">Subcategoria</a>
+              <div class="ui raised segment"><a class="ui green ribbon label">Subcategoria</a>
                 <label id="subcategory"></label>
               </div>
             </div>
           </div>
           <h3 class="ui dividing header"></h3>
-          <div id="hiddendiv" class="hidden">
+          <div id="adevents" class="hidden">
             <h3 class="ui header"></h3>
             <div id="adevents" class="ui segment">
               <h4>Data do evento:
                 <label id="datead"></label>
               </h4>
-              <h4>Para mais detalhes, acessar o<a id="urlad" href="" target="_blank"> site.</a></h4>
+              <h4>Para mais detalhes, acessar o<a id="urlad" target="_blank"> site.</a></h4>
             </div>
-            <div id="youtubeVideo" class="ui embed"></div>
+            <div id="youtubeVideo" class="ui embed hidden"></div>
             <h3 class="ui dividing header"></h3>
           </div>
           <div>
@@ -252,12 +262,32 @@
               </div>
             </div>
           </div>
-          <div id="SendMessage" onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner, 'ad_detail.html');" class="button fluid ui orange button">Enviar Mensagem</div>
-          <button id="EditAd" onclick="ad_RedirectForEditAd();" class="fluid ui orange button">Editar Anúncio</button>
+          <div id="SendMessage" onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner, 'ad_detail.html');" class="button fluid ui green button">Enviar Mensagem</div>
+          <div id="EditAd" onclick="ad_RedirectForEditAd();" class="button fluid ui green button hidden">Editar Anúncio</div>
+          <div id="RequestAdAccessOnFarm" onclick="auth_RequireLoggingToAccessFunction(ad_RequestAdAccessOnFarm, 'ad_detail.html');" class="button fluid ui green button">Pedir permissão para linkar anúncio a suas fazenda</div>
+          <div class="ui divider"></div>
+          <div class="two ui buttons">
+            <div id="shareFacebook" onclick="ad_Share('facebook');" class="ui facebook button"><i class="facebook icon"></i>Compartilhar</div>
+            <div id="shareTwitter" onclick="ad_Share('twitter');" class="ui twitter button"><i class="twitter icon"></i>Compartilhar</div>
+          </div>
         </div><br/>
       </div>
     </div>
   </body>
-  <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.min.js"></script>
-  <script>ad_FillDetailPage(misc_GetUrlParam('uid'));</script>
+  <style>
+    #map {
+        height: 330px;
+        width: 100%;
+        margin: 0 auto 0 auto;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.min.js"></script><script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKwwSi-fNm8CRHJpbDGTRSOaYCepFlY9g&amp;callback=ad_InitMap"></script>
+  <script>
+    if (navigator.onLine) {
+        sw_Register();
+        ad_FillDetailPage(misc_GetUrlParam('uid'));
+    } else {
+        sw_SetLastPageState();
+    }
+  </script>
 </html>

@@ -1,5 +1,6 @@
 html
-    
+
+    title Shared.Farm - Informação do usuário    
     include templates/head
     
     body
@@ -13,7 +14,7 @@ html
                 #display_user_edit.ui(style="display:none;")
                     .ui.grid
                         .row
-                            img.ui.centered.rounded.image#imageuploaded(src="" style="height: 200px; width: 200px;")
+                            img.ui.centered.rounded.image#imageuploaded(src="/imgs/profile.jpg" style="height: 200px; width: 200px;")
                     .ui.centered.segments
                         .ui.segment
                             i.user.icon
@@ -41,7 +42,7 @@ html
                     .ui.padded.column.row.grid
                         .two.wide.column
                         .ten.wide.column.centered
-                            a.ui.fluid.orange.button(href="user_edit.html")
+                            a.ui.fluid.green.button(href="user_edit.html")
                                 i.pencil.alternate.icon
                                 |Editar
                         .two.wide.column
@@ -50,4 +51,10 @@ html
             include templates/footer
         script(src='js/user.js')
         script.
-            db_getUserInfo();
+            if (navigator.onLine) {
+                sw_Register();
+
+                db_getUserInfo();
+            } else {
+                sw_SetLastPageState();
+            }

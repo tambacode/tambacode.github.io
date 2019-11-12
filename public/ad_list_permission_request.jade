@@ -1,0 +1,39 @@
+html
+    
+    title Shared.Farm - Requesições de acesso a um anúncio
+    include templates/head
+    
+    body
+        include templates/sideBar
+        include templates/filterSideBar
+        .pusher
+            include templates/header
+            #all
+                .ui.padded.grid
+                    .column
+                        .ui.segment
+                            .sub.header
+                                | Aqui você poderá visualizar os pedidos de link a um anúncio seu.
+                            br
+                            .sub.header
+                                | Dando acesso a um anúncio significa que outro usuário poderá exibi-lo em uma de suas fazendas.
+                br
+                #noData.ui.padded.grid.hidden
+                    .column
+                        .ui.segment
+                            .sub.header
+                                | Nenhum pedido de acesso atualmente
+                #ads.sharedAds.ui.grid
+                    include templates/loader
+                br
+                br
+            include templates/footer
+        script.
+            if (navigator.onLine) {
+                pageReadyDesired = 0;
+                sw_Register();
+
+                ad_List_ListAdsAccessRequest();
+            } else {
+                sw_SetLastPageState();
+            }

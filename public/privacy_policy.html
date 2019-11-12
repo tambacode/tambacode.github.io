@@ -1,9 +1,9 @@
 
 <html>
+  <title>Shared.Farm - Politíca de Privacidade    </title>
   <head>
-    <title>Shared.Farm</title>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <meta name="theme-color" content="#f2711c"/>
     <meta name="mobile-web-app-capable" content="yes"/>
@@ -13,10 +13,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
     <link rel="manifest" crossorigin="use-credentials" href="manifest.json"/>
     <link rel="canonical" href="http://localhost:5000//"/>
-    <link rel="icon" sizes="128x128" href="/imgs/icons/square128px.png"/>
-    <link rel="icon" sizes="256x256" href="/imgs/icons/square256px.png"/>
-    <link rel="icon" sizes="512x512" href="/imgs/icons/square512px.png"/>
-    <link rel="apple-touch-icon" href="/imgs/icons/square128px.png"/>
+    <link rel="icon" sizes="128x128" href="/imgs/Icons/gofarmer128.png"/>
+    <link rel="icon" sizes="256x256" href="/imgs/Icons/gofarmer256.png"/>
+    <link rel="icon" sizes="512x512" href="/imgs/Icons/gofarmer512.png"/>
+    <link rel="apple-touch-icon" href="/imgs/Icons/gofarmer128.png"/>
     <link rel="stylesheet" type="text/css" href="semanticUI/semantic.css"/>
     <link rel="stylesheet" type="text/css" href="semanticUI/components/Semantic-UI-Alert.css"/>
     <link rel="stylesheet" type="text/css" href="css/webapp.css"/>
@@ -38,8 +38,11 @@
     <script src="js/messages.js"></script>
     <script src="js/sharedAd.js"></script>
   </head>
+  <link rel="dns-prefetch" href="/offline.html"/>
+  <link rel="dns-prefetch" href="/notfound.html"/>
+  <link rel="dns-prefetch" href="/imgs/noConnection_Icon.jpg"/>
   <body>
-    <div class="ui left sidebar vertical menu"><a href="index.html" class="item">Home<i class="home icon Large"></i></a><a id="PerfilButton" onClick="user_OpenProfile();" class="item hidden">Meu Perfil<i class="user circle icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list.html');" class="item">Meus Anúncios<i class="shopping bag icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_favorites.html');" class="item">Favoritos<i class="heart icon Large"></i></a><a onClick="messages_GoTo();" class="item">Mensagens<i class="comment icon Large"></i></a><a id="LogoutButton" onClick="auth_LogoffUser();" class="item hidden">Sair<i class="sign-out icon Large"></i></a><a id="LoginButton" onClick="auth_RequireLoggingToAccess('index.html');" class="item hidden">Login<i class="sign-in icon Large"></i></a></div>
+    <div class="ui left sidebar vertical menu"><a href="index.html" class="item">Home<i class="home icon Large"></i></a><a id="PerfilButton" onClick="user_OpenProfile();" class="item hidden">Meu Perfil<i class="user circle icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list.html');" class="item">Meus Anúncios<i class="shopping bag icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_permission_request.html');" class="item">Pedidos de acesso a anúncio<i class="handshake icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_favorites.html');" class="item">Favoritos<i class="heart icon Large"></i></a><a onClick="messages_GoTo();" class="item">Mensagens<i class="comment icon Large"></i></a><a id="LogoutButton" onClick="auth_LogoffUser();" class="item hidden">Sair<i class="sign-out icon Large"></i></a><a id="LoginButton" onClick="auth_RequireLoggingToAccess('index.html');" class="item hidden">Login<i class="sign-in icon Large"></i></a></div>
     <div class="ui right sidebar vertical menu">
       <div class="ui padded grid">
         <div class="ui wide column">
@@ -118,44 +121,46 @@
     </div>
     <script>
       // Get values
-      const fields = ads_GetFilterFields(true);
+      if (navigator.onLine) {
+          const fields = ads_GetFilterFields(true);
       
-      const filterSideBar_InitFields = function() {
-          // Set Values
-          if (fields['searchTerm']) { $('#filter_term').val(fields['searchTerm']); }
-          if (fields['category']) {
-              $("#filter_" + fields['category']).prop("checked", true);
+          const filterSideBar_InitFields = function() {
+              // Set Values
+              if (fields['searchTerm']) { $('#filter_term').val(fields['searchTerm']); }
+              if (fields['category']) {
+                  $("#filter_" + fields['category']).prop("checked", true);
       
-              if (fields['category'] == 'servicos') {
-                  ad_InitDropDownWithServices($('#filter_Subcategory'), true);
-              } else if (fields['category'] == 'eventos') {
-                  ad_InitDropDownWithEvents($('#filter_Subcategory'), true);
+                  if (fields['category'] == 'servicos') {
+                      ad_InitDropDownWithServices($('#filter_Subcategory'), true);
+                  } else if (fields['category'] == 'eventos') {
+                      ad_InitDropDownWithEvents($('#filter_Subcategory'), true);
+                  }
               }
+              
+              if (fields['state']) { $('#filter_state').dropdown('set selected', fields['state']); }
+              // City field below
+      
+              if (fields['subcategory']) { $('#filter_Subcategory').dropdown('set selected', fields['subcategory']); }
+      
+              if (fields['minprice']) { $('#filter_minprice').val(fields['minprice']); }
+              if (fields['maxprice']) { $('#filter_maxprice').val(fields['maxprice']); }
+          };
+      
+          const filterSideBase_InitCity = function() {
+              if (fields['city']) { $('#filter_city').dropdown('set selected', fields['city']); }
           }
-          
-          if (fields['state']) { $('#filter_state').dropdown('set selected', fields['state']); }
-          // City field below
       
-          if (fields['subcategory']) { $('#filter_Subcategory').dropdown('set selected', fields['subcategory']); }
-      
-          if (fields['minprice']) { $('#filter_minprice').val(fields['minprice']); }
-          if (fields['maxprice']) { $('#filter_maxprice').val(fields['maxprice']); }
-      };
-      
-      const filterSideBase_InitCity = function() {
-          if (fields['city']) { $('#filter_city').dropdown('set selected', fields['city']); }
+          ad_InitDropDownWithProducts($('#filter_Subcategory'), true);
+          misc_InitDropdownWithStates($('#filter_state'), $('#filter_city'), true, filterSideBase_InitCity);
+          filterSideBar_InitFields();
       }
-      
-      ad_InitDropDownWithProducts($('#filter_Subcategory'), true);
-      misc_InitDropdownWithStates($('#filter_state'), $('#filter_city'), true, filterSideBase_InitCity);
-      filterSideBar_InitFields();
     </script>
     <div class="pusher">
       <div id="menu" class="ui sf_header">
         <div class="ui padded grid">
-          <div class="orange row">
+          <div class="green row">
             <div class="three wide column">
-              <button onclick="ui_openSidebar();" class="ui icon button orange"><i class="icon list large"></i></button>
+              <button id="menuButton" onclick="ui_openSidebar();" class="ui icon button green"><i class="icon list large"></i></button>
             </div>
             <div class="ten wide column">
               <div class="ui search">
@@ -166,7 +171,7 @@
               </div>
             </div>
             <div id="header_right" class="right aligned three wide column">                   
-              <button onclick="ui_openFilterSidebar();" class="ui icon button orange"><i class="icon filter circle large"></i></button>
+              <button onclick="ui_openFilterSidebar();" class="ui icon button green"><i class="icon filter circle large"></i></button>
             </div>
             <script>
               //ui_headerRightAction();
@@ -217,4 +222,11 @@
       </li>
     </ul><strong><a name="compartilhamento"></a>5. Compartilhamento da informação<br/><br/></strong>Nós podemos compartilhar informações que coletamos com Nossas Afiliadas (empresas sob mesmo controle e propriedade) ou grupos de entidades oferecendo o Serviço conjuntamente, incluindo Grupo Naspers e Grupo Schibsted Media, localizadas em qualquer outro país. Essas empresas podem apenas processar e utilizar esta informação para nos auxiliar nos propósitos descritos acima e estão vinculadas a esta Política de Privacidade.<br/><br/>O Usuário reconhece e concorda expressamente que a base de dados poderá ser total ou parcialmente cedida ou transferida a terceiros, desde que respeitada a finalidade de dar continuidade à atividade prestada pela Shared.Farm ou se existir uma obrigatoriedade legal neste sentido.<br/><br/>Nós não compartilhamos Dados dos Usuários com partes não afiliadas, a menos que tenhamos autorização específica dos nossos Usuários para fazê-lo, ou nas circunstâncias abaixo:<br/><br/>Nós podemos utilizar terceiros prestadores de serviço para nos ajudar a oferecer os Nossos serviços, mas nesse caso eles não terão qualquer poder para, independentemente, utilizar informações pessoais que eles processam em Nosso nome, e devem se sujeitar aos termos dessa Política.<br/><br/>Nós podemos integrar ao Site funcionalidades oferecidas por terceiros, tais como financiamento, pagamento, entrega, entre outros. Nestas hipóteses em que a funcionalidade é oferecida por terceiros, poderá ser necessário que o Usuário compartilhe seus dados de cadastro e/ou informações adicionais com tais prestadores, o que será devidamente informado no momento do compartilhamento. As informações compartilhadas com tais terceiros sujeitam-se às Políticas de Privacidade próprias de cada um deles.<br/><br/>Nós podemos compartilhar os dados informados por um Usuário interessado em um anúncio com o Usuário anunciante, para a finalidade de promover a interação entre as partes.<br/><br/>Nos reservamos o direito de compartilhar informação com autoridades públicas ou privadas que nos permitam lutar contra fraude e abuso em Nossa rede, investigar suspeitas de violação da lei, ou combater qualquer outra suspeita de descumprimento dos nossos Termos de Uso ou da lei.<br/><br/>Nós podemos compartilhar informações pessoais com autoridades governamentais quando requerido de acordo com a lei aplicável.<br/><br/>Nós podemos compartilhar certas informações não pessoais (dados que não identificam nossos Usuários individualmente) com terceiros prestadores de serviços, parceiros de confiança ou pesquisadores aprovados, no intuito de melhor compreender quais publicidades e serviços podem interessá-lo, para melhorar a qualidade e a efetividade geral dos Nossos Serviços ou serviço deles, ou para contribuir em pesquisas acadêmicas.<br/><br/>Nós não alugamos ou vendemos Dados dos Usuários a terceiros não afiliados, ao menos que tenhamos permissão específica dos Nossos Usuários para fazê-lo. No caso de o Nosso negócio ou uma divisão do Nosso negócio ser reorganizado ou vendido e nós transferirmos todos ou substancialmente todos os nossos ativos a um novo proprietário, sua informação pessoal pode ser transferida ao comprador independentemente de sua autorização para garantir a continuidade do Serviço.<br/><br/><strong><a name="controle"></a>6. Controle do usuário</strong><br/><br/><em>6.1 Acesso, correção e exclusão:</em>Se você é um Usuário que criou uma conta ou um anúncio conosco, Você pode acessar, requerer uma correção ou a exclusão da informação que Você forneceu enviando um e-mail para nosso canal de atendimento (acessível em http://bit.ly/SharedFarm-fale-com-a-gente) ou acessando o menu "Minha Conta" no nosso Site. É importante esclarecer que o e-mail informado não pode ser alterado, sendo permitido cadastrar apenas um e-mail para cada conta. Você é responsável pela correção dos dados que Você forneceu ou publicou em nosso Site, bem como por mantê-los atualizados. Se sua conta foi criada por meio de provedor de identidade (p. ex. Facebook Connect), Você pode também desabilitar ou trocar a informação da conta por meio das configurações oferecidas por este provedor de identidade (p. ex. no site facebook.com).<br/><br/><em>6.2 Escolha de terceiros:</em>Alguns terceiros ativos em nosso Site, como o Google Adwords, dão a você a possibilidade de desabilitar seus anúncios e usar informações para publicidade dirigida baseada em interesses. Você pode visitar os sites http://www.youronlinechoices.com e http://www.networkadvertising.org para aprender mais sobre essa prática e exercer escolhas sobre como esse tipo de informação pode ser coletada e utilizada.<br/><br/><em>6.3 Cookies:</em>A maioria dos navegadores de computadores e dispositivos móveis (como Safari, Firefox, Internet Explorer, Chrome, Opera) oferecem controles que permitem que Você limite ou bloqueie a instalação de cookies em seu sistema. Note que se Você desabilitar os cookies no seu navegador, tanto cookies próprios (sites que você visitou) quanto cookies de terceiros (outras empresas além daquelas que você visitou diretamente na internet), pode haver uma piora na funcionalidade de algumas ferramentas.<br/><br/><em>6.4 Coleta de bloco de dados:</em>Se você deseja limitar as informações que Nós podemos coletar/armazenar sobre Você, Você pode acessar a seção 'Minha Conta' do Nosso Site e editar as informações fornecidas. Importante esclarecer que o e-mail informado não poderá ser alterado, sendo permitido informar apenas um e-mail para cada conta. Note ainda que algumas informações são necessárias e obrigatórias para viabilizar a utilização do Site e que, ao excluir ou bloquear certas informações que Você forneceu, seu uso dos Sites e Serviços pode ter uma queda da funcionalidade em alguns casos.<br/><br/><strong><a name="seguranca"></a>7. Segurança<br/><br/></strong>Toda informação que Nós coletamos é protegida por meios técnicos e procedimentos de segurança razoáveis no intuito de evitar acessos ou uso dos dados de forma não autorizada. Nossas afiliadas, parceiros de confiança e terceiros prestadores de serviços se comprometeram a gerenciar a informação de acordo com Nossos requisitos de segurança e privacidade.<br/><br/><strong><a name="mudancas"></a>8. Mudanças nesta política<br/><br/></strong>Esta política foi atualizada em Maio de 2018. Nós podemos atualizar esta Política periodicamente, cabendo ao Usuário verificar a versão mais atual no momento da utilização dos Sites. Ao continuar utilizando nossos Serviços, Você confirma sua aceitação a quaisquer atualizações a esta Política.<br/><br/>Se nós fizermos alterações materiais a esta Política com as quais você não deseja concordar, Você poderá descontinuar o uso dos Serviços.<br/><br/><strong><a name="contato"></a>9. Contato<br/><br/></strong>Perguntas sobre esta política podem ser direcionadas ao e-mail privacidade@sharedfarm.com.br
   </body>
+  <script>
+    if (navigator.onLine) {
+        sw_Register();
+    } else {
+        sw_SetLastPageState();
+    }
+  </script>
 </html>

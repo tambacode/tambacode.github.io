@@ -1,5 +1,6 @@
 html
     
+    title Shared.Farm - Novo anúncio
     include templates/head
     
     body
@@ -12,7 +13,7 @@ html
                 br                
                 include templates/loader
                 .ui.container(style="display:none")                    
-                    form.ui.form.ad_register#InsertAdRegistration
+                    form.ui.form.ad_register#InsertAdRegistration(method="post")
                         .field.required
                             label Título
                             input(type='text' name='title' id='title' maxlength="50" placeholder='Título do anúncio' required="required")
@@ -23,19 +24,19 @@ html
                             label Categoria
                             .inline.fields
                                 .field
-                                    .ui.radio.orange.checkbox
+                                    .ui.radio.green.checkbox
                                         input(type='radio' name='category' id='farm' value="fazendas" disabled)
                                         label Fazenda
                                 .field
-                                    .ui.radio.orange.checkbox
+                                    .ui.radio.green.checkbox
                                         input(type='radio' name='category' id='products' value="produtos" disabled)
                                         label Produtos
                                 .field
-                                    .ui.radio.orange.checkbox
+                                    .ui.radio.green.checkbox
                                         input(type='radio' name='category' id='services' value="servicos" disabled)
                                         label Serviços
                                 .field
-                                    .ui.radio.orange.checkbox
+                                    .ui.radio.green.checkbox
                                         input(type='radio' name='category' id='events' value="eventos" disabled)
                                         label Eventos
                         .field.notFarm
@@ -50,13 +51,24 @@ html
                                     .field.required
                                         label Preço R$
                                         input(type='text' name='price' id='price' minlength="1" maxlength="14" data-symbol="R$ " data-thousands="." data-decimal="," required="required" onclick='$(this).maskMoney();')
-                        .field
+                        //-- Image area
+                        .field.required
                             label Imagem
-                            .ui.padded.centered.grid#ImagesGrid                                             
-                        .field.hidden.events
+                            .ui.padded.centered.grid#ImagesGrid
+
+                        //-- Maps area                                          
+                        .field.hidden.isFarm
+                            label Selecione o arquivo KML
+                            .ui.right.action.icon.input
+                                i.inverted.gray.circular.upload.link.icon(onclick="ad_openFileDialog()")
+                                input(id="findkmlfile" type="file"  accept=".kml, .kmz" style="display: none;")
+                                input(type="text" id="kmlfile" placeholder="Nome do arquivo KML")
+                                
+                        //-- Events fields area
+                        .field.required.hidden.events
                             label Data do evento
                             .ui.left.icon.small.input
-                                i.calendar.icon                                
+                                i.calendar.icon
                                 input(type='date' name='datead' id='datead')
                         .field.hidden.events
                             label Site do evento
@@ -70,6 +82,8 @@ html
                                 .ui.label
                                     | youtube.com/watch?v=
                                 input(type='text' name='urlad' id='urlad' maxlength="200" placeholder='{ID}')
+                        
+                        //-- Personal info area
                         .field
                             .ui.grid
                                 .six.wide.column
@@ -118,27 +132,29 @@ html
                             .ui.padded.column.row.grid#ad_add
                                 .two.wide.column.centered
                                 .ten.wide.column.centered
-                                    .ui.fluid.orange.submit.button#InsertAdRegistrationButton(onclick='db_InsertAdRegistration();')
+                                    .ui.fluid.green.submit.button#InsertAdRegistrationButton(value="insert" onclick="ad_getFormAction(this);")
                                         i.save.icon
                                         |Cadastrar
                                 .two.wide.column.centered
                             .ui.padded.column.row.grid.hidden#ad_edit
                                 .eight.wide.column.centered
-                                    .ui.fluid.orange.submit.button#updateButton(onclick='ad_update();')
+                                    .ui.fluid.green.submit.button#updateButton(value="update" onclick="ad_getFormAction(this);")
                                         i.save.outline.icon
                                         |Salvar
                                 .eight.wide.column
-                                    .ui.fluid.orange.submit.button#deleteButton(onclick='ad_delete();')
+                                    .ui.fluid.green.submit.button#deleteButton(value="delete" onclick="ad_getFormAction(this);")
                                         i.trash.alternate.icon
                                         |Excluir
-                .ui.modal(id='ad_type_modal')
+                        .field
+                            .ui.error.message
+                .ui.small.basic.modal(id='ad_type_modal')
                     .vertical-center
                         .ui.padded.sixteen.column.centered.grid
                             .wide.column.row
-                                .ui.orange.card.login
+                                .ui.green.card.login
                                     .content
                                         .ui.grid
-                                            .orange.column.row
+                                            .green.column.row
                                                 .column
                                                 .left.aligned.ten.wide.column
                                                     .ui.white.header Tipo de anúncio
@@ -165,7 +181,6 @@ html
             include templates/footer
           
         script.
-            ad_initComponent();
             ad_Register_AddNewImage();
             ad_GetCategory();
             misc_InitDropdownWithStates($("#statead"), $("#cityad"));

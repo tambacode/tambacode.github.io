@@ -1,12 +1,63 @@
 /* This file is dedicate to store all logic part about ad_registration interface */
 
+var adFormAction = "";
+
 const ad_initComponent = function() {
     $('form.ad_register')
         .form({
-        onSuccess: function(event){
-            event.preventDefault();
-        }
-    });
+            fields: {
+                title: {
+                  identifier: 'title',
+                  rules: [{
+                    type: 'empty',
+                    prompt: 'Preencha o título do anúncio!'
+                  }]
+                },
+                description: {
+                  identifier: 'description',
+                  rules: [{
+                    type: 'empty',
+                    prompt: 'Descreva detalhes do anúncio!'
+                  }]
+                }
+            },
+            onSuccess: function(event){
+                event.preventDefault();
+                ad_ExecuteLoaderButton("add");
+                ad_ExecuteFormAction(adFormAction);   
+            },
+            onError: function(event){
+                ad_ExecuteLoaderButton("remove");
+            }
+        });
+    $('#findkmlfile').change(ad_SetKmlFileName);
+}
+
+const ad_ValidateFields = function(id){
+    ad_initComponent();
+
+    if (( id == "products")||( id == "services")||(id == "events")){
+        $('form.ad_register')
+            .form('add rule', 'price',{
+              rules: [{
+                type: 'empty',
+                prompt: 'Favor preencher o preço!'
+              }]
+            });
+    }
+    if (id == "events"){
+        $('form.ad_register')
+            .form('add rule', 'datead',{
+              rules: [{
+                type: 'regExp[/^[0-9]{4}[-]{1}[0-9]{2}[-]{1}[0-9]{2}$/g]',
+                prompt: 'Favor selecionar uma data!'
+              }]
+            });
+    }
+}
+
+const ad_UpdateLoaderFromButton = function(){
+
 }
 
 const ad_showFields = function() {
@@ -49,20 +100,69 @@ const ad_selectedType = function(id){
     }
     
     ad_GetCategory();
+    ad_ValidateFields(id);
 
     $('.ui.modal').modal('hide');
 };
+
+
+//-- ADS KML REG --//
+
+const ad_openFileDialog = function(){
+  $('#findkmlfile').click();
+}
+
+const ad_SetKmlFileName = function(evt){
+
+    $("#kmlfile").val(evt.target.files[0].name);
+
+}
+
+const db_GetKmlInfoFromAd = function(adUID){
+    const path = "/ads_kmlfile/" + adUID + "/name";
+
+    const onFake = function(){
+        $("#kmlfile").val("");
+        return;
+    };
+
+    const onSuccess = function(snapshot){
+        var urlFromDb = snapshot.val();
+        $("#kmlfile").val(urlFromDb);            
+    };
+    db_get(path, onSuccess, onFake, onFake);
+}
+
+//---------------------//
+
+const ad_GetSelectedCaterogy = function(){
+
+    var category = "";
+
+    if (products.checked == true) {
+        category = products.value;
+    } else if (services.checked == true) {
+        category = services.value;
+    } else if (farm.checked == true) {
+        category = farm.value;
+    } else {
+        category = events.value;
+    }
+    return category;
+}
 
 const db_InsertAdRegistration = function(flagUpdate, adUID) {
     // Test if there is any image being uploaded
 
     if (ad_UploadingImage > 0) {
         misc_DisplayErrorMessage('Imagem carregando', 'Favor aguardar todas as imagens finalizarem o upload');
+        ad_ExecuteLoaderButton("remove");
         return;
     }
 
     if (ad_CurrentlyAddedImages.length == 0) {
         misc_DisplayErrorMessage('Nenhuma imagem', 'Favor adicionar ao menos uma imagem para efetuar o cadastro do anÃºncio.');
+        ad_ExecuteLoaderButton("remove");
         return;
     }
 
@@ -79,15 +179,8 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
     var title = document.getElementById('title').value;
     var description = document.getElementById('description').value;
 
-    if (products.checked == true) {
-        var category = products.value;
-    } else if (services.checked == true) {
-        var category = services.value;
-    } else if (farm.checked == true) {
-        var category = farm.value;
-    } else {
-        var category = events.value;
-    }
+    var category = ad_GetSelectedCaterogy();
+
     const subcategory = document.getElementById('subcategory').innerText;
 
     var price = document.getElementById('price').value;
@@ -139,10 +232,18 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
         ad_Register_SaveImagePathToDB(key, ad_CurrentlyAddedImages);
         db_set(path, dataToInsert);
         db_InsertAdRegistrationOnUsers(key);
-        
-        auth_RequireLoggingToAccess(pageToRedirect);
     } else if(flagUpdate == 'yes') {
-        db_update(path, dataToInsert, auth_RequireLoggingToAccess(pageToRedirect));
+        ad_Register_SaveImagePathToDB(key, ad_CurrentlyAddedImages);
+        db_update(path, dataToInsert, );
+    }
+
+    if (category === "fazendas") {
+        db_saveKmlFile(key).then((msg) => {
+            console.log(msg);
+            auth_RequireLoggingToAccess(pageToRedirect);
+        });
+    } else {
+        auth_RequireLoggingToAccess(pageToRedirect);
     }
 };
 
@@ -151,8 +252,9 @@ const ad_Register_SaveImagePathToDB = function(adUID, imagesArray) {
     var adImagesRef = db.ref(path);
 
     for (var i = 0; i < imagesArray.length; i++) {
-        const imageKey = db_GetNewPushKey(path)
-        adImagesRef.child(imageKey).set(imagesArray[i]);
+        const imageKey = (imagesArray[i].key) ? (imagesArray[i].key) : (db_GetNewPushKey(path));
+        const imageUrl = (imagesArray[i].key) ? (imagesArray[i].url) : (imagesArray[i]);
+        adImagesRef.child(imageKey).set(imageUrl);
     }
 };
 
@@ -172,8 +274,8 @@ const ad_InitDropDownWithServices = function(dropDownField, adAny) {
     }
 
     values.push({ name : 'Agricultor', value : 'Agricultor' });
-    values.push({ name : 'ManutenÃ§Ã£o de MaquinÃ¡rio', value : 'ManutenÃ§Ã£o de MaquinÃ¡rio' });
-    values.push({ name : 'MÃ©dico VeterinÃ¡rio', value : 'MÃ©dico VeterinÃ¡rio' });
+    values.push({ name : 'Manutenção de Maquinário', value : 'Manutenção de Maquinário' });
+    values.push({ name : 'Médico Veterinário', value : 'Médico Veterinário' });
     values.push({ name : 'Caseiro', value : 'Caseiro' });
 
     dropDownField.dropdown({ values: values });
@@ -189,11 +291,11 @@ const ad_InitDropDownWithProducts = function(dropDownField, adAny) {
         values.push({ name: 'Cereais', value: 'Cereais', selected: true });
     }
 
-    values.push({ name : 'OrgÃ¢nicos', value : 'OrgÃ¢nicos' });
-    values.push({ name : 'ProteÃ­na', value : 'ProteÃ­na' });
+    values.push({ name : 'Orgânicos', value : 'Orgânicos' });
+    values.push({ name : 'Proteí­na', value : 'Proteí­na' });
     values.push({ name : 'Vegetais', value : 'Vegetais' });
     values.push({ name : 'Frutas', value : 'Frutas' });
-    values.push({ name : 'LaticÃ­nios', value : 'LaticÃ­nios' });
+    values.push({ name : 'Laticí­nios', value : 'Laticí­nios' });
     values.push({ name : 'Flores e Plantas', value : 'Flores e Plantas' });
     
     dropDownField.dropdown({ values: values });
@@ -209,7 +311,7 @@ const ad_InitDropDownWithEvents = function(dropDownField, adAny) {
         values.push({ name: 'Colaborativo', value: 'Colaborativo', selected: true });
     }
 
-    values.push({ name : 'NÃ£o-colaborativo', value : 'NÃ£o-colaborativo' });
+    values.push({ name : 'Não-colaborativo', value : 'Não-colaborativo' });
     
     dropDownField.dropdown({ values: values });
 };
@@ -311,12 +413,68 @@ const ad_Register_AddNewImage = function() {
 };
 
 ///////////////////////////////// ADS UPDATE /////////////////////////////////
-const ad_RedirectForEditAd = function(){
+const ad_RedirectForEditAd = function() {
     //Get Uid of Ad
     const adUID = misc_GetUrlParam('uid');
     //Redirect user to edit page
     misc_GoToPage("ad_registration.html?isitforEdit=1&uid=" + adUID);
-}
+};
+
+const ad_RequestAdAccessOnFarm = function() {
+    const userID = localStorage.getItem('auth_UserUID');
+
+    if (userID) {
+        $("#RequestAdAccessOnFarm").addClass("disabled");
+
+        const adUID = misc_GetUrlParam('uid');
+        const path = 'ad/' + adUID + '/user';
+
+        var onError = function(snapshot) {
+            misc_DisplayErrorMessage('Erro ao enviar o pedido', 'Algo aconteceu, tente novamente mais tarde.');
+            $("#RequestAdAccessOnFarm").removeClass("disabled");
+        };
+
+        var onSucess = function(snapshot) {
+            const ownerUID = snapshot.val();
+            ad_SendRequestAdAccessOnFarm(ownerUID, userID, adUID, onError);
+        };
+
+        db_get(path, onSucess, onError, onError);
+    } else {
+        misc_DisplayErrorMessage('Usuário não logado', 'Por favor faça o login para realizar essa ação.');
+    }
+};
+
+const ad_SendRequestAdAccessOnFarm = function(ownerUID, userID, adUID, onError) {
+    const path = 'ad_accessOnFarmRequest/' + ownerUID + '/' + adUID;
+
+    var doActionOfSending = function() {
+        rootRef.child('ad_accessOnFarmRequest').child(ownerUID).child(adUID).push(userID);  
+        misc_DisplaySuccessMessage("Pedido enviado com sucesso!", "Aguarde o anúnciante responder.");
+    };
+
+    var onSucess = function(snapshot) {
+        var alreadySentRequest = false;
+        
+        snapshot.forEach(function(val) {
+            if (val.val() == userID) {
+                alreadySentRequest = true;
+            }
+        });
+
+        if (!alreadySentRequest) {
+            doActionOfSending();
+        } else {
+            misc_DisplayErrorMessage('Pedido duplicado', 'Você já enviou uma solicitação para esse anúncio!');
+        }
+    };
+
+    var onNullValue = function(snapshot) {
+        doActionOfSending();
+    };
+
+    db_get(path, onSucess, onNullValue, onError);
+};
 
 //Fill all filds
 const ad_fillfieldforEdit = function(){
@@ -335,8 +493,10 @@ const ad_fillfieldforEdit = function(){
             //var val = snapshot.val();
 
             snapshot.forEach(function(childSnapshot) {
-                var item = childSnapshot.val();
-                item.key = childSnapshot.key;
+                var item = {
+                    url : childSnapshot.val(),
+                    key : childSnapshot.key
+                };
 
                 ad_CurrentlyAddedImages.push(item);
 
@@ -350,13 +510,13 @@ const ad_fillfieldforEdit = function(){
 
                 $("#ImagesGrid").append(imageCard);
                 
-                $('#' + inputId).parent().find('img').attr('src', item);
+                $('#' + inputId).parent().find('img').attr('src', item.url);
 
                 ad_Register_RemoveLoadingIconFromImage('#' + inputId);
 
                 ad_QtdRegisterImages = ad_QtdRegisterImages + 1;
-                
             });
+
             ad_showFields();
             //$('#divloader').remove();
         };
@@ -400,12 +560,13 @@ const ad_GetCardByUid = function(holder, uid) {
     db_getEqualToIndex('ad', uid, onSucess, onError, onError);
 }
 
-const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelected, showCheckbox) {
-    const addImage = '<div class="four wide column product_image"><a href="{0}"><img src="{1}" class="ui tiny rounded image list"></a></div>';
-    const addInfo  = '<div class="twelve wide column product_info"><a href="{2}"><h4 id="title">{3}</h4></a>{9}<h3 id="price">{7}</h3><span id="info">{8}</span><div style="width: 100%;" class="ui divider"></div></div>';
+const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelected, showCheckbox, requestInfo) {
+    const addImage = '<div adId="{11}" {12} class="four wide column product_image"><a href="{0}"><img src="{1}" class="ui tiny rounded image list"></a></div>';
+    const addInfo  = '<div adId="{11}" {12} class="twelve wide column product_info"><a href="{2}"><h4 id="title">{3}</h4></a>{9}<h3 id="price">{7}</h3><span id="info">{8}</span>{10}<div style="width: 100%;" class="ui divider"></div></div>';
 
     var link = 'ad_detail.html?uid=' + uid;
     var card = addImage + addInfo;
+    var const10Value = '';
 
     if (showCheckbox) {
         // IF SHOWCHECKBOX disable links
@@ -422,6 +583,25 @@ const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelec
         card = card.replace('{5}', (showFavoriteButton) ? "heart" : "");
     }
 
+    if (requestInfo) {
+        const methodCallParams = "this, '" + uid + "', " + "'" + requestInfo.requesterID + "','" + requestInfo.randomUid + "'";
+        const acceptOption = '<div class="accessRequestContent"><p>Liberar acesso à {0}?</p><div class="ui buttons"><button {13} class="ui green icon button"><i class="icon thumbs up" onclick="ad_AccessRequestAccept({1});"></i></button><div class="or" data-text="ou"></div><button {14} class="ui red icon button" onclick="ad_AccessRequestDeny({2});"><i class="icon thumbs down"></i></button></div></div>';
+
+        const10Value = acceptOption;
+        const10Value = const10Value.replace('{0}', requestInfo.requesterName);
+        const10Value = const10Value.replace('{1}', methodCallParams);
+        const10Value = const10Value.replace('{2}', methodCallParams);
+        
+        // SET BUTTON ID
+        const btnID = 'buttonID="' + Math.random() + '"';
+        card = card.replace('{12}', btnID);
+        card = card.replace('{12}', btnID);
+        const10Value = const10Value.replace('{13}', btnID);
+        const10Value = const10Value.replace('{14}', btnID);
+    } else {
+        card = card.replace('{12}', '');
+    }
+
     card = card.replace('{0}', link);
     card = card.replace('{1}', image);
     card = card.replace('{2}', link);
@@ -430,6 +610,9 @@ const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelec
     card = card.replace('{6}', (favoriteSelected) ? "" : "outline");
     card = card.replace('{7}', (obj.category != 'fazendas') ? misc_GetPrice(obj.price) : "&nbsp;");
     card = card.replace('{8}', misc_GetStringWithMaxCharacthers(obj.description, 40));
+    card = card.replace('{10}', const10Value);
+    card = card.replace('{11}', uid);
+    card = card.replace('{11}', uid);
 
     return card;
 };
@@ -519,6 +702,7 @@ const ads_List_ListAdsByTerm = function() {
                 cardAdded = true;
 
                 ads_AddAdToDiv(snapshot, uid, obj, holder);
+                misc_SchedulePageSave(2000);
             }
         });
 
@@ -537,7 +721,7 @@ const ads_List_ListAdsByTerm = function() {
     if (firstCall) {
         db_get("ad", onSucess, onError, onError);
     } else {
-        console.log("ADD PAGINATION HERE");
+        //console.log("ADD PAGINATION HERE");
     }
 };
 
@@ -560,13 +744,20 @@ const ads_List_ListInnerJoinAdsOnDiv = function(div, qtdAdsToList, table, innerJ
             misc_RemoveLoader(div);
             ads_AddAdToDiv(snapshot, snapshot.key, snapshot.val(), div);
         }
+
+        misc_UpdatePageReady();
     };
 
     const onError = function(snapshot) {
         if (div) { div.remove(); }
+        misc_UpdatePageReady();
     };
 
-    db_getInnerJoinLimitToLast(tableOne, path, tableTwo, onSucess, onError, onError, true, qtdAdsToList);
+    if (path != null)  {
+        db_getInnerJoinLimitToLast(tableOne, path, tableTwo, onSucess, onError, onError, true, qtdAdsToList);
+    } else {
+        onError(null);
+    }
 };
 
 const ads_List_ListLastAdsOnDiv = function(div, limitToLast, table, fieldToOrder, fieldTestValue) {
@@ -585,10 +776,13 @@ const ads_List_ListLastAdsOnDiv = function(div, limitToLast, table, fieldToOrder
         if (!cardAdded) {
             div.remove();
         }
+
+        misc_UpdatePageReady();
     };
 
     const onError = function(snapshot) {
         div.remove();
+        misc_UpdatePageReady();
     };
 
     if (!fieldTestValue) {
@@ -684,7 +878,7 @@ const ad_addSliderVideo = function(ivideo){
         source      : 'youtube',
         //placeholder : '/images/bear-waving.jpg',
         id          : ivideo        
-    });
+    }).removeClass('hidden');
 };
 
 const ad_SetFarmFields = function() {
@@ -692,10 +886,15 @@ const ad_SetFarmFields = function() {
     $('.isFarm').removeClass('hidden');
 };
 
+
 const ad_FillDetailPage = function(adUID) {
     const edit = misc_GetUrlParam('isitforEdit');
     const user = localStorage.getItem('auth_UserUID');
     var adPath = 'ad/' + adUID;
+
+    var hideAdAccessOnFarm = function() {
+        $("#RequestAdAccessOnFarm").addClass("hidden");
+    };
 
     var onSucess = function(snapshot) {
         var val = snapshot.val();
@@ -704,11 +903,19 @@ const ad_FillDetailPage = function(adUID) {
 
         if (val.category === 'fazendas') {
             ad_SetFarmFields();
+            db_GetKmlInfoFromAd(adUID);
             ad_LoadAdsListOnDiv('EqualToLimitToLast', $('#farmChildren'), 'ad_parent', snapshot.key, 100);
+            hideAdAccessOnFarm();
         } else {
             if (val.ad_parent) {
                 ad_GetCardByUid($('#farmCard'), val.ad_parent);
+                hideAdAccessOnFarm();
             }
+        }
+
+        if (val.user == user) {
+            hideAdAccessOnFarm();
+            $("#EditAd").removeClass("hidden");
         }
 
         if (!edit) {
@@ -733,7 +940,7 @@ const ad_FillDetailPage = function(adUID) {
             );
 
             if (val.user == user) {
-                document.getElementById("SendMessage").style.visibility = "hidden";
+                $("#SendMessage").addClass("hidden");
             }
 
         } else {
@@ -742,10 +949,6 @@ const ad_FillDetailPage = function(adUID) {
     };
 
     db_get(adPath, onSucess, ad_ErrorFunction, ad_ErrorFunction);
-
-    if(!edit){
-        document.getElementById("EditAd").style.visibility = "hidden";
-    }
 };
 
 const ad_InitGlide = function(icounter){
@@ -782,7 +985,7 @@ const ad_ValuesIntoDetail = function(val, icounter) {
         if(val.category === 'produtos'){
             products.checked = true;
             id = "products";
-        } else if (val.category === 'serviÃ§os'){
+        } else if (val.category === 'servicos'){
             services.checked = true;
             id = "services";
         } else if (val.category === 'fazendas'){
@@ -818,10 +1021,12 @@ const ad_ValuesIntoDetail = function(val, icounter) {
         category.innerText = val.category;
         subcategory.innerText = val.subcategory;
         if (val.category === "eventos"){
-            ad_addSliderVideo(val.event_url);
-            datead.innerText = val.event_date;
-            $("#urlad").prop("href", val.event_site);
-            $('#hiddendiv').removeClass('hidden');
+            datead.innerText = val.event_date;            
+            (val.event_site) ? ($("#urlad").prop("href", "http://" + val.event_site)) : (undefined);
+            (val.event_url) ? (ad_addSliderVideo(val.event_url)) : (undefined);
+            $('#adevents').each(function() {
+                $(this).removeClass('hidden');
+            });
         }
 
         db_get('/users/'+val.user, 
@@ -835,21 +1040,23 @@ const ad_ValuesIntoDetail = function(val, icounter) {
                 ad_showFields();
                 ad_InitGlide(icounter);
             }
-            , null
-            , null
+            , ad_ErrorFunction
+            , ad_ErrorFunction
         );
+
         
-        if (firebase.auth().currentUser.uid == val.user) {
+        if ((firebase.auth().currentUser)&&(firebase.auth().currentUser.uid == val.user)) {
             document.getElementById("EditAd").style.visibility = "visible";
         } else {
             document.getElementById("SendMessage").style.visibility = "visible";
         }
 
+        misc_SchedulePageSave(1000);
     }
 };
 
 const ad_ErrorFunction = function(error) {
-    misc_DisplayErrorMessage('Erro ao exibir anÃºncio', 'Favor tentar mais tarde');
+    misc_DisplayErrorMessage('Erro ao exibir anúncio', 'Favor tentar mais tarde');
 };
 
 const ad_LoadAdsListOnDiv = function(searchType, holder, orderByChild, orderByChildValue, limitToLast) {
@@ -864,6 +1071,7 @@ const ad_LoadAdsListOnDiv = function(searchType, holder, orderByChild, orderByCh
                 const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
                 
                 ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, false, false)); 
+                misc_SchedulePageSave(1000);
             }, onErr, onErr);
         });
     };
@@ -881,25 +1089,61 @@ const ad_LoadAdsListOnDiv = function(searchType, holder, orderByChild, orderByCh
     }
 }
 
+// Function to init Google Maps API. This needs to be like function ad_InitMap() standard
+function ad_InitMap() {
+    var file_path = '/ads_kmlfile/' + misc_GetUrlParam('uid') + '/url';
+    var srcKml = "";
+
+    const onFake = function(){
+        return;
+    };
+
+    const onSuccess = function(snapshot){
+        srcKml = snapshot.val();
+        console.log(srcKml);
+    
+        if (!srcKml)
+            srcKml = 'https://developers.google.com/maps/documentation/javascript/examples/kml/westcampus.kml';
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: new google.maps.LatLng(-19.257753, 146.823688),
+            zoom: 2,
+            mapTypeId: 'terrain'
+        });
+
+        var kmlLayer = new google.maps.KmlLayer(srcKml, {
+            suppressInfoWindows: true,
+            preserveViewport: false,
+            map: map
+        });
+    };
+    db_get(file_path, onSuccess, onFake, onFake);
+};
+
 /////////////////////////////////  AD DETAIL /////////////////////////////////
 /////////////////////////////////  AD LIST   /////////////////////////////////
-
 const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
     const getUser = localStorage.getItem('auth_UserUID');
-    const firstCall = (lastAdUIDReceived == null);
-    const path = "users_favorites/" + getUser;
 
+    if (!getUser) { misc_GoToHome(); }
+
+    const firstCall = (lastAdUIDReceived == null);
+    
     var onSucess = function(snapshot) {
-        misc_RemoveLoader();
+        var snapKey = snapshot.key;
+        var snapVal = snapshot.val();
         
+        misc_RemoveLoader();
         const holder = $("#ads");
-        $.each(snapshot.val(), function(uid, obj) {
+        const loadProduct = function(uid, obj) {
             const onErr = function(snapshot) {};
                 
             // This IF test if farms are enableb on this search or not
             if (term != "mylistNoFarms" || (term == "mylistNoFarms" && obj.category != 'fazendas')) {
                 lastAdUIDReceived = uid;
                 
+                pageReadyDesired++;
+
                 db_get("ads_images",
                     function(snapshot) {
                         const imgsRef = snapshot.val();
@@ -907,12 +1151,22 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
                         
                         if (term == "myfavs") {
                             ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, true, enableCheckboxOnCards)); 
+                            misc_UpdatePageReady();
                         }else {
                             ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, false, enableCheckboxOnCards)); 
+                            misc_UpdatePageReady();
                         }
                     }, onErr, onErr);
             }
-        });
+        }
+        
+        if (term == "myfavs") {
+            $.each(snapVal, function(uid, obj) {
+                loadProduct(uid, obj);
+            });
+        } else {
+            loadProduct(snapKey, snapVal);
+        }
     };
 
     const onError = function(snapshot) {
@@ -924,19 +1178,131 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
     if (firstCall) {
         //TODO: Change "title" to "timestamp", when this field is added to database, so we can order the ads list by their creation date.
         if (term == "mylist" || term == "mylistNoFarms") {
-            db_getOrderByChildContainsLimitToLast("ad", "user", getUser, 50, onSucess, onError, onError);
+            //db_getOrderByChildContainsLimitToLast("ad", "user", getUser, 50, onSucess, onError, onError);
+            const pathInTableOne = "" + getUser + "/ad";
+            const tableOne = rootRef.child("user_ad");
+            const tableTwo = rootRef.child("ad");
+
+            db_getInnerJoin(tableOne, pathInTableOne, tableTwo, onSucess, onError, onError);
         } else if(term == "myfavs") {
+            var path = "users_favorites/" + getUser;
             db_get(path, onSucess, null, null);
-        }     
-        
-        //db_get("ad", onSucess, onError, onError);
+        }
     } else {
-        console.log("ADD PAGINATION HERE");
+        //console.log("ADD PAGINATION HERE");
     }
 };
-
 /////////////////////////////////  AD LIST   /////////////////////////////////
 
+/////////////////////////////////  AD ACESS LIST   /////////////////////////////////
+const ad_List_ListAdsAccessRequest = function() {
+    const holder = $("#ads");
+    const getUser = localStorage.getItem('auth_UserUID');
+
+    if (!getUser) { misc_GoToHome(); }
+    
+    var onSucess = function(snapshot, snap) {
+        misc_RemoveLoader();
+        
+        const adUid = snap.key;
+        const adRequestersList = snap.val();
+
+        const searchUserInfo = function(randomUid, requesterID, cardData) {
+            const onUserInfoErr = function(snapshot) {
+                misc_DisplayErrorMessage("Tente novamente!", "Erro ao consultar as informações do solicitante.")
+            };
+
+            const onUserInfoSuccess = function(userInfoSnapshot) {
+                const requestInfo = {
+                    requesterID: requesterID,
+                    requesterName: userInfoSnapshot.val(),
+                    randomUid: randomUid,
+                }
+
+                ad_List_AddCardToList(cardData.holder, ad_GetAdCard(cardData.uid, cardData.image, cardData.obj, cardData.showFavoriteButton, cardData.favoriteSelected, cardData.showCheckbox, requestInfo)); 
+            };
+
+            const userInfoPath = "users/" + requesterID + "/name";
+            db_get(userInfoPath, onUserInfoSuccess, onUserInfoErr, onUserInfoErr);
+        };
+
+        uid = snapshot.key;
+        obj = snapshot.val();
+        
+        const onErr = function(snapshot) {
+            misc_DisplayErrorMessage("Tente novamente!", "Erro consultar a imagem de algum produto.")
+        };
+
+        db_get("ads_images",
+            function(snapshot) {
+                const imgsRef = snapshot.val();
+                const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
+                
+                const cardData = {
+                    holder: holder,
+                    uid: uid,
+                    image: imgURL,
+                    obj: obj,
+                    showFavoriteButton: false,
+                    favoriteSelected: false,
+                    showCheckbox: false
+                }
+
+                $.each(adRequestersList, function(uid, obj) {
+                    searchUserInfo(uid, obj, cardData);
+                });
+
+                sw_SavePage();
+            }
+            ,onErr
+            ,onErr
+        );
+    };
+
+    const onError = function(snapshot) {
+        if (misc_RemoveLoader()) {
+            misc_DisplayErrorMessage("Tente novamente!", "Erro ao executar a consulta.")
+        }
+    };
+    
+    const onNull = function(snapshot) {
+        if (misc_RemoveLoader()) {
+            $("#ads").append(misc_GetNullValueMsg(true));
+        }
+    };
+
+    const tableOne = rootRef.child("ad_accessOnFarmRequest");
+    const tableTwo = rootRef.child("ad");
+    db_getInnerJoin(tableOne, getUser, tableTwo, onSucess, onNull, onError);
+};
+
+const ad_AccessRequestAccept = function(event, uid, requesterId, randomUid) {
+    // Remove all ads with same ID from page
+    $('[adid="-LlPLpgrO9hcOs9URHIZ"]').remove();
+    
+    // Remove all requests for this AD from DB
+    const userId = localStorage.getItem('auth_UserUID');
+    rootRef.child('ad_accessOnFarmRequest').child(userId).child(uid).set(null);
+
+    // Set AD into user table
+    rootRef.child('user_ad').child(requesterId).child('ad').child(uid).set(uid);
+    
+    // Display success message
+    misc_DisplaySuccessMessage("Pedido aceito com sucesso!", "Agora o solicitante poderá usar este anúncio.")
+};
+
+const ad_AccessRequestDeny = function(event, uid, requesterId, randomUid) {
+    // Remove card from page
+    $('[buttonID="'+ event.getAttribute('buttonid') + '"]').remove();
+    
+    // Remove only one request from DB
+    const userId = localStorage.getItem('auth_UserUID');
+    rootRef.child('ad_accessOnFarmRequest').child(userId).child(uid).child(randomUid).set(null);
+
+    // Dispaly success message
+    misc_DisplaySuccessMessage("Pedido recusado com sucesso!", "O solicitante não terá acesso a este anúncio.")
+};
+/////////////////////////////////  AD ACESS LIST   /////////////////////////////////
 /////////////////////////////////  AD DELETE   /////////////////////////////////
 const ad_delete = function(){
     const adUID = misc_GetUrlParam('uid');
@@ -962,3 +1328,75 @@ const ad_delete = function(){
     db_get("ads_images/" + adUID, onSucess, null, null);
 };
 /////////////////////////////////  AD DELETE   /////////////////////////////////
+/////////////////////////////////  AD SHARE   /////////////////////////////////
+const ad_Share = function(social_network) {
+    if (social_network == 'facebook') {
+        url = 'https://www.facebook.com/sharer.php?display=popup&u=' + window.location.href;
+        options = 'toolbar=0,status=0,resizable=1,width=626,height=436';
+        window.open(url,'sharer',options);
+    }
+
+    if (social_network == 'twitter') {
+        url = 'https://twitter.com/share?url' + window.location.href;
+        options = 'toolbar=0,status=0,resizable=1,width=626,height=436';
+        window.open(url,'sharer',options);
+    }
+};
+/////////////////////////////////  AD SHARE   /////////////////////////////////
+/////////////////////////////////  Ads Classes ////////////////////////////////
+
+//Command pattern to determine insert, update or delete ad
+class Ad_LoaderButton{
+    add(){
+        $(".field .ui.button").each(function(){
+            $(this).addClass("loading");
+        });        
+    }
+    remove(){
+        $(".field .ui.button").each(function(){
+            $(this).removeClass("loading");
+        });
+    }
+}
+
+class Ad_Action {
+  //constructor() {
+  //  this._action = action;
+  //}
+  insert() {
+    return db_InsertAdRegistration();
+  }
+  update() {
+    return ad_update();
+  }
+  delete() {
+    return ad_delete();
+  }
+}
+
+class Command {
+  constructor(subject) {
+    this._subject = subject;
+    this.commandsExecuted = [];
+  }
+  execute(command) {
+    this.commandsExecuted.push(command);
+    return this._subject[command]();
+  }
+}
+
+const ad_ExecuteLoaderButton = function(loader){
+    const action = new Command(new Ad_LoaderButton());
+    action.execute(loader);
+}
+
+const ad_ExecuteFormAction = function(){
+    const action = new Command(new Ad_Action());
+    action.execute(adFormAction);
+}
+
+const ad_getFormAction = function(obj){
+    adFormAction = obj.getAttribute('value');
+}
+
+/////////////////////////////////  Ads Classes ////////////////////////////////

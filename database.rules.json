@@ -23,6 +23,10 @@
       ".read": true,
       ".write": true,
     },
+    "ads_kmlfile": {
+      ".read": true,
+      ".write": true,
+    },
     "users_messages": {
       ".read": true,
       ".write": true, 
@@ -38,6 +42,10 @@
       ".write": true, 
     },
     "user_ad": {
+      ".read": true,
+      ".write": true, 
+    },
+    "ad_accessOnFarmRequest": {
       ".read": true,
       ".write": true, 
     }

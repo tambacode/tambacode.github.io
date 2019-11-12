@@ -1,5 +1,5 @@
-html
-    
+html    
+    title Shared.Farm - Home
     include templates/head
 
     body
@@ -13,7 +13,7 @@ html
                 #adsLast.sharedAds.ui.grid
                     .sharedAdsHeader
                         .ui.equal.width.centered.padded.grid
-                            .green.row
+                            .blue.row
                                 .colunm
                                     h4.ui.white.header
                                         i.inverted.star.outline.icon
@@ -23,7 +23,7 @@ html
                 #adsFarm.sharedAds.ui.grid
                     .sharedAdsHeader
                         .ui.equal.width.centered.padded.grid
-                            .green.row
+                            .blue.row
                                 .colunm
                                     h4.ui.white.header
                                         i.inverted.star.outline.icon
@@ -33,7 +33,7 @@ html
                 #adsProducts.sharedAds.ui.grid
                     .sharedAdsHeader
                         .ui.equal.width.centered.padded.grid
-                            .green.row
+                            .blue.row
                                 .colunm
                                     h4.ui.white.header
                                         i.inverted.tags.icon
@@ -43,7 +43,7 @@ html
                 #adsServices.sharedAds.ui.grid
                     .sharedAdsHeader
                         .ui.equal.width.centered.padded.grid
-                            .green.row
+                            .blue.row
                                 .colunm
                                     h4.ui.white.header
                                         i.inverted.handshake.outline.icon
@@ -53,7 +53,7 @@ html
                 #adsEvents.sharedAds.ui.grid
                     .sharedAdsHeader
                         .ui.equal.width.centered.padded.grid
-                            .green.row
+                            .blue.row
                                 .colunm
                                     h4.ui.white.header
                                         i.inverted.calendar.alternate.outline.icon
@@ -69,7 +69,7 @@ html
                             | O que você produra? Produtos, serviços ou eventos? Seja o que for, encontre facilmente através da pesquisa.
                       .extra.content
                         .center.aligned.author
-                            button.ui.green.button(onclick="ui_openFilterSidebar();")
+                            button.ui.yellow.button(onclick="ui_openFilterSidebar();")
                                 i.icon.filter                        
                                 | Pesquisar
                     br
@@ -89,19 +89,18 @@ html
                 br
             include templates/footer
         script.
-            const qtdAdsToListByType = 3;
-            if('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js', { scope: '/' })
-                .then(function(registration) {
-                    console.log('Service Worker Registered');
-                });
-                navigator.serviceWorker.ready.then(function(registration) {
-                    console.log('Service Worker Ready');
-                });
+            if (navigator.onLine) {
+                pageReadyDesired = 6;
+                
+                sw_Register();
+
+                const qtdAdsToListByType = 3;
+                ads_List_ListLastAdsOnDiv($('#adsLast'), qtdAdsToListByType, 'ad', 'timestamp', null);
+                ads_List_ListLastAdsOnDiv($('#adsFarm'), qtdAdsToListByType, 'ad', 'category', 'fazendas');
+                ads_List_ListLastAdsOnDiv($('#adsProducts'), qtdAdsToListByType, 'ad', 'category', 'produtos');
+                ads_List_ListLastAdsOnDiv($('#adsServices'), qtdAdsToListByType, 'ad', 'category', 'servicos');
+                ads_List_ListLastAdsOnDiv($('#adsEvents'), qtdAdsToListByType, 'ad', 'category', 'eventos');
+                ads_List_ListInnerJoinAdsOnDiv($('#adsHistory'), qtdAdsToListByType, 'user_last_viewed_ads', 'ad');
+            } else {
+                sw_SetLastPageState();
             }
-            ads_List_ListLastAdsOnDiv($('#adsLast'), qtdAdsToListByType, 'ad', 'timestamp', null);
-            ads_List_ListLastAdsOnDiv($('#adsFarm'), qtdAdsToListByType, 'ad', 'category', 'fazendas');
-            ads_List_ListLastAdsOnDiv($('#adsProducts'), qtdAdsToListByType, 'ad', 'category', 'produtos');
-            ads_List_ListLastAdsOnDiv($('#adsServices'), qtdAdsToListByType, 'ad', 'category', 'servicos');
-            ads_List_ListLastAdsOnDiv($('#adsEvents'), qtdAdsToListByType, 'ad', 'category', 'eventos');
-            ads_List_ListInnerJoinAdsOnDiv($('#adsHistory'), qtdAdsToListByType, 'user_last_viewed_ads', 'ad');

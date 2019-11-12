@@ -1,5 +1,6 @@
 html
-    
+  
+    title Shared.Farm - Politíca de Privacidade    
     include templates/head
       
     body
@@ -247,3 +248,9 @@ html
         br
         br
       | Perguntas sobre esta política podem ser direcionadas ao e-mail privacidade@sharedfarm.com.br
+    script.
+        if (navigator.onLine) {
+            sw_Register();
+        } else {
+            sw_SetLastPageState();
+        }

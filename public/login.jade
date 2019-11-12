@@ -1,5 +1,6 @@
 html
     
+    title Shared.Farm - Login
     include templates/head
     
     body
@@ -11,10 +12,10 @@ html
                 .vertical-center
                     .ui.padded.sixteen.column.centered.grid
                         .wide.column.row
-                            .ui.orange.card.login
+                            .ui.blue.card.login
                                 .content
                                     .ui.grid
-                                        .orange.column.row
+                                        .blue.column.row
                                             .column
                                             .left.aligned.ten.wide.column
                                                 .ui.white.header Entrar usando
@@ -22,6 +23,10 @@ html
                                                 .ui.icon
                                                     i.icon.user.circle.large
                                         .ui.padded.column.row.grid
+                                            .sixteen.wide.column.centered
+                                                button.large.ui.google.plus.button(onClick="auth_LoginGoogle();")
+                                                    i.google.plus.icon
+                                                    | Entrar com o Google&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                             .sixteen.wide.column.centered
                                                 button.large.ui.facebook.button(onClick="auth_LoginFacebook();")
                                                     i.facebook.icon

@@ -1,8 +1,8 @@
 #menu.ui.sf_header
     .ui.padded.grid
-        .orange.row
+        .green.row
             .three.wide.column
-                button.ui.icon.button.orange(onclick="ui_openSidebar();")
+                button#menuButton.ui.icon.button.green(onclick="ui_openSidebar();")
                     i.icon.list.large
             .ten.wide.column
                 .ui.search
@@ -11,7 +11,7 @@
                         i#adsSearchButton.link.search.icon(onclick="ads_SearchAd();")
                     .results
             .right.aligned.three.wide.column#header_right                    
-                button.ui.icon.button.orange(onclick="ui_openFilterSidebar();")
+                button.ui.icon.button.green(onclick="ui_openFilterSidebar();")
                     i.icon.filter.circle.large
             script.
                 //ui_headerRightAction();

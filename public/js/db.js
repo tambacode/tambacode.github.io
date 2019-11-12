@@ -1,7 +1,11 @@
-﻿var db = firebase.database();
-var db_storage = firebase.storage()
-var rootRef = db.ref();
-var rootStorageRef = db_storage.ref();
+﻿var db, db_storage, rootRef, rootStorageRef = null;
+
+if (navigator.onLine) {
+    db = firebase.database();
+    db_storage = firebase.storage()
+    rootRef = db.ref();
+    rootStorageRef = db_storage.ref();
+}
 
 //  Use to get a new key when inserting a new data on DB
 //  path (string): 'SharedFarm/Users'
@@ -171,6 +175,7 @@ const db_getInnerJoinorderByValue = function(table1, pathInTableOne, table2, onS
     });
 }
 
+var scheduleInnerJoin = null;
 var db_getInnerJoin = function(table1, pathInTableOne, table2, onSucess, onNullValue, onError, useValueToSearchOnChild) {
     table1.child(pathInTableOne).on('child_added', snap => {
         let lastInfoRef;
@@ -182,16 +187,20 @@ var db_getInnerJoin = function(table1, pathInTableOne, table2, onSucess, onNullV
         
         lastInfoRef.once('value')
             .then(function(snapshot) {
+                clearTimeout(scheduleInnerJoin);
                 if (snapshot.val() == null)
                 {
                     onNullValue(snapshot);
                 } else {
-                    onSucess(snapshot);
+                    onSucess(snapshot, snap);
                 }
             }).catch(function(error) {
+                clearTimeout(scheduleInnerJoin);
                 onError(error);
             });
     });
+
+    scheduleInnerJoin = setTimeout(onNullValue, 2000);
 };
 
 const db_getInnerJoinLimitToLast = function(table1, pathInTableOne, table2, onSucess, onNullValue, onError, useValueToSearchOnChild, limitToLast) {
@@ -277,19 +286,23 @@ const db_getUserToEdit = function() {
 };
 
 const db_getUserInfo = function() {
-    var path = '/users/' + localStorage.getItem('auth_UserUID');
+    const usedID = localStorage.getItem('auth_UserUID');
+
+    if (usedID == null) {
+        user_OpenProfile();
+    }
+
+    const path = '/users/' + usedID;
+
+    var Finish = function() {
+        user_showFields();
+        misc_RemoveLoader();
+        misc_SchedulePageSave();
+    };
 
     var onSuccess = function(snapshot) {
-
         var temp_info = "";
 
-        if (snapshot.val().profile_picture_link !== undefined) {
-            misc_SetImageRotation($('#imageuploaded'), snapshot.val().pictureRotate);
-            misc_waitImageLoadReady($('#imageuploaded'), snapshot.val().profile_picture_link, function(){
-                user_showFields();
-                misc_RemoveLoader();                
-            });
-        }
         $("#name").text(snapshot.val().name);
         $("#email").text(snapshot.val().email);
         
@@ -310,6 +323,14 @@ const db_getUserInfo = function() {
         (snapshot.val().state !== undefined) ? temp_info += " - " + snapshot.val().state : temp_info;
         $("#cep_city_state").text(temp_info);
 
+        if (snapshot.val().profile_picture_link !== undefined) {
+            misc_SetImageRotation($('#imageuploaded'), snapshot.val().pictureRotate);
+            misc_waitImageLoadReady($('#imageuploaded'), snapshot.val().profile_picture_link, function(){
+                Finish();
+            });
+        } else {
+            Finish();
+        }
     };
 
     var onNullValue = function(snapshot) {
@@ -383,48 +404,99 @@ const db_updateUserImage = function(url){
     db_update(path, dataToInsert, doneSuccess(url));
 }
 
+const db_saveKmlInfoToAd = function(url){
+    return new Promise((resolve) => {
+        const path = "/ads_kmlfile/" + localStorage.getItem('adUID');
+        var file = document.getElementById('findkmlfile').files[0];
+
+        var dataToSave = {
+            name : file.name,
+            url : url
+        };
+
+        const commonAction = function(){
+            localStorage.removeItem('adUID');
+            resolve("doneSuccess on update ADS REG");
+        };
+
+        const onNull = function(){
+            db_set(path, dataToSave,commonAction());            
+        };
+
+        const onSuccess = function(snapshot){
+            var urlFromDb = snapshot.val();
+            db_update(path, dataToSave, commonAction());    
+        };
+        db_get(path + "/url", onSuccess, onNull, onNull);
+    });
+}
+
+
 /*
 Params: Function to update files to storage
 path: storage path from root on e.g. users_image/
 file: array from input type=file e.g. document.getElementById('fileInput').files[0];
 callback: function to be executed when uploaded is success to get url of uploaded file
 */
-const db_saveImage = function(path, file, callback) {
-    //This function add imagens on data base
-    const name = path + "_" + file.name;
-    const metadata = {
-        contentType: file.type
-    };
+const db_SaveFileToStorage = function(path, file) {
+    return new Promise((resolve) => {
+        //This function add imagens on data base
+        const name = path;
+        const metadata = {
+            contentType: file.type
+        };
+        var urlSaved = "";
 
-    // Create a storage ref
-    var storageRef = db_storage.ref(name);
-    // Upload file
-    var task = storageRef.put(file, metadata);
+        // Create a storage ref
+        var storageRef = db_storage.ref(name);
+        // Upload file
+        var task = storageRef.put(file, metadata);
 
-    // Update progress bar
-    task.on('state_changed',
-        function progress(snapshot) {
-            var perc = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        },
-        function error(err) {
-            misc_DisplayErrorMessage("Upload imagem","Image Upload Error: " + err);
-        },
-        function complete() {  
-             // Upload completed successfully, now we can get the download URL
-            task.snapshot.ref.getDownloadURL().then(callback);
-        }
-    );
+        // Update progress bar
+        task.on('state_changed',
+            function progress(snapshot) {
+                var perc = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            },
+            function error(err) {
+                misc_DisplayErrorMessage("Upload imagem","Image Upload Error: " + err);
+            },
+            function complete() {  
+                 // Upload completed successfully, now we can get the download URL
+                task.snapshot.ref.getDownloadURL().then((url) => {
+                    console.log("could save to Storage and getDownloadURL");
+                    resolve(url);
+                });
+            }
+        );            
+    });
 }
 
-const db_saveUserImage = function(){
+const db_saveUserImage = async function(){
     var image_path = 'users_images/' + localStorage.getItem('auth_UserUID');
 
     var file = document.getElementById('fileInput').files[0];
 
     if (file) {
         ad_Register_SetImageLoading($('#fileInput'));
-        db_saveImage(image_path, file, db_updateUserImage);
+        let sUrl = await db_SaveFileToStorage(image_path, file);
+        let sWaitSave = await db_updateUserImage(sUrl);
     } else {
-        db_updateUserInfo();
+        let sWaitSave = await db_updateUserInfo();
+    }
+}
+
+
+const db_saveKmlFile = async function(adUID){
+    var file_path = 'farm_kml/' + adUID;
+    var file = document.getElementById('findkmlfile').files[0];
+
+    localStorage.setItem('adUID', adUID);
+
+    if (file) {
+        let sUrl = await db_SaveFileToStorage(file_path, file);
+        let sWaitSave = await db_saveKmlInfoToAd(sUrl);
+        return new Promise ((resolve) => {
+            resolve(sWaitSave);
+        });
     }
 }

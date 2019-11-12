@@ -1,5 +1,6 @@
 html
-    
+
+    title Shared.Farm - Messagem    
     include templates/head
     
     body
@@ -46,4 +47,10 @@ html
                 br
             include templates/footer
     script.
-        message_DisplayMessages();
+        if (navigator.onLine) {
+            sw_Register();
+
+            message_DisplayMessages();
+        } else {
+            sw_SetLastPageState();
+        }
