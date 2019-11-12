@@ -195,20 +195,25 @@ const message_SendMessage = function() {
 
     if (textMessage.val() == '') { return; }
 
-    const key = Date.now();
-    const newMsgPath = messagePath + '/' + key;
+    const onGetServerTime = function(serverTime) {
+        const key = serverTime;
 
-    var dataToInsert = {
-        user: localStorage.getItem('auth_UserUID'),
-        content : textMessage.val()
+        const newMsgPath = messagePath + '/' + key;
+
+        var dataToInsert = {
+            user: localStorage.getItem('auth_UserUID'),
+            content : textMessage.val()
+        };
+        
+        textMessage.val('');
+
+        // Save message
+        db_set(newMsgPath, dataToInsert);
+        // Update data in last info table
+        message_UpdateInfoInLastInfoTable(misc_GetUrlParam('uid'), key, dataToInsert.content);
     };
-    
-    textMessage.val('');
 
-    // Save message
-    db_set(newMsgPath, dataToInsert);
-    // Update data in last info table
-    message_UpdateInfoInLastInfoTable(misc_GetUrlParam('uid'), key, dataToInsert.content);
+    db_GetServerTime(onGetServerTime);
 };
 
 const message_UpdateInfoInLastInfoTable = function(msgUID, timestamp, content) {
@@ -267,7 +272,6 @@ const message_StartChat = function(ownerUID, currentUID, adUID) {
 
     // Create message in messages_last_info
     var createMessageLastInfo = function(messageUID, ad_uid, ad_title, ad_image) {
-        console.log(4);
         const msgLastInfoPath = 'messages_last_info/' + messageUID;
         
         const dataToInsert = {
@@ -275,7 +279,7 @@ const message_StartChat = function(ownerUID, currentUID, adUID) {
             "ad_title": ad_title,
             "ad_image": ad_image,
             "content": "Nova mensagem",
-            "timestamp": Date.now()
+            "timestamp": firebaseDateNow
         };
 
         // Save message

@@ -14,6 +14,16 @@ const db_GetNewPushKey = function(path) {
     return key;
 };
 
+// Use this to get the server time
+const db_GetServerTime = function(callback) {
+    db.ref("/.info/serverTimeOffset").on('value', function(offset) {
+        var offsetVal = offset.val() || 0;
+        var serverTime = Date.now() + offsetVal;
+
+        callback(serverTime);
+    });
+}
+
 /*
     Method used to insert a new value in some path
     path (string): 'SharedFarm/Users'

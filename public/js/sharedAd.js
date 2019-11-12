@@ -212,7 +212,7 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
         state: state,
         city: city,
         images: "",
-        timestamp: Date.now()             
+        timestamp: firebaseDateNow
     };
 
     var pageToRedirect = 'ad_detail.html?uid=' + key;
@@ -842,7 +842,7 @@ const ads_List_FavoriteAd = function(uid) {
             title: title,
             price: price,
             description: description,
-            timestamp: Date.now()             
+            timestamp: firebaseDateNow
         };
 
         db_set(path, dataToInsert);
@@ -907,7 +907,10 @@ const ad_FillDetailPage = function(adUID) {
     var onSucess = function(snapshot) {
         var val = snapshot.val();
 
-        ad_AddLastViewedAd(Date.now(), adUID);
+        var onGetServerTime = function(serverTime) {
+            ad_AddLastViewedAd(serverTime, adUID);    
+        };
+        db_GetServerTime(onGetServerTime);
 
         if (val.category === 'fazendas') {
             ad_SetFarmFields();

@@ -3,6 +3,8 @@ window.fb = {};
 var pageReadyDesired = 0;
 var pageReadyCount = 0;
 
+var firebaseDateNow = firebase.database.ServerValue.TIMESTAMP;
+
 fb.firebaseConfig = {
     apiKey: "AIzaSyD1aOg-QStOG5VB-imai9JF68h9Qq2q8So",
     authDomain: "shared-farm-dev.firebaseapp.com",
