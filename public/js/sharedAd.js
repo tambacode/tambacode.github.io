@@ -1139,6 +1139,7 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
     if (!getUser) { misc_GoToHome(); }
 
     const firstCall = (lastAdUIDReceived == null);
+    const urlParamUID = misc_GetUrlParam('uid');
     
     var onSucess = function(snapshot) {
         var snapKey = snapshot.key;
@@ -1150,9 +1151,19 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
             const onErr = function(snapshot) {};
                 
             // This IF test if farms are enableb on this search or not
-            if (term != "mylistNoFarms" || (term == "mylistNoFarms" && obj.category != 'fazendas')) {
+            var canAdd = true;
+            if (canAdd && ((term == "mylistNoFarms" || term == "mylistNoFarmsNoParents") && obj.category == 'fazendas')) { canAdd = false; }
+            if (canAdd && term == "mylistNoFarmsNoParents") { 
+                if (obj.ad_parent != null && obj.ad_parent != urlParamUID) {
+                    canAdd = false;
+                }
+            }
+
+            //if (term != "mylistNoFarms" || ((term == "mylistNoFarms" || term == "mylistNoFarmsNoParents") && obj.category != 'fazendas')) {
+            //if ((term == "mylistNoFarmsNoParents" && obj.ad_parent == null) || term != "mylistNoFarmsNoParents") {
+
+            if (canAdd) {
                 lastAdUIDReceived = uid;
-                
                 pageReadyDesired++;
 
                 db_get("ads_images",
@@ -1188,7 +1199,7 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
 
     if (firstCall) {
         //TODO: Change "title" to "timestamp", when this field is added to database, so we can order the ads list by their creation date.
-        if (term == "mylist" || term == "mylistNoFarms") {
+        if (term == "mylist" || term == "mylistNoFarms" || term == "mylistNoFarmsNoParents") {
             //db_getOrderByChildContainsLimitToLast("ad", "user", getUser, 50, onSucess, onError, onError);
             const pathInTableOne = "" + getUser + "/ad";
             const tableOne = rootRef.child("user_ad");
