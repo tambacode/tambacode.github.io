@@ -627,8 +627,8 @@ const ads_GetFilterFields = function(byUrl) {
     if (!byUrl) {
         fields['searchTerm'] = $('#filter_term').val();
         fields['category'] = $("input[name='filter_category']:checked").val();
-        fields['state'] = $('#filter_state').dropdown('get value');
-        fields['city'] = $('#filter_city').dropdown('get value');
+        fields['state'] = $('#filter_state').dropdown('get text');
+        fields['city'] = $('#filter_city').dropdown('get text');
         fields['subcategory'] = $('#filter_Subcategory').dropdown('get value');
         fields['minprice'] = $('#filter_minprice').val();
         fields['maxprice'] = $('#filter_maxprice').val();
@@ -655,30 +655,31 @@ const ads_ApplyFilter = function() {
 const ads_IsObjectFiltersValid = function(filters, obj) {
     var searchTerm = misc_LowerCase(filters['searchTerm']);
     var title = misc_LowerCase(obj['title']);
+    
     if (title.includes(searchTerm) == false) { return false; }
 
     if (filters['category']) {
-        if (filters['category'] != obj['category']) { return false; }
+        if (filters['category'] != obj['category']) { console.log('2'); return false; }
     }
-
+    
     if (filters['state']) {
-        if (filters['state'] != obj['state']) { return false; }
+        if (filters['state'] != obj['state']) { return console.log(filters['state'] + ' - ' + obj['state']); false; }
     }
-
+    
     if (filters['city']) {
-        if (filters['city'] != obj['city']) { return false; }
+        if (filters['city'] != obj['city']) { console.log('3'); return false; }
     }
-
+    
     if (filters['subcategory']) {
         if (filters['subcategory'] != obj['subcategory']) { return false; }
     }
-
+    
     const price = misc_GetFloatNumber(obj['price']);
     
     if (filters['minprice']) {
         if (price < misc_GetFloatNumber(filters['minprice'])) { return false; }
     }
-
+    
     if (filters['maxprice']) {
         if (price > misc_GetFloatNumber(filters['maxprice'])) { return false; }
     }
@@ -689,12 +690,18 @@ const ads_IsObjectFiltersValid = function(filters, obj) {
 const ads_List_ListAdsByTerm = function() {
     const firstCall = (lastAdUIDReceived == null);
 
+    var A = false;
     var onSucess = function(snapshot) {
         misc_RemoveLoader();
         const holder = $("#ads");
         const filters = ads_GetFilterFields(true);
         var cardAdded = false;
         
+        if (A == false)
+        {
+            A = true;
+            console.log(filters['searchTerm']);
+        }
         $.each(snapshot.val(), function(uid, obj) {
             lastAdUIDReceived = uid;
 
@@ -713,6 +720,7 @@ const ads_List_ListAdsByTerm = function() {
     };
 
     const onError = function(snapshot) {
+        console.log(snapshot);
         if (misc_RemoveLoader()) {
             $("#ads").append(misc_GetErrorMsg(true));
         }
