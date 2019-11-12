@@ -8,7 +8,7 @@ if (navigator.onLine) {
 }
 
 //  Use to get a new key when inserting a new data on DB
-//  path (string): 'SharedFarm/Users'
+//  path (string): 'GoFarmer/Users'
 const db_GetNewPushKey = function(path) {
     var key = db.ref().child(path).push().key;
     return key;
@@ -26,7 +26,7 @@ const db_GetServerTime = function(callback) {
 
 /*
     Method used to insert a new value in some path
-    path (string): 'SharedFarm/Users'
+    path (string): 'GoFarmer/Users'
     postData (Json structure): 
         var dataToInsert = {
             name: 'John',
