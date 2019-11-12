@@ -105,11 +105,11 @@ html
                                 .sixteen.wide.column(style="margin-top: 0;")
                     
                     //-- Buttons area
-                    .button.fluid.ui.green.button(id='SendMessage' onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner, 'ad_detail.html');")
+                    .button.fluid.ui.green(id='SendMessage' onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner, 'ad_detail.html');")
                         | Enviar Mensagem
-                    .button.fluid.ui.green.button.hidden(id='EditAd' onclick="ad_RedirectForEditAd();")
+                    .button.fluid.ui.green.hidden(id='EditAd' onclick="ad_RedirectForEditAd();")
                         | Editar Anúncio
-                    .button.fluid.ui.green.button(id='RequestAdAccessOnFarm' onclick="auth_RequireLoggingToAccessFunction(ad_RequestAdAccessOnFarm, 'ad_detail.html');")
+                    .button.fluid.ui.green(id='RequestAdAccessOnFarm' onclick="auth_RequireLoggingToAccessFunction(ad_RequestAdAccessOnFarm, 'ad_detail.html');")
                         | Pedir permissão para linkar anúncio a suas fazenda
                     .ui.divider
                     .two.ui.buttons
