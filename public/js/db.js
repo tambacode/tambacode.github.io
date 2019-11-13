@@ -243,7 +243,7 @@ const db_InsertUserOnLogin = function(path, name, email, providerName, providerT
     var dataToInsert = {
         name: name,
         email: email,
-        profile_picture_link: 'https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/users_images%2Fimage.png?alt=media&token=eeddedea-0ead-4ced-8741-651f58bcd9ff',
+        profile_picture_link: '/imgs/default_profile_picture.png',
         tokens : {}
     };
 
