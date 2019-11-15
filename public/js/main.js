@@ -208,7 +208,7 @@ const misc_RemoveErrorNullMsg = function() {
 };
 
 const misc_GetErrorMsg = function(withRow) {
-    return misc_GetNullValueOrder(withRow, 'errorMsg', 'Erro ao executar a pesquisa');
+    return misc_GetNullValueOrder(withRow, 'errorMsg', 'Nenhum dado encontrado');
 };
 
 const misc_GetNullValueMsg = function(withRow) {
