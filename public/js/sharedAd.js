@@ -1104,29 +1104,37 @@ const ad_LoadAdsListOnDiv = function(searchType, holder, orderByChild, orderByCh
 function ad_InitMap() {
     var file_path = '/ads_kmlfile/' + misc_GetUrlParam('uid') + '/url';
     var srcKml = "";
+    var map = ""
 
     const onFake = function(){
+        $(".map").addClass("hidden");
         return;
     };
 
-    const onSuccess = function(snapshot){
+    const onSuccess = async function(snapshot){
         srcKml = snapshot.val();
         console.log(srcKml);
+
     
-        if (!srcKml)
-            srcKml = 'https://developers.google.com/maps/documentation/javascript/examples/kml/westcampus.kml';
+        if (srcKml) {
+            //srcKml = 'https://developers.google.com/maps/documentation/javascript/examples/kml/westcampus.kml';
 
-        var map = new google.maps.Map(document.getElementById('map'), {
-            center: new google.maps.LatLng(-19.257753, 146.823688),
-            zoom: 2,
-            mapTypeId: 'terrain'
-        });
-
-        var kmlLayer = new google.maps.KmlLayer(srcKml, {
-            suppressInfoWindows: true,
-            preserveViewport: false,
-            map: map
-        });
+            map = new google.maps.Map(document.getElementById('map'), {
+                    center: new google.maps.LatLng(-13.6573936,-69.7152704),
+                    zoom: 2,
+                    mapTypeId: google.maps.MapTypeId.TERRAIN
+                });
+ 
+            setTimeout( function(){
+                kmlLayer = new google.maps.KmlLayer(srcKml, {
+                    suppressInfoWindows: true,
+                    preserveViewport: false,
+                    map: map
+                });
+            }, 2000);
+        } else {
+            $(".map").addClass("hidden");
+        }
     };
     db_get(file_path, onSuccess, onFake, onFake);
 };
