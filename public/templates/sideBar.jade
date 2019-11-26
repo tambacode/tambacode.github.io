@@ -11,6 +11,7 @@
     a.item(onclick="auth_RequireLoggingToAccess('ad_list_permission_request.html');")
         | Pedidos de acesso a anúncio
         i.handshake.icon.Large
+        i#permissionRequestPush.ui.red.empty.circular.label.menuRedPush.hidden
     a.item(onclick="auth_RequireLoggingToAccess('ad_list_favorites.html');")
         | Favoritos
         i.heart.icon.Large
@@ -23,3 +24,19 @@
     a.item.hidden#LoginButton(onClick="auth_RequireLoggingToAccess('index.html');")
         | Login
         i.sign-in.icon.Large
+script.
+    if (navigator.onLine) {
+        var userID = localStorage.getItem('auth_UserUID');
+        if (userID != null) {
+            var path = "ad_accessOnFarmRequest/" + userID;
+            var onSucess = function(snapshot) {
+                console.log("a");
+                $("#menuRedPush").removeClass("hidden");
+                $("#permissionRequestPush").removeClass("hidden");
+            };
+
+            var onError = function(snapshot) {};
+
+            db_get(path, onSucess, onError, onError);    
+        }
+    }

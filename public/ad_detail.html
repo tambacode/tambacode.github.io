@@ -1,11 +1,11 @@
 
 <html>
-  <title>Shared.Farm - Detalhe do anúncio</title>
+  <title>GoFarmer - Detalhe do anúncio</title>
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <meta name="theme-color" content="#f2711c"/>
+    <meta name="theme-color" content="#068305"/>
     <meta name="mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="application-name" content="Share.Farm"/>
@@ -44,7 +44,24 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css"/>
   <body>
-    <div class="ui left sidebar vertical menu"><a href="index.html" class="item">Home<i class="home icon Large"></i></a><a id="PerfilButton" onClick="user_OpenProfile();" class="item hidden">Meu Perfil<i class="user circle icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list.html');" class="item">Meus Anúncios<i class="shopping bag icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_permission_request.html');" class="item">Pedidos de acesso a anúncio<i class="handshake icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_favorites.html');" class="item">Favoritos<i class="heart icon Large"></i></a><a onClick="messages_GoTo();" class="item">Mensagens<i class="comment icon Large"></i></a><a id="LogoutButton" onClick="auth_LogoffUser();" class="item hidden">Sair<i class="sign-out icon Large"></i></a><a id="LoginButton" onClick="auth_RequireLoggingToAccess('index.html');" class="item hidden">Login<i class="sign-in icon Large"></i></a></div>
+    <div class="ui left sidebar vertical menu"><a href="index.html" class="item">Home<i class="home icon Large"></i></a><a id="PerfilButton" onClick="user_OpenProfile();" class="item hidden">Meu Perfil<i class="user circle icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list.html');" class="item">Meus Anúncios<i class="shopping bag icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_permission_request.html');" class="item">Pedidos de acesso a anúncio<i class="handshake icon Large"></i><i id="permissionRequestPush" class="ui red empty circular label menuRedPush hidden"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_favorites.html');" class="item">Favoritos<i class="heart icon Large"></i></a><a onClick="messages_GoTo();" class="item">Mensagens<i class="comment icon Large"></i></a><a id="LogoutButton" onClick="auth_LogoffUser();" class="item hidden">Sair<i class="sign-out icon Large"></i></a><a id="LoginButton" onClick="auth_RequireLoggingToAccess('index.html');" class="item hidden">Login<i class="sign-in icon Large"></i></a></div>
+    <script>
+      if (navigator.onLine) {
+          var userID = localStorage.getItem('auth_UserUID');
+          if (userID != null) {
+              var path = "ad_accessOnFarmRequest/" + userID;
+              var onSucess = function(snapshot) {
+                  console.log("a");
+                  $("#menuRedPush").removeClass("hidden");
+                  $("#permissionRequestPush").removeClass("hidden");
+              };
+      
+              var onError = function(snapshot) {};
+      
+              db_get(path, onSucess, onError, onError);    
+          }
+      }
+    </script>
     <div class="ui right sidebar vertical menu">
       <div class="ui padded grid">
         <div class="ui wide column">
@@ -162,7 +179,7 @@
         <div class="ui padded grid">
           <div class="green row">
             <div class="three wide column">
-              <button id="menuButton" onclick="ui_openSidebar();" class="ui icon button green"><i class="icon list large"></i></button>
+              <button id="menuButton" onclick="ui_openSidebar();" class="ui icon button green"><i id="menuRedPush" class="ui red empty circular label menuRedPush hidden"></i><i class="icon list large"></i></button>
             </div>
             <div class="ten wide column">
               <div class="ui search">
@@ -208,8 +225,8 @@
             <div id="price" class="notFarm">| </div>
             <div id="description" class="sub header"></div>
           </h2>
-          <div class="ui dividing header isFarm"></div>
-          <div class="html ui top attached segment hidden isFarm"><br/><br/>
+          <div class="map ui dividing header hidden isFarm"></div>
+          <div class="map html ui top attached segment hidden isFarm"><br/><br/>
             <div id="map" class="ui"></div>
             <div class="ui top attached label">Mapa da fazenda</div>
           </div>
@@ -262,9 +279,9 @@
               </div>
             </div>
           </div>
-          <div id="SendMessage" onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner, 'ad_detail.html');" class="button fluid ui green button">Enviar Mensagem</div>
-          <div id="EditAd" onclick="ad_RedirectForEditAd();" class="button fluid ui green button hidden">Editar Anúncio</div>
-          <div id="RequestAdAccessOnFarm" onclick="auth_RequireLoggingToAccessFunction(ad_RequestAdAccessOnFarm, 'ad_detail.html');" class="button fluid ui green button">Pedir permissão para linkar anúncio a suas fazenda</div>
+          <div id="SendMessage" onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner, 'ad_detail.html');" class="button fluid ui green">Enviar Mensagem</div>
+          <div id="EditAd" onclick="ad_RedirectForEditAd();" class="button fluid ui green hidden">Editar Anúncio</div>
+          <div id="RequestAdAccessOnFarm" onclick="auth_RequireLoggingToAccessFunction(ad_RequestAdAccessOnFarm, 'ad_detail.html');" class="button fluid ui green">Pedir permissão para linkar anúncio a suas fazenda</div>
           <div class="ui divider"></div>
           <div class="two ui buttons">
             <div id="shareFacebook" onclick="ad_Share('facebook');" class="ui facebook button"><i class="facebook icon"></i>Compartilhar</div>
@@ -281,7 +298,7 @@
         margin: 0 auto 0 auto;
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.min.js"></script><script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKwwSi-fNm8CRHJpbDGTRSOaYCepFlY9g&amp;callback=ad_InitMap"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.min.js"></script><script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxpL8r2ySRM9-nUEIw7o89QwSbMPtHhO0&amp;callback=ad_InitMap"></script>
   <script>
     if (navigator.onLine) {
         sw_Register();

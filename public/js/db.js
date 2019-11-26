@@ -8,15 +8,25 @@ if (navigator.onLine) {
 }
 
 //  Use to get a new key when inserting a new data on DB
-//  path (string): 'SharedFarm/Users'
+//  path (string): 'GoFarmer/Users'
 const db_GetNewPushKey = function(path) {
     var key = db.ref().child(path).push().key;
     return key;
 };
 
+// Use this to get the server time
+const db_GetServerTime = function(callback) {
+    db.ref("/.info/serverTimeOffset").on('value', function(offset) {
+        var offsetVal = offset.val() || 0;
+        var serverTime = Date.now() + offsetVal;
+
+        callback(serverTime);
+    });
+}
+
 /*
     Method used to insert a new value in some path
-    path (string): 'SharedFarm/Users'
+    path (string): 'GoFarmer/Users'
     postData (Json structure): 
         var dataToInsert = {
             name: 'John',
@@ -233,7 +243,7 @@ const db_InsertUserOnLogin = function(path, name, email, providerName, providerT
     var dataToInsert = {
         name: name,
         email: email,
-        profile_picture_link: 'https://firebasestorage.googleapis.com/v0/b/shared-farm-dev.appspot.com/o/users_images%2Fimage.png?alt=media&token=eeddedea-0ead-4ced-8741-651f58bcd9ff',
+        profile_picture_link: '/imgs/default_profile_picture.png',
         tokens : {}
     };
 

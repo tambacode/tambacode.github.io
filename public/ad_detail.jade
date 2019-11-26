@@ -1,5 +1,5 @@
 html
-    title Shared.Farm - Detalhe do anúncio
+    title GoFarmer - Detalhe do anúncio
     include templates/head
       
     //- Required Core Stylesheet
@@ -51,10 +51,10 @@ html
                     h2.ui.green.header
                         #price.notFarm | 
                         .sub.header#description
-                    .ui.dividing.header.isFarm
-
+                    
                     //-- Map area
-                    .html.ui.top.attached.segment.hidden.isFarm
+                    .map.ui.dividing.header.hidden.isFarm
+                    .map.html.ui.top.attached.segment.hidden.isFarm
                         br
                         br
                         #map.ui
@@ -105,11 +105,11 @@ html
                                 .sixteen.wide.column(style="margin-top: 0;")
                     
                     //-- Buttons area
-                    .button.fluid.ui.green.button(id='SendMessage' onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner, 'ad_detail.html');")
+                    .button.fluid.ui.green(id='SendMessage' onclick="auth_RequireLoggingToAccessFunction(message_StartChatWithProductOwner, 'ad_detail.html');")
                         | Enviar Mensagem
-                    .button.fluid.ui.green.button.hidden(id='EditAd' onclick="ad_RedirectForEditAd();")
+                    .button.fluid.ui.green.hidden(id='EditAd' onclick="ad_RedirectForEditAd();")
                         | Editar Anúncio
-                    .button.fluid.ui.green.button(id='RequestAdAccessOnFarm' onclick="auth_RequireLoggingToAccessFunction(ad_RequestAdAccessOnFarm, 'ad_detail.html');")
+                    .button.fluid.ui.green(id='RequestAdAccessOnFarm' onclick="auth_RequireLoggingToAccessFunction(ad_RequestAdAccessOnFarm, 'ad_detail.html');")
                         | Pedir permissão para linkar anúncio a suas fazenda
                     .ui.divider
                     .two.ui.buttons
@@ -130,9 +130,7 @@ html
     script(src="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.min.js")
 
     //- Official gofarmer Maps Key
-    //-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxpL8r2ySRM9-nUEIw7o89QwSbMPtHhO0&amp;callback=ad_InitMap"></script>
-    //- Alternative Key for test purpose
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKwwSi-fNm8CRHJpbDGTRSOaYCepFlY9g&amp;callback=ad_InitMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxpL8r2ySRM9-nUEIw7o89QwSbMPtHhO0&amp;callback=ad_InitMap"></script>
     
     script.
         if (navigator.onLine) {

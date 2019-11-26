@@ -1,5 +1,5 @@
 html
-    title Shared.Farm - Seleção dos anúncios filhos
+    title GoFarmer - Seleção dos anúncios filhos
     include templates/head
 
     body
@@ -26,7 +26,8 @@ html
                 br
             include templates/footer
         script.
-            ad_List_ListAdsByUser("mylistNoFarms", true);
+            ad_List_ListAdsByUser("mylistNoFarmsNoParents", true);
+
             const ads_SaveChildrenAds = function() {
                 const adRef = rootRef.child('ad');
                 const adParentUID = misc_GetUrlParam('uid');

@@ -212,7 +212,7 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
         state: state,
         city: city,
         images: "",
-        timestamp: Date.now()             
+        timestamp: firebaseDateNow
     };
 
     var pageToRedirect = 'ad_detail.html?uid=' + key;
@@ -627,8 +627,8 @@ const ads_GetFilterFields = function(byUrl) {
     if (!byUrl) {
         fields['searchTerm'] = $('#filter_term').val();
         fields['category'] = $("input[name='filter_category']:checked").val();
-        fields['state'] = $('#filter_state').dropdown('get value');
-        fields['city'] = $('#filter_city').dropdown('get value');
+        fields['state'] = $('#filter_state').dropdown('get text');
+        fields['city'] = $('#filter_city').dropdown('get text');
         fields['subcategory'] = $('#filter_Subcategory').dropdown('get value');
         fields['minprice'] = $('#filter_minprice').val();
         fields['maxprice'] = $('#filter_maxprice').val();
@@ -655,30 +655,31 @@ const ads_ApplyFilter = function() {
 const ads_IsObjectFiltersValid = function(filters, obj) {
     var searchTerm = misc_LowerCase(filters['searchTerm']);
     var title = misc_LowerCase(obj['title']);
+    
     if (title.includes(searchTerm) == false) { return false; }
 
     if (filters['category']) {
-        if (filters['category'] != obj['category']) { return false; }
+        if (filters['category'] != obj['category']) { console.log('2'); return false; }
     }
-
+    
     if (filters['state']) {
-        if (filters['state'] != obj['state']) { return false; }
+        if (filters['state'] != obj['state']) { return console.log(filters['state'] + ' - ' + obj['state']); false; }
     }
-
+    
     if (filters['city']) {
-        if (filters['city'] != obj['city']) { return false; }
+        if (filters['city'] != obj['city']) { console.log('3'); return false; }
     }
-
+    
     if (filters['subcategory']) {
         if (filters['subcategory'] != obj['subcategory']) { return false; }
     }
-
+    
     const price = misc_GetFloatNumber(obj['price']);
     
     if (filters['minprice']) {
         if (price < misc_GetFloatNumber(filters['minprice'])) { return false; }
     }
-
+    
     if (filters['maxprice']) {
         if (price > misc_GetFloatNumber(filters['maxprice'])) { return false; }
     }
@@ -689,12 +690,18 @@ const ads_IsObjectFiltersValid = function(filters, obj) {
 const ads_List_ListAdsByTerm = function() {
     const firstCall = (lastAdUIDReceived == null);
 
+    var A = false;
     var onSucess = function(snapshot) {
         misc_RemoveLoader();
         const holder = $("#ads");
         const filters = ads_GetFilterFields(true);
         var cardAdded = false;
         
+        if (A == false)
+        {
+            A = true;
+            console.log(filters['searchTerm']);
+        }
         $.each(snapshot.val(), function(uid, obj) {
             lastAdUIDReceived = uid;
 
@@ -713,6 +720,7 @@ const ads_List_ListAdsByTerm = function() {
     };
 
     const onError = function(snapshot) {
+        console.log(snapshot);
         if (misc_RemoveLoader()) {
             $("#ads").append(misc_GetErrorMsg(true));
         }
@@ -834,7 +842,7 @@ const ads_List_FavoriteAd = function(uid) {
             title: title,
             price: price,
             description: description,
-            timestamp: Date.now()             
+            timestamp: firebaseDateNow
         };
 
         db_set(path, dataToInsert);
@@ -899,7 +907,10 @@ const ad_FillDetailPage = function(adUID) {
     var onSucess = function(snapshot) {
         var val = snapshot.val();
 
-        ad_AddLastViewedAd(Date.now(), adUID);
+        var onGetServerTime = function(serverTime) {
+            ad_AddLastViewedAd(serverTime, adUID);    
+        };
+        db_GetServerTime(onGetServerTime);
 
         if (val.category === 'fazendas') {
             ad_SetFarmFields();
@@ -1093,29 +1104,37 @@ const ad_LoadAdsListOnDiv = function(searchType, holder, orderByChild, orderByCh
 function ad_InitMap() {
     var file_path = '/ads_kmlfile/' + misc_GetUrlParam('uid') + '/url';
     var srcKml = "";
+    var map = ""
 
     const onFake = function(){
+        $(".map").addClass("hidden");
         return;
     };
 
-    const onSuccess = function(snapshot){
+    const onSuccess = async function(snapshot){
         srcKml = snapshot.val();
         console.log(srcKml);
+
     
-        if (!srcKml)
-            srcKml = 'https://developers.google.com/maps/documentation/javascript/examples/kml/westcampus.kml';
+        if (srcKml) {
+            //srcKml = 'https://developers.google.com/maps/documentation/javascript/examples/kml/westcampus.kml';
 
-        var map = new google.maps.Map(document.getElementById('map'), {
-            center: new google.maps.LatLng(-19.257753, 146.823688),
-            zoom: 2,
-            mapTypeId: 'terrain'
-        });
-
-        var kmlLayer = new google.maps.KmlLayer(srcKml, {
-            suppressInfoWindows: true,
-            preserveViewport: false,
-            map: map
-        });
+            map = new google.maps.Map(document.getElementById('map'), {
+                    center: new google.maps.LatLng(-13.6573936,-69.7152704),
+                    zoom: 2,
+                    mapTypeId: google.maps.MapTypeId.TERRAIN
+                });
+ 
+            setTimeout( function(){
+                kmlLayer = new google.maps.KmlLayer(srcKml, {
+                    suppressInfoWindows: true,
+                    preserveViewport: false,
+                    map: map
+                });
+            }, 2000);
+        } else {
+            $(".map").addClass("hidden");
+        }
     };
     db_get(file_path, onSuccess, onFake, onFake);
 };
@@ -1128,6 +1147,7 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
     if (!getUser) { misc_GoToHome(); }
 
     const firstCall = (lastAdUIDReceived == null);
+    const urlParamUID = misc_GetUrlParam('uid');
     
     var onSucess = function(snapshot) {
         var snapKey = snapshot.key;
@@ -1139,9 +1159,19 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
             const onErr = function(snapshot) {};
                 
             // This IF test if farms are enableb on this search or not
-            if (term != "mylistNoFarms" || (term == "mylistNoFarms" && obj.category != 'fazendas')) {
+            var canAdd = true;
+            if (canAdd && ((term == "mylistNoFarms" || term == "mylistNoFarmsNoParents") && obj.category == 'fazendas')) { canAdd = false; }
+            if (canAdd && term == "mylistNoFarmsNoParents") { 
+                if (obj.ad_parent != null && obj.ad_parent != urlParamUID) {
+                    canAdd = false;
+                }
+            }
+
+            //if (term != "mylistNoFarms" || ((term == "mylistNoFarms" || term == "mylistNoFarmsNoParents") && obj.category != 'fazendas')) {
+            //if ((term == "mylistNoFarmsNoParents" && obj.ad_parent == null) || term != "mylistNoFarmsNoParents") {
+
+            if (canAdd) {
                 lastAdUIDReceived = uid;
-                
                 pageReadyDesired++;
 
                 db_get("ads_images",
@@ -1177,7 +1207,7 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
 
     if (firstCall) {
         //TODO: Change "title" to "timestamp", when this field is added to database, so we can order the ads list by their creation date.
-        if (term == "mylist" || term == "mylistNoFarms") {
+        if (term == "mylist" || term == "mylistNoFarms" || term == "mylistNoFarmsNoParents") {
             //db_getOrderByChildContainsLimitToLast("ad", "user", getUser, 50, onSucess, onError, onError);
             const pathInTableOne = "" + getUser + "/ad";
             const tableOne = rootRef.child("user_ad");

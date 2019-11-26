@@ -54,7 +54,7 @@ const ui_InitDropDownWithStates = function(dropDownField, adAny) {
 
 var ui_headerRightAction = function(){
 
-	var ui_rightIcon = "<button class='ui icon button orange' onclick='{0}'> \
+	var ui_rightIcon = "<button class='ui icon button green' onclick='{0}'> \
                     		<i class='icon {1} large'></i> \
                     	</button>";
 
