@@ -20,9 +20,8 @@
     }
   ],
   "start_url": "/index.html",
-  "background_color": "#068305",
+  "background_color": "#ffffff",
   "display": "standalone",
-  "scope": "https://shared-farm-dev.firebaseapp.com/",
   "splash_pages": null,
-  "theme_color": "#068305"
+  "theme_color": "#ffffff"
 }
