@@ -1,4 +1,4 @@
-const cacheVersion = "0.42";
+const cacheVersion = "0.43";
 const cacheName = `sharefarm-${cacheVersion}`;
 const cachedFiles = [
     "./imgs/noConnection_Icon.jpg",
