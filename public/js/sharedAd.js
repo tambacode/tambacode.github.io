@@ -560,6 +560,13 @@ const ad_GetCardByUid = function(holder, uid) {
     db_getEqualToIndex('ad', uid, onSucess, onError, onError);
 }
 
+const ad_adTitleShrink = function(str){
+    const MAX_TITLE_LENGTH = 28;
+    var newTitle = "";
+    (str.length > MAX_TITLE_LENGTH) ? (newTitle = str.substring(0, MAX_TITLE_LENGTH) + "...") : (newTitle = str);
+    return newTitle;
+}
+
 const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelected, showCheckbox, requestInfo) {
     const addImage = '<div adId="{11}" {12} class="four wide column product_image"><a href="{0}"><img src="{1}" class="ui tiny rounded image list"></a></div>';
     const addInfo  = '<div adId="{11}" {12} class="twelve wide column product_info"><a href="{2}"><h4 id="title">{3}</h4></a>{9}<h3 id="price">{7}</h3><span id="info">{8}</span>{10}<div style="width: 100%;" class="ui divider"></div></div>';
@@ -605,7 +612,7 @@ const ad_GetAdCard = function(uid, image, obj, showFavoriteButton, favoriteSelec
     card = card.replace('{0}', link);
     card = card.replace('{1}', image);
     card = card.replace('{2}', link);
-    card = card.replace('{3}', obj.title);
+    card = card.replace('{3}', ad_adTitleShrink(obj.title));
     card = card.replace('{4}', uid);
     card = card.replace('{6}', (favoriteSelected) ? "" : "outline");
     card = card.replace('{7}', (obj.category != 'fazendas') ? misc_GetPrice(obj.price) : "&nbsp;");
