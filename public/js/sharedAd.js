@@ -1336,9 +1336,12 @@ const ad_AccessRequestDeny = function(event, uid, requesterId, randomUid) {
 /////////////////////////////////  AD DELETE   /////////////////////////////////
 const ad_delete = function(){
     const adUID = misc_GetUrlParam('uid');
+    const getUser = localStorage.getItem('auth_UserUID');
 
     //remove add
     db_delete('ad/' + adUID);
+    db_delete("user_ad/" + getUser + "/ad/" + adUID);
+    db_delete('ads_kmlfile/' + adUID);
 
     //Remove images from storage
     var onSucess = function(snapshot) {       
