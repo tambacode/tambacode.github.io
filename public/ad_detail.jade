@@ -46,8 +46,13 @@ html
                     h1.ui.header
                         #title| 
                         .sub.header
-                            i.map.marker.alternate.icon
-                            .content#address
+                            .ui.list
+                                .item
+                                    i.building.middle.aligned.icon
+                                    .content
+                                        a.header#cep_address
+                                        .description#uf_city
+
                     h2.ui.green.header
                         #price.notFarm | 
                         .sub.header#description
@@ -91,8 +96,13 @@ html
                             h1.ui.header
                                 #name| 
                                 .sub.header
-                                    i.map.marker.alternate.icon
-                                    .content#district
+                                    .ui.list
+                                        .item
+                                            i.marker.icon
+                                            .content#district
+                                        .item#phoneVisible
+                                            i.phone.icon
+                                            .content#phone
                             #farmCard.sharedAds.ui.grid.notFarm
                                 .sixteen.wide.column(style="margin-top: 0;")
                     

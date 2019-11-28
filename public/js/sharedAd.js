@@ -1039,11 +1039,13 @@ const ad_ValuesIntoDetail = function(val, icounter) {
     } else {
         //image.src = imgURL;
         title.innerText = val.title;
-        address.innerText = val.location;
+        cep_address.innerText = val.cep + " " + val.location;
+        uf_city.innerText = val.city + " " + val.state;
         price.innerText = "R$ " + val.price;
         description.innerText = val.description;
         category.innerText = val.category;
         subcategory.innerText = val.subcategory;
+        (val.tel_visible) ? (phone.innerText = val.tel) : ($("#phoneVisible").addClass("hidden"));
         if (val.category === "eventos"){
             datead.innerText = val.event_date;            
             (val.event_site) ? ($("#urlad").prop("href", "http://" + val.event_site)) : (undefined);
@@ -1059,8 +1061,8 @@ const ad_ValuesIntoDetail = function(val, icounter) {
                 $("#name").text(valUser.name);
                 $("#district").text(valUser.district);
                 //$("#district").text(valUser.district + ", " + valUser.city);
-                $("#email").text(valUser.email);
-                $("#phone").text(valUser.phone);
+                //$("#email").text(valUser.email);
+                //$("#phone").text(valUser.phone);
                 ad_showFields();
                 ad_InitGlide(icounter);
             }
