@@ -811,19 +811,26 @@ const ads_List_FavoriteAdClick = function(self) {
     const item = $(self);
     var favoriteAdd = false;
     const uid = $(self).attr("uid");
-    
-    if ($(self).hasClass('outline'))
-    {
-        item.removeClass('outline');
-        favoriteAdd = true;
-    } else {
-        item.addClass('outline');
-    }
 
-    if (favoriteAdd) {
-        ads_List_FavoriteAd(uid);
-    } else {
-        ads_List_UnfavoriteAd(uid);
+    //auth_RequireLoggingToAccess('ad_registration.html');
+    
+
+    if (localStorage.getItem('auth_UserOnline')) {
+        if ($(self).hasClass('outline'))
+        {
+            item.removeClass('outline');
+            favoriteAdd = true;
+        } else {
+            item.addClass('outline');
+        }
+
+        if (favoriteAdd) {
+            ads_List_FavoriteAd(uid);
+        } else {
+            ads_List_UnfavoriteAd(uid);
+        }
+    }else{
+        misc_DisplayErrorMessage('Atenção', 'Você precisa logar na plataforma para favaritar itens!');
     }
 };
 
@@ -863,8 +870,10 @@ const ads_List_UnfavoriteAd = function(uid) {
     const user = localStorage.getItem('auth_UserUID');
     const path = 'users_favorites/' + user + '/' + uid;
 
-    //Unfavorite Ad
-    db_delete(path);
+    if (localStorage.getItem('auth_UserOnline')) {
+        //Unfavorite Ad
+        db_delete(path);
+    }
 };
 
 ///////////////////////////////// ADS SEARCH /////////////////////////////////
