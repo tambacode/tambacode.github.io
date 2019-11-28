@@ -810,10 +810,7 @@ const ads_List_ListLastAdsOnDiv = function(div, limitToLast, table, fieldToOrder
 const ads_List_FavoriteAdClick = function(self) {
     const item = $(self);
     var favoriteAdd = false;
-    const uid = $(self).attr("uid");
-
-    //auth_RequireLoggingToAccess('ad_registration.html');
-    
+    const uid = $(self).attr("uid");    
 
     if (localStorage.getItem('auth_UserOnline')) {
         if ($(self).hasClass('outline'))
@@ -1196,7 +1193,7 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
                         const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
                         
                         if (term == "myfavs") {
-                            ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, true, enableCheckboxOnCards)); 
+                            ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, true, true, enableCheckboxOnCards)); 
                             misc_UpdatePageReady();
                         }else {
                             ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, false, enableCheckboxOnCards)); 
