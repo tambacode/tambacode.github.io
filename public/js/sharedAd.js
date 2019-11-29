@@ -775,6 +775,27 @@ const ads_List_ListInnerJoinAdsOnDiv = function(div, qtdAdsToList, table, innerJ
     }
 };
 
+const ads_List_EnableUserFavOnDiv = function() {
+    const userFav = localStorage.getItem('auth_UserUID');
+    
+    if(userFav){
+            const onSucess = function(snapshot) {            
+                $.each(snapshot.val(), function(uid, obj) {
+                   const imgsRef = snapshot.val();
+                   const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
+
+                   $("[uid="+imgURL+"]").removeClass('outline');
+                });
+            };        
+      
+        if (userFav != null)  {
+            db_get('users_favorites/'+userFav, onSucess, onError, onError);
+        } else {
+            onError(null);
+        }
+    }
+}
+
 const ads_List_ListLastAdsOnDiv = function(div, limitToLast, table, fieldToOrder, fieldTestValue) {
     const onSucess = function(snapshot) {
         var cardAdded = false;
@@ -793,6 +814,7 @@ const ads_List_ListLastAdsOnDiv = function(div, limitToLast, table, fieldToOrder
         }
 
         misc_UpdatePageReady();
+        ads_List_EnableUserFavOnDiv();
     };
 
     const onError = function(snapshot) {
