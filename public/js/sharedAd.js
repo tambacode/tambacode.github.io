@@ -1195,10 +1195,10 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
                         const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
                         
                         if (term == "myfavs") {
-                            ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, true, true, enableCheckboxOnCards)); 
+                            ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, true, true)); 
                             misc_UpdatePageReady();
                         }else {
-                            ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, false, enableCheckboxOnCards)); 
+                            ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, false)); 
                             misc_UpdatePageReady();
                         }
                     }, onErr, onErr);
@@ -1231,7 +1231,7 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
             db_getInnerJoin(tableOne, pathInTableOne, tableTwo, onSucess, onError, onError);
         } else if(term == "myfavs") {
             var path = "users_favorites/" + getUser;
-            db_get(path, onSucess, null, null);
+            db_get(path, onSucess, onError, onError);
         }
     } else {
         //console.log("ADD PAGINATION HERE");
