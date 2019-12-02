@@ -639,6 +639,9 @@ const ads_GetFilterFields = function(byUrl) {
         fields['subcategory'] = $('#filter_Subcategory').dropdown('get value');
         fields['minprice'] = $('#filter_minprice').val();
         fields['maxprice'] = $('#filter_maxprice').val();
+
+        if (fields['state'] == "Selecione") { fields['state'] = "";}
+        if (fields['city'] == "Cidade") { fields['city'] = "";}
     } else {
         fields['searchTerm'] = misc_GetUrlParam('searchTerm');
         fields['category'] = misc_GetUrlParam('category');
