@@ -239,7 +239,6 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
 
     if (category === "fazendas") {
         db_saveKmlFile(key).then((msg) => {
-            console.log(msg);
             auth_RequireLoggingToAccess(pageToRedirect);
         });
     } else {
@@ -669,15 +668,15 @@ const ads_IsObjectFiltersValid = function(filters, obj) {
     if (title.includes(searchTerm) == false) { return false; }
 
     if (filters['category']) {
-        if (filters['category'] != obj['category']) { console.log('2'); return false; }
+        if (filters['category'] != obj['category']) { return false; }
     }
     
     if (filters['state']) {
-        if (filters['state'] != obj['state']) { return console.log(filters['state'] + ' - ' + obj['state']); false; }
+        if (filters['state'] != obj['state']) { return false; }
     }
     
     if (filters['city']) {
-        if (filters['city'] != obj['city']) { console.log('3'); return false; }
+        if (filters['city'] != obj['city']) { return false; }
     }
     
     if (filters['subcategory']) {
@@ -724,7 +723,6 @@ const ads_List_ListAdsByTerm = function() {
     };
 
     const onError = function(snapshot) {
-        console.log(snapshot);
         if (misc_RemoveLoader()) {
             $("#ads").append(misc_GetErrorMsg(true));
         }
@@ -1147,9 +1145,7 @@ function ad_InitMap() {
 
     const onSuccess = async function(snapshot){
         srcKml = snapshot.val();
-        console.log(srcKml);
-
-    
+        
         if (srcKml) {
             //srcKml = 'https://developers.google.com/maps/documentation/javascript/examples/kml/westcampus.kml';
 
@@ -1185,7 +1181,7 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
     
     var onSucess = function(snapshot) {
         $("#errorMsg").remove();
-        
+
         var snapKey = snapshot.key;
         var snapVal = snapshot.val();
         
