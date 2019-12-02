@@ -161,7 +161,7 @@ const db_InsertAdRegistration = function(flagUpdate, adUID) {
     }
 
     if (ad_CurrentlyAddedImages.length == 0) {
-        misc_DisplayErrorMessage('Nenhuma imagem', 'Favor adicionar ao menos uma imagem para efetuar o cadastro do anÃºncio.');
+        misc_DisplayErrorMessage('Nenhuma imagem', 'Favor adicionar ao menos uma imagem para efetuar o cadastro do anuncio.');
         ad_ExecuteLoaderButton("remove");
         return;
     }
