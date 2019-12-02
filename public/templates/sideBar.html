@@ -1,0 +1,15 @@
+<div class="ui left sidebar vertical menu"><a href="index.html" class="item">Home<i class="home icon Large"></i></a><a id="PerfilButton" onClick="user_OpenProfile();" class="item hidden">Meu Perfil<i class="user circle icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list.html');" class="item">Meus Anúncios<i class="shopping bag icon Large"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_permission_request.html');" class="item">Pedidos de acesso a anúncio<i class="handshake icon Large"></i><i id="permissionRequestPush" class="ui red empty circular label menuRedPush hidden"></i></a><a onclick="auth_RequireLoggingToAccess('ad_list_favorites.html');" class="item">Favoritos<i class="heart icon Large"></i></a><a onClick="messages_GoTo();" class="item">Mensagens<i class="comment icon Large"></i></a><a id="LogoutButton" onClick="auth_LogoffUser();" class="item hidden">Sair<i class="sign-out icon Large"></i></a><a id="LoginButton" onClick="auth_RequireLoggingToAccess('index.html');" class="item hidden">Login<i class="sign-in icon Large"></i></a></div><script>if (navigator.onLine) {
+    var userID = localStorage.getItem('auth_UserUID');
+    if (userID != null) {
+        var path = "ad_accessOnFarmRequest/" + userID;
+        var onSucess = function(snapshot) {
+            console.log("a");
+            $("#menuRedPush").removeClass("hidden");
+            $("#permissionRequestPush").removeClass("hidden");
+        };
+
+        var onError = function(snapshot) {};
+
+        db_get(path, onSucess, onError, onError);    
+    }
+}</script>

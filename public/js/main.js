@@ -6,14 +6,14 @@ var pageReadyCount = 0;
 var firebaseDateNow = firebase.database.ServerValue.TIMESTAMP;
 
 fb.firebaseConfig = {
-    apiKey: "AIzaSyD1aOg-QStOG5VB-imai9JF68h9Qq2q8So",
-    authDomain: "shared-farm-dev.firebaseapp.com",
-    databaseURL: "https://shared-farm-dev.firebaseio.com",
-    projectId: "shared-farm-dev",
-    storageBucket: "shared-farm-dev.appspot.com",
-    messagingSenderId: "619465723035",
-    appId: "1:619465723035:web:4dac067dc0eb3abf"
-  };
+  apiKey: "AIzaSyDOKCSxlmlPi86v8RhaaReG1CvR6sZSruM",
+  authDomain: "gofarmerapp.firebaseapp.com",
+  databaseURL: "https://gofarmerapp.firebaseio.com",
+  projectId: "gofarmerapp",
+  storageBucket: "gofarmerapp.appspot.com",
+  messagingSenderId: "360000565223",
+  appId: "1:360000565223:web:70a113b9417c9e01f59742"
+};
 
 if (navigator.onLine) {
     firebase.initializeApp(fb.firebaseConfig);
