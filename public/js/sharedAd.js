@@ -700,18 +700,12 @@ const ads_IsObjectFiltersValid = function(filters, obj) {
 const ads_List_ListAdsByTerm = function() {
     const firstCall = (lastAdUIDReceived == null);
 
-    var A = false;
     var onSucess = function(snapshot) {
         misc_RemoveLoader();
         const holder = $("#ads");
         const filters = ads_GetFilterFields(true);
         var cardAdded = false;
         
-        if (A == false)
-        {
-            A = true;
-            console.log(filters['searchTerm']);
-        }
         $.each(snapshot.val(), function(uid, obj) {
             lastAdUIDReceived = uid;
 
@@ -1190,6 +1184,8 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
     const urlParamUID = misc_GetUrlParam('uid');
     
     var onSucess = function(snapshot) {
+        $("#errorMsg").remove();
+        
         var snapKey = snapshot.key;
         var snapVal = snapshot.val();
         
@@ -1220,10 +1216,10 @@ const ad_List_ListAdsByUser = function(term, enableCheckboxOnCards) {
                         const imgURL = imgsRef[uid][Object.keys(imgsRef[uid])[0]];
                         
                         if (term == "myfavs") {
-                            ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, true, true)); 
+                            ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, true, true, enableCheckboxOnCards)); 
                             misc_UpdatePageReady();
                         }else {
-                            ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, false)); 
+                            ad_List_AddCardToList(holder, ad_GetAdCard(uid, imgURL, obj, false, false, enableCheckboxOnCards)); 
                             misc_UpdatePageReady();
                         }
                     }, onErr, onErr);
